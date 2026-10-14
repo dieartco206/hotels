@@ -96,7 +96,7 @@ export function HotelDetailModal({
         <div className="overflow-y-auto p-6 space-y-6">
           
           {/* Photo Gallery Grid (Bento style) */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-2.5 rounded-2xl overflow-hidden aspect-16/9 md:aspect-21/9 max-h-[380px]">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-2.5 rounded-2xl overflow-hidden h-72 sm:h-80 md:h-[360px]">
             {/* Main Hero Photo */}
             <div className="md:col-span-2 relative group overflow-hidden bg-slate-100 cursor-pointer h-full">
               <img
@@ -195,11 +195,11 @@ export function HotelDetailModal({
                   className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-card hover:border-brand-300 transition-all flex flex-col md:flex-row gap-5"
                 >
                   {/* Room Photo */}
-                  <div className="w-full md:w-56 aspect-16/10 md:aspect-auto rounded-xl overflow-hidden shrink-0 bg-slate-100">
+                  <div className="w-full md:w-56 h-44 md:h-auto rounded-xl overflow-hidden shrink-0 bg-slate-100">
                     <img
                       src={room.image || hotel.mainImage}
                       alt={room.name}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover object-center"
                     />
                   </div>
 

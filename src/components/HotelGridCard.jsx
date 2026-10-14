@@ -21,11 +21,11 @@ export function HotelGridCard({
       className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-card hover:shadow-float hover:-translate-y-1 transition-all duration-200 cursor-pointer flex flex-col justify-between group"
     >
       {/* Photo & Top Badges */}
-      <div className="relative aspect-16/10 overflow-hidden bg-slate-100">
+      <div className="relative h-48 w-full overflow-hidden bg-slate-100 shrink-0">
         <img
           src={hotel.mainImage}
           alt={hotel.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
         />
 
         {/* Wishlist Heart Button */}

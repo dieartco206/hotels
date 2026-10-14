@@ -27,11 +27,11 @@ export function HotelCard({
       
       {/* 1. Left (32% width): Photos & Badges */}
       <div className="w-full md:w-[32%] p-3 flex flex-col justify-between shrink-0">
-        <div className="relative aspect-4/3 rounded-xl overflow-hidden bg-slate-100">
+        <div className="relative h-48 md:h-52 w-full rounded-xl overflow-hidden bg-slate-100">
           <img
             src={activePhoto}
             alt={hotel.name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
           />
           
           {/* Wishlist Heart Button */}
@@ -60,21 +60,21 @@ export function HotelCard({
           <div className="grid grid-cols-4 gap-1.5 mt-2">
             <button
               onClick={() => setActivePhoto(hotel.mainImage)}
-              className={`relative aspect-4/3 rounded-lg overflow-hidden border-2 transition-all ${
+              className={`relative aspect-[4/3] rounded-lg overflow-hidden border-2 transition-all ${
                 activePhoto === hotel.mainImage ? 'border-brand-500 shadow-2xs' : 'border-transparent opacity-75 hover:opacity-100'
               }`}
             >
-              <img src={hotel.mainImage} alt="Main" className="w-full h-full object-cover" />
+              <img src={hotel.mainImage} alt="Main" className="w-full h-full object-cover object-center" />
             </button>
             {hotel.thumbnails.slice(0, 3).map((thumb, idx) => (
               <button
                 key={idx}
                 onClick={() => setActivePhoto(thumb)}
-                className={`relative aspect-4/3 rounded-lg overflow-hidden border-2 transition-all ${
+                className={`relative aspect-[4/3] rounded-lg overflow-hidden border-2 transition-all ${
                   activePhoto === thumb ? 'border-brand-500 shadow-2xs' : 'border-transparent opacity-75 hover:opacity-100'
                 }`}
               >
-                <img src={thumb} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
+                <img src={thumb} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover object-center" />
               </button>
             ))}
           </div>
