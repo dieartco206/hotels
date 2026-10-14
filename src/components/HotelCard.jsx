@@ -6,7 +6,7 @@ import {
   Wifi, 
   Waves, 
   Utensils, 
-  Sparkles, 
+  Award, 
   Check, 
   CreditCard,
   Building,
@@ -46,10 +46,10 @@ export function HotelCard({
             <Heart className={`w-4 h-4 transition-transform active:scale-125 ${isWishlisted ? 'fill-rose-500 text-rose-500' : ''}`} />
           </button>
 
-          {/* Ribbon Badge */}
+          {/* Ribbon Badge - Zero AI sparkles */}
           {hotel.badge && (
-            <div className="absolute top-2.5 left-2.5 bg-brand-600/95 backdrop-blur-xs text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-xs flex items-center gap-1">
-              <Sparkles className="w-2.5 h-2.5" />
+            <div className="absolute top-2.5 left-2.5 bg-brand-700/95 backdrop-blur-xs text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-xs flex items-center gap-1">
+              <Award className="w-3 h-3 text-amber-300" />
               {hotel.badge}
             </div>
           )}

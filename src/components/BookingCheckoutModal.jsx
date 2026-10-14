@@ -9,7 +9,6 @@ import {
   QrCode, 
   Building2, 
   Bed, 
-  Sparkles,
   Download,
   Share2,
   Clock
@@ -43,7 +42,7 @@ export function BookingCheckoutModal({
 
   const handleSubmitBooking = (e) => {
     e.preventDefault();
-    const code = 'TVLK-' + Math.floor(100000 + Math.random() * 900000);
+    const code = 'NUSA-' + Math.floor(100000 + Math.random() * 900000);
     setBookingCode(code);
     setStep('success');
     if (onBookingSuccess) {
@@ -66,7 +65,7 @@ export function BookingCheckoutModal({
                 {step === 'form' ? 'Konfirmasi Pemesanan & Pembayaran' : 'Pemesanan Berhasil Terkonfirmasi!'}
               </h3>
               <p className="text-xs text-slate-500">
-                {step === 'form' ? 'Langkah terakhir untuk mengamankan kamar Anda' : 'E-Voucher resmi telah diterbitkan oleh Traveloka'}
+                {step === 'form' ? 'Langkah terakhir untuk mengamankan kamar Anda' : 'E-Voucher resmi telah diterbitkan oleh NusaStay'}
               </p>
             </div>
           </div>
@@ -190,7 +189,7 @@ export function BookingCheckoutModal({
                 <span className="font-semibold text-slate-800">{formatRupiah(taxAndService)}</span>
               </div>
               <div className="flex justify-between text-emerald-600 font-semibold">
-                <span>Diskon Eksklusif Promo Traveloka</span>
+                <span>Diskon Eksklusif Member NusaStay</span>
                 <span>- {formatRupiah(memberDiscount)}</span>
               </div>
               <div className="pt-2 border-t border-slate-200 flex justify-between items-center text-sm">
@@ -236,7 +235,7 @@ export function BookingCheckoutModal({
             <div className="bg-gradient-to-br from-slate-50 to-blue-50/50 border border-slate-200 rounded-2xl p-5 text-left max-w-lg mx-auto shadow-sm">
               <div className="flex justify-between items-start border-b border-slate-200 pb-3 mb-3">
                 <div>
-                  <div className="text-[10px] text-slate-400 font-bold uppercase">No. Booking Traveloka</div>
+                  <div className="text-[10px] text-slate-400 font-bold uppercase">No. Booking NusaStay</div>
                   <div className="text-lg font-mono font-black text-brand-600 tracking-wider">
                     {bookingCode}
                   </div>

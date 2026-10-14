@@ -8,7 +8,6 @@ import {
   CheckCircle2, 
   Waves, 
   Wifi, 
-  Sparkles,
   Building,
   Palmtree,
   Home

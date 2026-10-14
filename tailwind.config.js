@@ -8,16 +8,16 @@ export default {
     extend: {
       colors: {
         brand: {
-          50: '#F0F8FF',
-          100: '#E0F0FE',
-          200: '#BAE0FD',
-          300: '#7CC4FA',
-          400: '#38A5F6',
-          500: '#0194F3', // Traveloka Blue
-          600: '#007CE8',
-          700: '#0064D2',
-          800: '#0050A8',
-          900: '#064486',
+          50: '#F0F6FF',
+          100: '#E0EDFE',
+          200: '#BA DBFD',
+          300: '#7CB8FA',
+          400: '#3B93F6',
+          500: '#0064D2',
+          600: '#0052CC', // Deep Sapphire Blue
+          700: '#003E99',
+          800: '#002E70',
+          900: '#0F254A',
         },
         cta: {
           DEFAULT: '#FF5E1F', // Coral Orange
@@ -25,33 +25,21 @@ export default {
           light: '#FFF4EE',
           border: '#FFD7C7',
         },
-        success: {
-          DEFAULT: '#10B981', // Emerald Green
-          light: '#ECFDF5',
-          border: '#A7F3D0',
-        },
-        rating: {
-          DEFAULT: '#F59E0B', // Amber
-          light: '#FEF3C7',
-        },
-        discount: {
-          DEFAULT: '#F43F5E', // Rose Red
-          light: '#FFF1F2',
-          dark: '#BE123C',
+        emerald: {
+          50: '#ECFDF5',
+          600: '#059669',
+          700: '#047857',
         },
         page: '#F8FAFC',
-        canvas: '#F1F5F9',
-        heading: '#0F172A',
-        body: '#475569',
       },
       fontFamily: {
         sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
       },
       boxShadow: {
-        'subtle': '0 1px 3px 0 rgba(15, 23, 42, 0.05), 0 1px 2px -1px rgba(15, 23, 42, 0.05)',
-        'card': '0 2px 8px -1px rgba(15, 23, 42, 0.07), 0 1px 4px -1px rgba(15, 23, 42, 0.04)',
-        'float': '0 12px 32px -4px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.06)',
-        'modal': '0 24px 60px -12px rgba(15, 23, 42, 0.25)',
+        'subtle': '0 1px 3px 0 rgba(15, 23, 42, 0.04), 0 1px 2px -1px rgba(15, 23, 42, 0.04)',
+        'card': '0 2px 8px -1px rgba(15, 23, 42, 0.06), 0 1px 4px -1px rgba(15, 23, 42, 0.03)',
+        'float': '0 14px 34px -4px rgba(15, 23, 42, 0.10), 0 4px 12px -2px rgba(15, 23, 42, 0.05)',
+        'modal': '0 24px 60px -12px rgba(15, 23, 42, 0.22)',
       }
     },
   },

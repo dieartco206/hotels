@@ -8,7 +8,6 @@ import {
   Wifi, 
   Waves, 
   Utensils, 
-  Sparkles, 
   Users, 
   Maximize2, 
   Bed, 
@@ -470,7 +469,7 @@ export function HotelDetailModal({
                     <span className="text-xs font-bold text-brand-600">9.5 / 10</span>
                   </div>
                   <p className="text-xs text-slate-600 leading-relaxed">
-                    "Kamar bersih, pemandangannya sangat indah dan fasilitasnya lengkap. Lokasi sangat dekat dengan atraksi utama. Booking lewat Traveloka juga sangat mulus tanpa kendala check-in."
+                    "Kamar bersih, pemandangannya sangat indah dan fasilitasnya lengkap. Lokasi sangat dekat dengan atraksi utama. Booking lewat NusaStay juga sangat mulus tanpa kendala check-in."
                   </p>
                 </div>
               </div>

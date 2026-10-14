@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Flame, Clock, Sparkles, ChevronRight, Star, MapPin } from 'lucide-react';
+import { Flame, Clock, Tag, ChevronRight, Star, MapPin } from 'lucide-react';
 import { formatRupiah } from '../utils/formatters';
 
 export function FlashSaleBanner({ flashHotels, onSelectHotel }) {
@@ -22,7 +22,7 @@ export function FlashSaleBanner({ flashHotels, onSelectHotel }) {
         } else if (prev.hours > 0) {
           return { hours: prev.hours - 1, minutes: 59, seconds: 59 };
         }
-        return { hours: 12, minutes: 0, seconds: 0 }; // reset cycle
+        return { hours: 12, minutes: 0, seconds: 0 };
       });
     }, 1000);
 
@@ -44,32 +44,32 @@ export function FlashSaleBanner({ flashHotels, onSelectHotel }) {
   return (
     <section id="flash-sale" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-6">
       {/* Container with warm light red/coral subtle border and gradient */}
-      <div className="bg-gradient-to-r from-red-50/70 via-rose-50/50 to-orange-50/70 rounded-3xl border border-rose-200/80 p-5 sm:p-7 shadow-sm">
+      <div className="bg-gradient-to-r from-red-50/80 via-rose-50/60 to-orange-50/80 rounded-3xl border border-rose-200/90 p-5 sm:p-7 shadow-sm">
         
         {/* Header Bar */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3.5">
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-rose-500 to-cta text-white flex items-center justify-center shadow-md shadow-rose-200">
-              <Flame className="w-6 h-6 animate-pulse" />
+              <Flame className="w-6 h-6" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-extrabold uppercase tracking-wider text-rose-600 bg-rose-100 px-2 py-0.5 rounded-full">
-                  Flash Deal Terbatas
+                <span className="text-xs font-black uppercase tracking-wider text-rose-600 bg-rose-100 px-2.5 py-0.5 rounded-full">
+                  Penawaran Kilat
                 </span>
-                <span className="text-xs text-slate-500 font-medium hidden sm:inline">Diperbarui setiap hari</span>
+                <span className="text-xs text-slate-500 font-medium hidden sm:inline">Harga terendah dalam 30 hari terakhir</span>
               </div>
               <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-0.5">
-                Epic Sale Hotel Pilihan
+                Koleksi Spesial Periode Terbatas
               </h2>
             </div>
           </div>
 
           {/* Countdown Clock */}
           <div className="flex items-center gap-2 self-start md:self-auto bg-white px-4 py-2 rounded-2xl border border-rose-200 shadow-xs">
-            <Clock className="w-4 h-4 text-rose-500 animate-spin-slow" />
+            <Clock className="w-4 h-4 text-rose-500" />
             <span className="text-xs font-bold text-slate-600">Berakhir Dalam:</span>
-            <div className="flex items-center gap-1 font-mono font-bold text-rose-600 text-sm">
+            <div className="flex items-center gap-1 font-mono font-black text-rose-600 text-sm">
               <span className="bg-rose-50 px-2 py-0.5 rounded border border-rose-100">{formatPad(timeLeft.hours)}</span>
               <span>:</span>
               <span className="bg-rose-50 px-2 py-0.5 rounded border border-rose-100">{formatPad(timeLeft.minutes)}</span>
@@ -82,11 +82,11 @@ export function FlashSaleBanner({ flashHotels, onSelectHotel }) {
         {/* Category Filter Pills */}
         <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-6 scrollbar-none">
           {[
-            { id: 'all', label: 'Semua Flash Deal' },
-            { id: 'bali', label: '🏝️ Bali Staycation' },
-            { id: 'jakarta', label: '🏙️ Jakarta Central' },
-            { id: 'bandung', label: '⛰️ Bandung Dingin' },
-            { id: 'luxury', label: '⭐ Bintang 5 Eksklusif' },
+            { id: 'all', label: 'Semua Penawaran' },
+            { id: 'bali', label: '🏝️ Bali Retreat' },
+            { id: 'jakarta', label: '🏙️ Jakarta Metropolitan' },
+            { id: 'bandung', label: '⛰️ Bandung Sejuk' },
+            { id: 'luxury', label: '⭐ Resor Bintang 5' },
           ].map(cat => (
             <button
               key={cat.id}
@@ -110,7 +110,7 @@ export function FlashSaleBanner({ flashHotels, onSelectHotel }) {
               onClick={() => onSelectHotel(hotel)}
               className="group bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-card hover:shadow-float hover:-translate-y-1 transition-all duration-200 cursor-pointer flex flex-col justify-between"
             >
-              {/* Photo & Badges */}
+              {/* Photo & Badges - Zero AI sparkles */}
               <div className="relative aspect-4/3 overflow-hidden bg-slate-100">
                 <img
                   src={hotel.mainImage}
@@ -118,7 +118,7 @@ export function FlashSaleBanner({ flashHotels, onSelectHotel }) {
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute top-2.5 left-2.5 bg-rose-600 text-white font-extrabold text-xs px-2.5 py-1 rounded-lg shadow-sm flex items-center gap-1">
-                  <Sparkles className="w-3 h-3" />
+                  <Tag className="w-3 h-3" />
                   Hemat {hotel.discountPercent}%
                 </div>
                 <div className="absolute bottom-2.5 left-2.5 bg-slate-900/80 backdrop-blur-xs text-white text-[11px] font-bold px-2 py-0.5 rounded-md flex items-center gap-1">
@@ -134,14 +134,14 @@ export function FlashSaleBanner({ flashHotels, onSelectHotel }) {
                     <MapPin className="w-3 h-3 text-slate-400" />
                     <span>{hotel.area}</span>
                   </div>
-                  <h3 className="font-bold text-slate-900 text-sm sm:text-base line-clamp-1 group-hover:text-brand-600 transition-colors">
+                  <h3 className="font-extrabold text-slate-900 text-sm sm:text-base line-clamp-1 group-hover:text-brand-600 transition-colors">
                     {hotel.name}
                   </h3>
 
                   {/* Quota Progress */}
                   <div className="mt-2.5">
-                    <div className="flex justify-between items-center text-[11px] font-semibold text-rose-600 mb-1">
-                      <span>🔥 Sisa {hotel.flashSaleRemaining || 2} kamar harga promo!</span>
+                    <div className="flex justify-between items-center text-[11px] font-bold text-rose-600 mb-1">
+                      <span>Sisa {hotel.flashSaleRemaining || 2} kamar promo</span>
                     </div>
                     <div className="w-full bg-rose-100 h-1.5 rounded-full overflow-hidden">
                       <div 
@@ -155,19 +155,19 @@ export function FlashSaleBanner({ flashHotels, onSelectHotel }) {
                 {/* Price & CTA */}
                 <div className="mt-4 pt-3 border-t border-slate-100 flex items-end justify-between">
                   <div>
-                    <span className="text-[11px] text-slate-400 line-through block">
+                    <span className="text-[11px] text-slate-400 line-through block font-medium">
                       {formatRupiah(hotel.originalPrice)}
                     </span>
                     <span className="text-base sm:text-lg font-black text-rose-600">
                       {formatRupiah(hotel.price)}
                     </span>
-                    <span className="text-[10px] text-slate-500 block">/malam</span>
+                    <span className="text-[10px] text-slate-400 block font-medium">/malam</span>
                   </div>
                   <button
                     type="button"
-                    className="px-3 py-1.5 bg-cta hover:bg-cta-hover text-white text-xs font-bold rounded-lg shadow-xs transition-colors"
+                    className="px-3 py-1.5 bg-cta hover:bg-cta-hover text-white text-xs font-bold rounded-xl shadow-2xs transition-colors"
                   >
-                    Klaim Promo
+                    Klaim Kamar
                   </button>
                 </div>
               </div>

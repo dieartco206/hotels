@@ -690,7 +690,7 @@ export const HOTELS_DATA = [
     city: 'Jakarta',
     area: 'Gatot Subroto, Jakarta Selatan',
     distanceText: '0.8 km dari SCBD Sudirman',
-    badge: 'Traveloka Clean+',
+    badge: 'Kurasi Unggulan',
     rating: 8.8,
     reviewsCount: 3120,
     originalPrice: 1650000,
