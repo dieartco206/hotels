@@ -1,13 +1,16 @@
 import React from 'react';
 import { X, Heart, Trash2, ChevronRight, Star } from 'lucide-react';
-import { formatRupiah } from '../utils/formatters';
+import { formatCurrency } from '../utils/formatters';
 
 export function WishlistDrawer({
   isOpen,
   onClose,
   wishlist,
   onRemoveFromWishlist,
-  onSelectHotel
+  onSelectHotel,
+  t,
+  currency = 'IDR',
+  lang = 'id'
 }) {
   if (!isOpen) return null;
 
@@ -22,8 +25,8 @@ export function WishlistDrawer({
               <Heart className="w-4 h-4 fill-rose-500" />
             </div>
             <div>
-              <h3 className="font-extrabold text-slate-900 text-base">Hotel Disimpan</h3>
-              <p className="text-xs text-slate-500">{wishlist.length} properti di wishlist Anda</p>
+              <h3 className="font-extrabold text-slate-900 text-base">{t?.wishlistTitle || 'Hotel Disimpan'}</h3>
+              <p className="text-xs text-slate-500">{wishlist.length} {t?.wishlistSubtitle || 'properti di wishlist Anda'}</p>
             </div>
           </div>
           <button
@@ -41,9 +44,9 @@ export function WishlistDrawer({
               <div className="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-3">
                 <Heart className="w-8 h-8" />
               </div>
-              <h4 className="text-base font-bold text-slate-800">Belum ada hotel tersimpan</h4>
+              <h4 className="text-base font-bold text-slate-800">{t?.emptyWishlistTitle || 'Belum ada hotel tersimpan'}</h4>
               <p className="text-xs text-slate-500 mt-1 max-w-xs mx-auto">
-                Klik ikon hati pada hotel mana pun untuk menyimpannya ke daftar liburan favorit Anda.
+                {t?.emptyWishlistDesc || 'Klik ikon hati pada hotel mana pun untuk menyimpannya ke daftar liburan favorit Anda.'}
               </p>
             </div>
           ) : (
@@ -66,7 +69,7 @@ export function WishlistDrawer({
                       <button
                         onClick={() => onRemoveFromWishlist(hotel.id)}
                         className="text-slate-300 hover:text-rose-500 transition-colors p-1"
-                        title="Hapus"
+                        title={t?.removeFromWishlist || "Hapus"}
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -82,7 +85,7 @@ export function WishlistDrawer({
 
                   <div className="flex items-center justify-between mt-2 pt-1 border-t border-slate-100">
                     <span className="text-xs font-black text-cta">
-                      {formatRupiah(hotel.price)}
+                      {formatCurrency(hotel.price, currency)}
                     </span>
                     <button
                       onClick={() => {
@@ -91,7 +94,7 @@ export function WishlistDrawer({
                       }}
                       className="text-xs font-bold text-brand-600 hover:text-brand-700 flex items-center"
                     >
-                      Pilih
+                      {t?.selectRoomBtn ? t.selectRoomBtn.replace(' Kamar', '').replace(' Bilik', '') : 'Pilih'}
                       <ChevronRight className="w-3.5 h-3.5" />
                     </button>
                   </div>
@@ -108,7 +111,7 @@ export function WishlistDrawer({
               onClick={onClose}
               className="w-full py-2.5 bg-brand-500 hover:bg-brand-600 text-white font-bold text-xs rounded-xl shadow-xs transition-colors"
             >
-              Lanjutkan Eksplorasi
+              {lang === 'en' ? 'Continue Browsing' : lang === 'ms' ? 'Teruskan Meneroka' : 'Lanjutkan Eksplorasi'}
             </button>
           </div>
         )}

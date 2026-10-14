@@ -9,13 +9,12 @@ import {
   Search, 
   Plus, 
   Minus, 
-  Check,
   ChevronDown,
   X,
   Tag,
   Compass
 } from 'lucide-react';
-import { calculateNights, formatDateIndo } from '../utils/formatters';
+import { calculateNights, formatDateLocalized } from '../utils/i18n';
 
 const POPULAR_DESTINATIONS = [
   { city: 'Semua Kota', province: 'Seluruh Indonesia', type: 'Semua Koleksi' },
@@ -39,7 +38,10 @@ export function SearchWidget({
   setGuests,
   quickFilters,
   setQuickFilters,
-  onSearchSubmit
+  onSearchSubmit,
+  t,
+  lang,
+  currency
 }) {
   const [activeTab, setActiveTab] = useState('hotel'); // 'hotel' | 'villa' | 'hourly' | 'special'
   const [isCityOpen, setIsCityOpen] = useState(false);
@@ -86,7 +88,7 @@ export function SearchWidget({
       {/* Container Card with subtle luxury border & shadow */}
       <div className="bg-white rounded-3xl shadow-float border border-slate-200/90 p-4 sm:p-6 transition-all">
         
-        {/* Tabs inside Widget - Zero AI sparkles */}
+        {/* Tabs inside Widget */}
         <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-4 border-b border-slate-100 scrollbar-none">
           <button
             onClick={() => setActiveTab('hotel')}
@@ -97,7 +99,7 @@ export function SearchWidget({
             }`}
           >
             <Building2 className="w-4 h-4 text-brand-600" />
-            Hotel Bintang & Butik
+            {t.tabHotels}
           </button>
 
           <button
@@ -109,7 +111,7 @@ export function SearchWidget({
             }`}
           >
             <Palmtree className="w-4 h-4 text-emerald-600" />
-            Private Villa & Resor
+            {t.tabVillas}
           </button>
 
           <button
@@ -121,8 +123,8 @@ export function SearchWidget({
             }`}
           >
             <Clock className="w-4 h-4 text-amber-500" />
-            Transit Singkat
-            <span className="text-[10px] bg-amber-100 text-amber-800 px-1.5 py-0.2 rounded font-bold">4-8 Jam</span>
+            {t.tabTransit}
+            <span className="text-[10px] bg-amber-100 text-amber-800 px-1.5 py-0.2 rounded font-bold">4-8h</span>
           </button>
 
           <button
@@ -134,8 +136,8 @@ export function SearchWidget({
             }`}
           >
             <Tag className="w-4 h-4 text-rose-500" />
-            Penawaran Eksklusif
-            <span className="text-[10px] bg-rose-100 text-rose-700 px-1.5 py-0.2 rounded font-bold">Hemat 30%</span>
+            {t.tabSpecial}
+            <span className="text-[10px] bg-rose-100 text-rose-700 px-1.5 py-0.2 rounded font-bold">-30%</span>
           </button>
         </div>
 
@@ -146,7 +148,7 @@ export function SearchWidget({
           <div className="md:col-span-4 relative" ref={cityRef}>
             <label className="block text-xs font-bold text-slate-500 mb-1 flex items-center gap-1">
               <MapPin className="w-3.5 h-3.5 text-brand-600" />
-              Destinasi atau Nama Properti
+              {t.destinationLabel}
             </label>
             <div 
               onClick={() => setIsCityOpen(!isCityOpen)}
@@ -156,9 +158,9 @@ export function SearchWidget({
                 <MapPin className="w-4 h-4" />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-[11px] text-slate-400 font-medium">Kota Tujuan</p>
+                <p className="text-[11px] text-slate-400 font-medium">{t.destinationLabel}</p>
                 <p className="text-sm font-extrabold text-slate-900 truncate">
-                  {searchQuery ? searchQuery : activeCity}
+                  {searchQuery ? searchQuery : activeCity === 'Semua Kota' ? t.allCities : activeCity}
                 </p>
               </div>
               <ChevronDown className="w-4 h-4 text-slate-400 shrink-0" />
@@ -168,7 +170,7 @@ export function SearchWidget({
             {isCityOpen && (
               <div className="absolute left-0 top-[82px] w-full sm:w-[380px] bg-white rounded-2xl shadow-float border border-slate-200 p-4 z-50 animate-in fade-in duration-150">
                 <div className="flex items-center justify-between mb-2 pb-2 border-b border-slate-100">
-                  <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Pilih Wilayah</span>
+                  <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">{t.destinationLabel}</span>
                   <button onClick={() => setIsCityOpen(false)} className="text-slate-400 hover:text-slate-600">
                     <X className="w-4 h-4" />
                   </button>
@@ -181,7 +183,7 @@ export function SearchWidget({
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Ketik nama kota atau nama hotel..."
+                    placeholder={t.destinationPlaceholder}
                     className="w-full pl-9 pr-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white"
                   />
                   {searchQuery && (
@@ -189,14 +191,14 @@ export function SearchWidget({
                       onClick={() => setSearchQuery('')}
                       className="absolute right-3 top-2.5 text-xs text-slate-400 hover:text-slate-600"
                     >
-                      Hapus
+                      Clear
                     </button>
                   )}
                 </div>
 
                 {/* Popular City Pills */}
                 <div className="mb-2">
-                  <span className="text-xs font-semibold text-slate-600 block mb-2">Destinasi Utama:</span>
+                  <span className="text-xs font-semibold text-slate-600 block mb-2">{t.popularDestinations}</span>
                   <div className="flex flex-wrap gap-1.5">
                     {POPULAR_DESTINATIONS.map((dest) => (
                       <button
@@ -208,7 +210,7 @@ export function SearchWidget({
                             : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                         }`}
                       >
-                        {dest.city}
+                        {dest.city === 'Semua Kota' ? t.allCities : dest.city}
                       </button>
                     ))}
                   </div>
@@ -225,7 +227,9 @@ export function SearchWidget({
                       <div className="flex items-center gap-2.5">
                         <MapPin className="w-4 h-4 text-slate-400 group-hover:text-brand-600" />
                         <div>
-                          <div className="text-sm font-bold text-slate-800">{dest.city}</div>
+                          <div className="text-sm font-bold text-slate-800">
+                            {dest.city === 'Semua Kota' ? t.allCities : dest.city}
+                          </div>
                           <div className="text-xs text-slate-400">{dest.province}</div>
                         </div>
                       </div>
@@ -242,10 +246,10 @@ export function SearchWidget({
             <label className="block text-xs font-bold text-slate-500 mb-1 flex items-center justify-between">
               <span className="flex items-center gap-1">
                 <Calendar className="w-3.5 h-3.5 text-brand-600" />
-                Periode Menginap
+                {t.stayPeriodLabel}
               </span>
               <span className="text-[11px] font-bold text-brand-700 bg-brand-50 px-2 py-0.5 rounded-full border border-brand-100">
-                {nights} Malam
+                {nights} {t.nights}
               </span>
             </label>
             <div 
@@ -257,9 +261,9 @@ export function SearchWidget({
                   <Calendar className="w-4 h-4" />
                 </div>
                 <div className="min-w-0">
-                  <div className="text-[11px] text-slate-400 font-medium">Check-in — Check-out</div>
+                  <div className="text-[11px] text-slate-400 font-medium">{t.stayPeriodLabel}</div>
                   <div className="text-xs sm:text-sm font-extrabold text-slate-900 truncate">
-                    {formatDateIndo(checkInDate)} - {formatDateIndo(checkOutDate)}
+                    {formatDateLocalized(checkInDate, lang)} - {formatDateLocalized(checkOutDate, lang)}
                   </div>
                 </div>
               </div>
@@ -271,8 +275,8 @@ export function SearchWidget({
               <div className="absolute left-0 top-[82px] w-full sm:w-[380px] bg-white rounded-2xl shadow-float border border-slate-200 p-5 z-50 animate-in fade-in duration-150">
                 <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
                   <div>
-                    <h4 className="text-sm font-bold text-slate-900">Pilih Tanggal Menginap</h4>
-                    <p className="text-xs text-slate-500">Durasi: {nights} Malam</p>
+                    <h4 className="text-sm font-bold text-slate-900">{t.stayPeriodLabel}</h4>
+                    <p className="text-xs text-slate-500">{nights} {t.nights}</p>
                   </div>
                   <button onClick={() => setIsDateOpen(false)} className="text-slate-400 hover:text-slate-600">
                     <X className="w-4 h-4" />
@@ -309,9 +313,9 @@ export function SearchWidget({
                 </div>
 
                 <div className="bg-brand-50/70 rounded-xl p-3 text-xs text-slate-700 flex items-center justify-between mb-3 border border-brand-100">
-                  <span>Total Durasi:</span>
+                  <span>{t.stayPeriodLabel}:</span>
                   <span className="font-extrabold text-brand-700 bg-white px-2.5 py-0.5 rounded-md shadow-2xs">
-                    {nights} Malam Menginap
+                    {nights} {t.nights}
                   </span>
                 </div>
 
@@ -320,7 +324,7 @@ export function SearchWidget({
                   onClick={() => setIsDateOpen(false)}
                   className="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-xl transition-colors"
                 >
-                  Terapkan Tanggal
+                  OK
                 </button>
               </div>
             )}
@@ -330,7 +334,7 @@ export function SearchWidget({
           <div className="md:col-span-3 relative" ref={guestsRef}>
             <label className="block text-xs font-bold text-slate-500 mb-1 flex items-center gap-1">
               <Users className="w-3.5 h-3.5 text-brand-600" />
-              Jumlah Tamu
+              {t.guestsRoomsLabel}
             </label>
             <div 
               onClick={() => setIsGuestsOpen(!isGuestsOpen)}
@@ -341,9 +345,9 @@ export function SearchWidget({
                   <Users className="w-4 h-4" />
                 </div>
                 <div className="min-w-0">
-                  <div className="text-[11px] text-slate-400 font-medium">Kapasitas</div>
+                  <div className="text-[11px] text-slate-400 font-medium">{t.guestsRoomsLabel}</div>
                   <div className="text-xs sm:text-sm font-extrabold text-slate-900 truncate">
-                    {guests.adults} Dewasa, {guests.rooms} Kamar
+                    {guests.adults} {t.adults}, {guests.rooms} {t.rooms}
                   </div>
                 </div>
               </div>
@@ -354,18 +358,18 @@ export function SearchWidget({
             {isGuestsOpen && (
               <div className="absolute right-0 top-[82px] w-full sm:w-72 bg-white rounded-2xl shadow-float border border-slate-200 p-4 z-50 animate-in fade-in duration-150">
                 <div className="flex items-center justify-between pb-2 border-b border-slate-100 mb-3">
-                  <h4 className="text-sm font-bold text-slate-800">Jumlah Tamu & Kamar</h4>
+                  <h4 className="text-sm font-bold text-slate-800">{t.guestsRoomsLabel}</h4>
                   <button onClick={() => setIsGuestsOpen(false)} className="text-slate-400 hover:text-slate-600">
                     <X className="w-4 h-4" />
                   </button>
                 </div>
 
                 <div className="space-y-4">
-                  {/* Dewasa */}
+                  {/* Adults */}
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="text-sm font-bold text-slate-800">Dewasa</div>
-                      <div className="text-xs text-slate-500">Usia 18 tahun ke atas</div>
+                      <div className="text-sm font-bold text-slate-800">{t.adults}</div>
+                      <div className="text-xs text-slate-500">{t.adultsDesc}</div>
                     </div>
                     <div className="flex items-center gap-2.5">
                       <button
@@ -387,11 +391,11 @@ export function SearchWidget({
                     </div>
                   </div>
 
-                  {/* Anak-anak */}
+                  {/* Children */}
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="text-sm font-bold text-slate-800">Anak-anak</div>
-                      <div className="text-xs text-slate-500">Usia 0 - 17 tahun</div>
+                      <div className="text-sm font-bold text-slate-800">{t.children}</div>
+                      <div className="text-xs text-slate-500">{t.childrenDesc}</div>
                     </div>
                     <div className="flex items-center gap-2.5">
                       <button
@@ -413,11 +417,11 @@ export function SearchWidget({
                     </div>
                   </div>
 
-                  {/* Kamar */}
+                  {/* Rooms */}
                   <div className="flex items-center justify-between pt-2 border-t border-slate-100">
                     <div>
-                      <div className="text-sm font-bold text-slate-800">Kamar</div>
-                      <div className="text-xs text-slate-500">Jumlah unit kamar</div>
+                      <div className="text-sm font-bold text-slate-800">{t.rooms}</div>
+                      <div className="text-xs text-slate-500">{t.roomsDesc}</div>
                     </div>
                     <div className="flex items-center gap-2.5">
                       <button
@@ -445,7 +449,7 @@ export function SearchWidget({
                   onClick={() => setIsGuestsOpen(false)}
                   className="w-full mt-4 py-2 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-xl transition-colors"
                 >
-                  Selesai
+                  OK
                 </button>
               </div>
             )}
@@ -456,10 +460,10 @@ export function SearchWidget({
             <button
               onClick={onSearchSubmit}
               className="w-full h-[52px] bg-cta hover:bg-cta-hover text-white font-black rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 flex items-center justify-center gap-2 group active:scale-95"
-              title="Temukan Akomodasi"
+              title={t.searchTooltip}
             >
               <Search className="w-5 h-5 group-hover:scale-110 transition-transform" />
-              <span className="md:hidden font-bold">Cari</span>
+              <span className="md:hidden font-bold">{t.searchBtn}</span>
             </button>
           </div>
 
@@ -468,7 +472,7 @@ export function SearchWidget({
         {/* Bottom Quick Filter Bar */}
         <div className="mt-4 pt-3.5 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-600">
           <div className="flex flex-wrap items-center gap-4">
-            <span className="font-bold text-slate-500">Filter Cepat:</span>
+            <span className="font-bold text-slate-500">Quick Filters:</span>
             
             <label className="flex items-center gap-1.5 cursor-pointer hover:text-slate-900 select-none">
               <input
@@ -477,7 +481,7 @@ export function SearchWidget({
                 onChange={() => handleQuickFilterToggle('payAtHotel')}
                 className="w-4 h-4 rounded text-brand-600 focus:ring-brand-500 border-slate-300"
               />
-              <span className="font-semibold">Bayar di Tempat</span>
+              <span className="font-semibold">{t.quickPayAtHotel}</span>
             </label>
 
             <label className="flex items-center gap-1.5 cursor-pointer hover:text-slate-900 select-none">
@@ -487,7 +491,7 @@ export function SearchWidget({
                 onChange={() => handleQuickFilterToggle('freeBreakfast')}
                 className="w-4 h-4 rounded text-brand-600 focus:ring-brand-500 border-slate-300"
               />
-              <span className="font-semibold text-emerald-700">✓ Sarapan Termasuk</span>
+              <span className="font-semibold text-emerald-700">{t.quickFreeBreakfast}</span>
             </label>
 
             <label className="flex items-center gap-1.5 cursor-pointer hover:text-slate-900 select-none">
@@ -497,7 +501,7 @@ export function SearchWidget({
                 onChange={() => handleQuickFilterToggle('fourStarsPlus')}
                 className="w-4 h-4 rounded text-brand-600 focus:ring-brand-500 border-slate-300"
               />
-              <span className="font-semibold">Bintang 4 & 5</span>
+              <span className="font-semibold">{t.quickFourStars}</span>
             </label>
 
             <label className="flex items-center gap-1.5 cursor-pointer hover:text-slate-900 select-none">
@@ -507,13 +511,13 @@ export function SearchWidget({
                 onChange={() => handleQuickFilterToggle('freeCancellation')}
                 className="w-4 h-4 rounded text-brand-600 focus:ring-brand-500 border-slate-300"
               />
-              <span className="font-semibold text-emerald-700">✓ Pembatalan Gratis</span>
+              <span className="font-semibold text-emerald-700">{t.quickFreeCancellation}</span>
             </label>
           </div>
 
           <div className="hidden lg:flex items-center gap-1.5 text-slate-400 font-medium">
             <Compass className="w-3.5 h-3.5 text-brand-600" />
-            <span>Koleksi properti terpercaya di 20+ kota</span>
+            <span>ID • MY • SG Curated Hotels</span>
           </div>
         </div>
 

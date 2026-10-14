@@ -1,24 +1,18 @@
-// Currency & formatting utilities for Indonesian Rupiah & Traveloka style
+// Currency & formatting utilities with multi-currency & locale support
+import { formatCurrency, getRatingText, formatDateLocalized } from './i18n';
 
-export const formatRupiah = (amount) => {
-  if (amount === undefined || amount === null) return 'Rp 0';
-  return 'Rp ' + amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+export { formatCurrency, getRatingText, formatDateLocalized };
+
+export const formatRupiah = (amount, currency = 'IDR') => {
+  return formatCurrency(amount, currency);
 };
 
-export const getRatingDescription = (rating) => {
-  if (rating >= 9.0) return 'Mengesankan';
-  if (rating >= 8.5) return 'Luar Biasa';
-  if (rating >= 8.0) return 'Sangat Bagus';
-  if (rating >= 7.5) return 'Bagus';
-  return 'Cukup';
+export const getRatingDescription = (rating, lang = 'id') => {
+  return getRatingText(rating, lang);
 };
 
-export const formatDateIndo = (dateStr) => {
-  if (!dateStr) return '';
-  const d = new Date(dateStr);
-  const days = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
-  return `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+export const formatDateIndo = (dateStr, lang = 'id') => {
+  return formatDateLocalized(dateStr, lang);
 };
 
 export const calculateNights = (checkInStr, checkOutStr) => {

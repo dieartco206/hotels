@@ -18,7 +18,7 @@ import {
   Info,
   Clock
 } from 'lucide-react';
-import { formatRupiah, getRatingDescription, formatDateIndo, calculateNights } from '../utils/formatters';
+import { formatCurrency, getRatingDescription, formatDateIndo, calculateNights } from '../utils/formatters';
 
 export function HotelDetailModal({ 
   hotel, 
@@ -28,7 +28,10 @@ export function HotelDetailModal({
   checkOutDate, 
   guests,
   isWishlisted,
-  onToggleWishlist 
+  onToggleWishlist,
+  t,
+  currency = 'IDR',
+  lang = 'id'
 }) {
   const [activeTab, setActiveTab] = useState('rooms'); // 'overview' | 'rooms' | 'facilities' | 'reviews'
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
@@ -131,9 +134,9 @@ export function HotelDetailModal({
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-brand-600" />
                 <div>
-                  <span className="text-slate-500 block">Jadwal Menginap:</span>
+                  <span className="text-slate-500 block">{t?.stayPeriodLabel || 'Jadwal Menginap'}:</span>
                   <span className="font-bold text-slate-800">
-                    {formatDateIndo(checkInDate)} - {formatDateIndo(checkOutDate)} ({nights} Malam)
+                    {formatDateIndo(checkInDate, lang)} - {formatDateIndo(checkOutDate, lang)} ({nights} {t?.nights || 'Malam'})
                   </span>
                 </div>
               </div>
@@ -141,9 +144,9 @@ export function HotelDetailModal({
               <div className="flex items-center gap-2">
                 <Users className="w-4 h-4 text-brand-600" />
                 <div>
-                  <span className="text-slate-500 block">Kapasitas:</span>
+                  <span className="text-slate-500 block">{t?.guestCapacity || 'Kapasitas'}:</span>
                   <span className="font-bold text-slate-800">
-                    {guests.adults} Dewasa • {guests.rooms} Kamar
+                    {guests.adults} {t?.adults || 'Dewasa'} • {guests.rooms} {t?.rooms || 'Kamar'}
                   </span>
                 </div>
               </div>
@@ -152,7 +155,7 @@ export function HotelDetailModal({
             <div className="flex items-center gap-2">
               <span className="text-emerald-700 bg-emerald-100 font-bold px-2 py-1 rounded-md flex items-center gap-1">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                Jaminan Harga Terbaik
+                {t?.guaranteeText?.split('&')[0]?.trim() || 'Jaminan Harga Terbaik'}
               </span>
             </div>
           </div>
@@ -160,10 +163,10 @@ export function HotelDetailModal({
           {/* Navigation Tabs */}
           <div className="flex items-center gap-2 border-b border-slate-200 pb-2">
             {[
-              { id: 'rooms', label: '🛏️ Pilihan Kamar' },
-              { id: 'overview', label: '📝 Ringkasan Hotel' },
-              { id: 'facilities', label: '🏊 Fasilitas Lengkap' },
-              { id: 'reviews', label: '⭐ Ulasan Tamu' },
+              { id: 'rooms', label: t?.tabRooms || '🛏️ Pilihan Kamar' },
+              { id: 'overview', label: t?.tabOverview || '📝 Ringkasan Hotel' },
+              { id: 'facilities', label: t?.tabFacilities || '🏊 Fasilitas Lengkap' },
+              { id: 'reviews', label: t?.tabReviews || '⭐ Ulasan Tamu' },
             ].map(tab => (
               <button
                 key={tab.id}
@@ -272,14 +275,14 @@ export function HotelDetailModal({
                       <div>
                         {room.originalPrice && (
                           <span className="text-xs text-slate-400 line-through block">
-                            {formatRupiah(room.originalPrice)}
+                            {formatCurrency(room.originalPrice, currency)}
                           </span>
                         )}
                         <span className="text-xl font-black text-cta">
-                          {formatRupiah(room.price)}
+                          {formatCurrency(room.price, currency)}
                         </span>
                         <span className="text-[11px] text-slate-400 block font-medium">
-                          Di luar pajak & biaya layanan
+                          {t?.taxExcluded || 'Di luar pajak & biaya layanan'}
                         </span>
                       </div>
 
@@ -287,7 +290,7 @@ export function HotelDetailModal({
                         onClick={() => onSelectRoom(hotel, room)}
                         className="px-5 py-2.5 bg-cta hover:bg-cta-hover text-white font-extrabold text-sm rounded-xl shadow-md transition-all active:scale-95 flex items-center gap-1"
                       >
-                        Pesan Sekarang
+                        {t?.bookNow || 'Pesan Sekarang'}
                         <ChevronRight className="w-4 h-4" />
                       </button>
                     </div>
@@ -389,10 +392,14 @@ export function HotelDetailModal({
                     {hotel.rating} <span className="text-base text-slate-400 font-medium">/ 10</span>
                   </div>
                   <div className="text-sm font-bold text-slate-800 mt-1">
-                    {getRatingDescription(hotel.rating)}
+                    {getRatingDescription(hotel.rating, lang)}
                   </div>
                   <div className="text-xs text-slate-500">
-                    Berdasarkan {hotel.reviewsCount.toLocaleString('id-ID')} ulasan terverifikasi
+                    {lang === 'en'
+                      ? `Based on ${hotel.reviewsCount.toLocaleString('en-SG')} verified reviews`
+                      : lang === 'ms'
+                      ? `Berdasarkan ${hotel.reviewsCount.toLocaleString('ms-MY')} ulasan disahkan`
+                      : `Berdasarkan ${hotel.reviewsCount.toLocaleString('id-ID')} ulasan terverifikasi`}
                   </div>
                 </div>
 

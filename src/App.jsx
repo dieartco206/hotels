@@ -14,7 +14,8 @@ import { Toast } from './components/Toast';
 import { Footer } from './components/Footer';
 
 import { HOTELS_DATA } from './data/hotelsData';
-import { formatRupiah } from './utils/formatters';
+import { formatCurrency } from './utils/formatters';
+import { TRANSLATIONS } from './utils/i18n';
 import { 
   SlidersHorizontal, 
   LayoutList, 
@@ -27,6 +28,11 @@ import {
 } from 'lucide-react';
 
 export default function App() {
+  // Locale & Multi-Currency State (Indonesia / Malaysia / Singapore)
+  const [lang, setLang] = useState('id'); // 'id' | 'ms' | 'en'
+  const [currency, setCurrency] = useState('IDR'); // 'IDR' | 'MYR' | 'SGD'
+  const t = useMemo(() => TRANSLATIONS[lang] || TRANSLATIONS.id, [lang]);
+
   // 1. Search Engine State
   const [activeCity, setActiveCity] = useState('Bali');
   const [searchQuery, setSearchQuery] = useState('');
@@ -213,6 +219,11 @@ export default function App() {
       <Navbar
         wishlistCount={wishlist.length}
         onOpenWishlist={() => setIsWishlistOpen(true)}
+        lang={lang}
+        setLang={setLang}
+        currency={currency}
+        setCurrency={setCurrency}
+        t={t}
         onSelectPromo={(category) => {
           if (category === 'villa') {
             setSelectedPropertyType('Villa');
@@ -224,7 +235,7 @@ export default function App() {
 
       <main>
         {/* 2. Hero Section */}
-        <HeroSection />
+        <HeroSection t={t} lang={lang} />
 
         {/* 3. Floating Overlapping Multi-Field Search Engine */}
         <SearchWidget
@@ -240,10 +251,12 @@ export default function App() {
           setGuests={setGuests}
           quickFilters={quickFilters}
           setQuickFilters={setQuickFilters}
+          t={t}
+          lang={lang}
           onSearchSubmit={() => {
             const el = document.getElementById('search-discovery-section');
             if (el) el.scrollIntoView({ behavior: 'smooth' });
-            showToast('Pencarian Diperbarui', `Menampilkan akomodasi terbaik di ${activeCity}`, 'info');
+            showToast(t?.searchBtn || 'Pencarian Diperbarui', `${t?.showingHotels?.replace('{count}', filteredHotels.length) || `Menampilkan akomodasi terbaik di ${activeCity}`}`, 'info');
           }}
         />
 
@@ -251,6 +264,9 @@ export default function App() {
         <FlashSaleBanner
           flashHotels={flashSaleHotels}
           onSelectHotel={(hotel) => setSelectedHotelForModal(hotel)}
+          t={t}
+          currency={currency}
+          lang={lang}
         />
 
         {/* 5. Main Content Area: Two-Column Search & Discovery Layout */}
@@ -272,6 +288,9 @@ export default function App() {
                 onResetFilters={handleResetFilters}
                 onOpenMap={() => setIsMapModalOpen(true)}
                 totalHotelsCount={filteredHotels.length}
+                t={t}
+                currency={currency}
+                lang={lang}
               />
             </div>
 
@@ -284,10 +303,10 @@ export default function App() {
                 {/* Results count & current destination heading */}
                 <div>
                   <h2 className="text-base sm:text-lg font-black text-slate-900">
-                    {activeCity === 'Semua Kota' ? 'Seluruh Indonesia' : `Hotel & Resor di ${activeCity}`}
+                    {activeCity === 'Semua Kota' ? (t?.allIndonesia || 'Seluruh Indonesia') : (t?.hotelsIn ? t.hotelsIn.replace('{city}', activeCity) : `Hotel & Resor di ${activeCity}`)}
                   </h2>
                   <p className="text-xs text-slate-500 font-medium">
-                    Menampilkan <strong className="text-brand-600 font-bold">{filteredHotels.length}</strong> akomodasi terbaik
+                    {t?.showingHotels ? t.showingHotels.replace('{count}', filteredHotels.length) : `Menampilkan ${filteredHotels.length} akomodasi terbaik`}
                   </p>
                 </div>
 
@@ -296,18 +315,18 @@ export default function App() {
                   
                   {/* Sort Dropdown */}
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-slate-500 hidden sm:inline">Urutkan:</span>
+                    <span className="text-xs font-bold text-slate-500 hidden sm:inline">{t?.sortByLabel || 'Urutkan:'}</span>
                     <div className="relative">
                       <select
                         value={sortBy}
                         onChange={(e) => setSortBy(e.target.value)}
                         className="text-xs font-bold text-slate-700 bg-slate-50 hover:bg-slate-100 border border-slate-300 rounded-xl px-3 py-2 pr-8 focus:ring-2 focus:ring-brand-500 focus:outline-none appearance-none cursor-pointer shadow-2xs"
                       >
-                        <option value="popularity">Popularitas Tertinggi</option>
-                        <option value="price_asc">Harga Terendah</option>
-                        <option value="price_desc">Harga Tertinggi</option>
-                        <option value="rating_desc">Rating Ulasan Tertinggi</option>
-                        <option value="discount_desc">Diskon Terbesar</option>
+                        <option value="popularity">{t?.sortPopularity || 'Popularitas Tertinggi'}</option>
+                        <option value="price_asc">{t?.sortPriceAsc || 'Harga Terendah'}</option>
+                        <option value="price_desc">{t?.sortPriceDesc || 'Harga Tertinggi'}</option>
+                        <option value="rating_desc">{t?.sortRatingDesc || 'Rating Ulasan Tertinggi'}</option>
+                        <option value="discount_desc">{t?.sortDiscountDesc || 'Diskon Terbesar'}</option>
                       </select>
                       <ArrowUpDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
                     </div>
@@ -342,11 +361,11 @@ export default function App() {
               {/* Active Filter Pills Bar */}
               {activeFiltersCount > 0 && (
                 <div className="flex flex-wrap items-center gap-2 pt-1 pb-2">
-                  <span className="text-xs font-bold text-slate-500">Filter Aktif:</span>
+                  <span className="text-xs font-bold text-slate-500">{t?.activeFiltersLabel || 'Filter Aktif:'}</span>
                   
                   {priceRange < 10000000 && (
                     <span className="inline-flex items-center gap-1 text-xs bg-brand-50 text-brand-700 px-2.5 py-1 rounded-lg border border-brand-200 font-semibold">
-                      Maks. {formatRupiah(priceRange)}
+                      {t?.maxPriceLabel || 'Maks.'} {formatCurrency(priceRange, currency)}
                       <button onClick={() => setPriceRange(10000000)} className="hover:text-brand-900">
                         <X className="w-3 h-3" />
                       </button>
@@ -373,7 +392,7 @@ export default function App() {
 
                   {(quickFilters.freeBreakfast || selectedFacilities.freeBreakfast) && (
                     <span className="inline-flex items-center gap-1 text-xs bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-lg border border-emerald-200 font-semibold">
-                      Sarapan Gratis
+                      {t?.facilityBreakfast || 'Sarapan Gratis'}
                       <button onClick={() => {
                         setQuickFilters(p => ({ ...p, freeBreakfast: false }));
                         setSelectedFacilities(p => ({ ...p, freeBreakfast: false }));
@@ -387,7 +406,7 @@ export default function App() {
                     onClick={handleResetFilters}
                     className="text-xs text-brand-600 font-bold hover:underline ml-1"
                   >
-                    Hapus Semua
+                    {t?.clearAllBtn || 'Hapus Semua'}
                   </button>
                 </div>
               )}
@@ -399,16 +418,16 @@ export default function App() {
                     <Building2 className="w-8 h-8" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-slate-800">Tidak ada hotel yang sesuai filter</h3>
+                    <h3 className="text-lg font-bold text-slate-800">{t?.noHotelsMatch || 'Tidak ada hotel yang sesuai filter'}</h3>
                     <p className="text-xs text-slate-500 mt-1 max-w-md mx-auto">
-                      Coba sesuaikan batas harga, kurangi filter fasilitas, atau pilih destinasi kota lainnya.
+                      {t?.noHotelsDesc || 'Coba sesuaikan batas harga, kurangi filter fasilitas, atau pilih destinasi kota lainnya.'}
                     </p>
                   </div>
                   <button
                     onClick={handleResetFilters}
                     className="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white font-bold text-xs rounded-xl shadow-xs transition-colors"
                   >
-                    Reset Filter Pencarian
+                    {t?.resetSearchFilters || 'Reset Filter Pencarian'}
                   </button>
                 </div>
               ) : viewMode === 'list' ? (
@@ -420,6 +439,9 @@ export default function App() {
                       onSelectHotel={(h) => setSelectedHotelForModal(h)}
                       onToggleWishlist={handleToggleWishlist}
                       isWishlisted={wishlist.some(w => w.id === hotel.id)}
+                      t={t}
+                      currency={currency}
+                      lang={lang}
                     />
                   ))}
                 </div>
@@ -432,6 +454,9 @@ export default function App() {
                       onSelectHotel={(h) => setSelectedHotelForModal(h)}
                       onToggleWishlist={handleToggleWishlist}
                       isWishlisted={wishlist.some(w => w.id === hotel.id)}
+                      t={t}
+                      currency={currency}
+                      lang={lang}
                     />
                   ))}
                 </div>
@@ -445,7 +470,7 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <Footer />
+      <Footer t={t} currency={currency} lang={lang} />
 
       {/* 6. Interactive Hotel Detail & Room Selection Modal */}
       {selectedHotelForModal && (
@@ -458,6 +483,9 @@ export default function App() {
           onSelectRoom={handleSelectRoom}
           isWishlisted={wishlist.some(w => w.id === selectedHotelForModal.id)}
           onToggleWishlist={handleToggleWishlist}
+          t={t}
+          currency={currency}
+          lang={lang}
         />
       )}
 
@@ -471,6 +499,9 @@ export default function App() {
           guests={guests}
           onClose={() => setCheckoutModalData(null)}
           onBookingSuccess={handleBookingSuccess}
+          t={t}
+          currency={currency}
+          lang={lang}
         />
       )}
 
@@ -483,6 +514,8 @@ export default function App() {
             setIsMapModalOpen(false);
             setSelectedHotelForModal(h);
           }}
+          t={t}
+          currency={currency}
         />
       )}
 
@@ -493,12 +526,15 @@ export default function App() {
         wishlist={wishlist}
         onRemoveFromWishlist={(id) => {
           setWishlist(prev => prev.filter(item => item.id !== id));
-          showToast('Dihapus dari Simpanan', 'Hotel telah dihapus dari wishlist.', 'wishlist');
+          showToast(t?.removeFromWishlist || 'Dihapus dari Simpanan', 'Hotel telah dihapus dari wishlist.', 'wishlist');
         }}
         onSelectHotel={(h) => {
           setIsWishlistOpen(false);
           setSelectedHotelForModal(h);
         }}
+        t={t}
+        currency={currency}
+        lang={lang}
       />
 
       {/* 10. Toast Notification */}

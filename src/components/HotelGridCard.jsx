@@ -7,13 +7,16 @@ import {
   Check, 
   CreditCard 
 } from 'lucide-react';
-import { formatRupiah, getRatingDescription } from '../utils/formatters';
+import { formatCurrency, getRatingDescription } from '../utils/formatters';
 
 export function HotelGridCard({ 
   hotel, 
   onSelectHotel, 
   onToggleWishlist, 
-  isWishlisted 
+  isWishlisted,
+  t,
+  currency = 'IDR',
+  lang = 'id'
 }) {
   return (
     <div 
@@ -84,13 +87,13 @@ export function HotelGridCard({
             {hotel.freeBreakfast && (
               <span className="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-semibold flex items-center gap-1">
                 <Check className="w-2.5 h-2.5 stroke-[3]" />
-                Sarapan
+                {t?.facilityBreakfast || 'Sarapan'}
               </span>
             )}
             {hotel.freeCancellation && (
               <span className="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-semibold flex items-center gap-1">
                 <Check className="w-2.5 h-2.5 stroke-[3]" />
-                Bisa Refund
+                {t?.facilityCancellation || 'Bisa Refund'}
               </span>
             )}
           </div>
@@ -101,23 +104,23 @@ export function HotelGridCard({
           <div>
             <div className="flex items-center gap-1">
               <span className="text-[11px] text-slate-400 line-through">
-                {formatRupiah(hotel.originalPrice)}
+                {formatCurrency(hotel.originalPrice, currency)}
               </span>
               <span className="bg-rose-100 text-rose-700 font-extrabold text-[9px] px-1 py-0.2 rounded">
                 -{hotel.discountPercent}%
               </span>
             </div>
             <div className="text-lg font-black text-cta">
-              {formatRupiah(hotel.price)}
+              {formatCurrency(hotel.price, currency)}
             </div>
-            <span className="text-[10px] text-slate-400 block">/malam</span>
+            <span className="text-[10px] text-slate-400 block">{t?.perNight || '/malam'}</span>
           </div>
 
           <button
             type="button"
             className="px-3 py-2 bg-cta hover:bg-cta-hover text-white text-xs font-bold rounded-xl shadow-xs transition-colors"
           >
-            Pilih Kamar
+            {t?.selectRoomBtn || 'Pilih Kamar'}
           </button>
         </div>
       </div>

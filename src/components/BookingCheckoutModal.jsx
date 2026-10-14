@@ -13,7 +13,7 @@ import {
   Share2,
   Clock
 } from 'lucide-react';
-import { formatRupiah, formatDateIndo, calculateNights } from '../utils/formatters';
+import { formatCurrency, formatDateIndo, calculateNights } from '../utils/formatters';
 
 export function BookingCheckoutModal({
   hotel,
@@ -22,16 +22,19 @@ export function BookingCheckoutModal({
   checkOutDate,
   guests,
   onClose,
-  onBookingSuccess
+  onBookingSuccess,
+  t,
+  currency = 'IDR',
+  lang = 'id'
 }) {
   const [step, setStep] = useState('form'); // 'form' | 'success'
   const [formData, setFormData] = useState({
-    fullName: 'Budi Pratama',
-    phone: '081234567890',
-    email: 'budi.pratama@gmail.com',
+    fullName: lang === 'en' ? 'John Tan' : lang === 'ms' ? 'Ahmad Firdaus' : 'Budi Pratama',
+    phone: lang === 'en' ? '+65 9123 4567' : lang === 'ms' ? '+60 12-345 6789' : '081234567890',
+    email: lang === 'en' ? 'johntan@gmail.com' : lang === 'ms' ? 'ahmad.firdaus@gmail.com' : 'budi.pratama@gmail.com',
     specialRequests: ['Ranjang besar (King)', 'Bebas asap rokok']
   });
-  const [paymentMethod, setPaymentMethod] = useState('bca');
+  const [paymentMethod, setPaymentMethod] = useState(currency === 'MYR' ? 'maybank' : currency === 'SGD' ? 'paynow' : 'bca');
   const [bookingCode, setBookingCode] = useState('');
 
   const nights = calculateNights(checkInDate, checkOutDate);
@@ -39,6 +42,31 @@ export function BookingCheckoutModal({
   const taxAndService = Math.round(baseRoomTotal * 0.11);
   const memberDiscount = 150000;
   const totalAmount = Math.max(0, baseRoomTotal + taxAndService - memberDiscount);
+
+  const getPaymentMethods = () => {
+    if (currency === 'MYR') {
+      return [
+        { id: 'maybank', name: 'Maybank2u', icon: '🏦' },
+        { id: 'cimb', name: 'CIMB Clicks', icon: '💳' },
+        { id: 'tng', name: "Touch 'n Go", icon: '📱' },
+        { id: 'cc', name: 'Kad Kredit', icon: '🔒' },
+      ];
+    }
+    if (currency === 'SGD') {
+      return [
+        { id: 'paynow', name: 'PayNow / QR', icon: '📱' },
+        { id: 'dbs', name: 'DBS PayLah!', icon: '🏦' },
+        { id: 'ocbc', name: 'OCBC Pay', icon: '💳' },
+        { id: 'cc', name: 'Credit Card', icon: '🔒' },
+      ];
+    }
+    return [
+      { id: 'bca', name: 'BCA Virtual Account', icon: '🏦' },
+      { id: 'mandiri', name: 'Mandiri VA', icon: '💳' },
+      { id: 'gopay', name: 'GoPay / QRIS', icon: '📱' },
+      { id: 'cc', name: 'Kartu Kredit', icon: '🔒' },
+    ];
+  };
 
   const handleSubmitBooking = (e) => {
     e.preventDefault();
@@ -62,10 +90,10 @@ export function BookingCheckoutModal({
             </div>
             <div>
               <h3 className="font-extrabold text-slate-900 text-lg">
-                {step === 'form' ? 'Konfirmasi Pemesanan & Pembayaran' : 'Pemesanan Berhasil Terkonfirmasi!'}
+                {step === 'form' ? (t?.checkoutTitle || 'Konfirmasi Pemesanan & Pembayaran') : (t?.confirmedTitle || 'Pemesanan Berhasil Terkonfirmasi!')}
               </h3>
               <p className="text-xs text-slate-500">
-                {step === 'form' ? 'Langkah terakhir untuk mengamankan kamar Anda' : 'E-Voucher resmi telah diterbitkan oleh NusaStay'}
+                {step === 'form' ? (t?.checkoutSubtitle || 'Langkah terakhir untuk mengamankan kamar Anda') : (t?.confirmedSubtitle || 'E-Voucher resmi telah diterbitkan oleh NusaStay')}
               </p>
             </div>
           </div>
@@ -95,10 +123,10 @@ export function BookingCheckoutModal({
 
               <div className="text-xs text-slate-600 sm:text-right border-t sm:border-t-0 pt-2 sm:pt-0 border-brand-200">
                 <div className="font-bold text-slate-800">
-                  {formatDateIndo(checkInDate)} - {formatDateIndo(checkOutDate)}
+                  {formatDateIndo(checkInDate, lang)} - {formatDateIndo(checkOutDate, lang)}
                 </div>
                 <div className="text-slate-500">
-                  {nights} Malam • {guests.adults} Dewasa ({guests.rooms} Kamar)
+                  {nights} {t?.nights || 'Malam'} • {guests.adults} {t?.adults || 'Dewasa'} ({guests.rooms} {t?.rooms || 'Kamar'})
                 </div>
               </div>
             </div>
@@ -106,12 +134,12 @@ export function BookingCheckoutModal({
             {/* 2. Contact Information Inputs */}
             <div>
               <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-3">
-                1. Data Tamu & Pemesan
+                {t?.guestDetailsTitle || '1. Data Tamu & Pemesan'}
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    Nama Lengkap (sesuai KTP / Paspor)
+                    {t?.fullNameLabel || 'Nama Lengkap (sesuai KTP / Paspor)'}
                   </label>
                   <input
                     type="text"
@@ -124,7 +152,7 @@ export function BookingCheckoutModal({
 
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    No. Handphone (WhatsApp)
+                    {t?.phoneLabel || 'No. Handphone (WhatsApp)'}
                   </label>
                   <input
                     type="tel"
@@ -137,7 +165,7 @@ export function BookingCheckoutModal({
 
                 <div className="sm:col-span-2">
                   <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    Alamat Email (E-Voucher akan dikirim ke sini)
+                    {t?.emailLabel || 'Alamat Email (E-Voucher akan dikirim ke sini)'}
                   </label>
                   <input
                     type="email"
@@ -153,15 +181,10 @@ export function BookingCheckoutModal({
             {/* 3. Payment Method */}
             <div>
               <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-3">
-                2. Metode Pembayaran Cepat
+                {t?.paymentMethodTitle || '2. Metode Pembayaran Cepat'}
               </h4>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                {[
-                  { id: 'bca', name: 'BCA Virtual Account', icon: '🏦' },
-                  { id: 'mandiri', name: 'Mandiri VA', icon: '💳' },
-                  { id: 'gopay', name: 'GoPay / QRIS', icon: '📱' },
-                  { id: 'cc', name: 'Kartu Kredit', icon: '🔒' },
-                ].map(pm => (
+                {getPaymentMethods().map(pm => (
                   <label
                     key={pm.id}
                     onClick={() => setPaymentMethod(pm.id)}
@@ -181,20 +204,20 @@ export function BookingCheckoutModal({
             {/* 4. Transparent Price Breakdown */}
             <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200 space-y-2 text-xs">
               <div className="flex justify-between text-slate-600">
-                <span>Biaya Kamar ({nights} Malam x {formatRupiah(room?.price || hotel?.price)})</span>
-                <span className="font-semibold text-slate-800">{formatRupiah(baseRoomTotal)}</span>
+                <span>{t?.roomCost || 'Biaya Kamar'} ({nights} {t?.nights || 'Malam'} x {formatCurrency(room?.price || hotel?.price, currency)})</span>
+                <span className="font-semibold text-slate-800">{formatCurrency(baseRoomTotal, currency)}</span>
               </div>
               <div className="flex justify-between text-slate-600">
-                <span>Pajak & Biaya Layanan Resmi (11%)</span>
-                <span className="font-semibold text-slate-800">{formatRupiah(taxAndService)}</span>
+                <span>{t?.taxAndService || 'Pajak & Biaya Layanan Resmi (11%)'}</span>
+                <span className="font-semibold text-slate-800">{formatCurrency(taxAndService, currency)}</span>
               </div>
               <div className="flex justify-between text-emerald-600 font-semibold">
-                <span>Diskon Eksklusif Member NusaStay</span>
-                <span>- {formatRupiah(memberDiscount)}</span>
+                <span>{t?.memberDiscount || 'Diskon Eksklusif Member NusaStay'}</span>
+                <span>- {formatCurrency(memberDiscount, currency)}</span>
               </div>
               <div className="pt-2 border-t border-slate-200 flex justify-between items-center text-sm">
-                <span className="font-extrabold text-slate-900">Total Pembayaran</span>
-                <span className="text-xl font-black text-cta">{formatRupiah(totalAmount)}</span>
+                <span className="font-extrabold text-slate-900">{t?.totalPayment || 'Total Pembayaran'}</span>
+                <span className="text-xl font-black text-cta">{formatCurrency(totalAmount, currency)}</span>
               </div>
             </div>
 
@@ -203,7 +226,7 @@ export function BookingCheckoutModal({
               type="submit"
               className="w-full py-3.5 bg-cta hover:bg-cta-hover text-white font-extrabold text-base rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 active:scale-98"
             >
-              <span>Bayar & Konfirmasi Pemesanan ({formatRupiah(totalAmount)})</span>
+              <span>{t?.payAndConfirm || 'Bayar & Konfirmasi Pemesanan'} ({formatCurrency(totalAmount, currency)})</span>
             </button>
 
             <div className="text-center text-[11px] text-slate-400 flex items-center justify-center gap-1">
@@ -221,13 +244,17 @@ export function BookingCheckoutModal({
 
             <div>
               <span className="text-xs font-extrabold uppercase tracking-widest text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">
-                Pembayaran Sukses
+                {lang === 'en' ? 'Payment Successful' : lang === 'ms' ? 'Bayaran Berjaya' : 'Pembayaran Sukses'}
               </span>
               <h3 className="text-2xl font-black text-slate-900 mt-2">
-                Selamat, Pesanan Anda Berhasil!
+                {t?.confirmedTitle || 'Selamat, Pesanan Anda Berhasil!'}
               </h3>
               <p className="text-sm text-slate-500 mt-1">
-                E-Voucher telah dikirimkan ke email <strong className="text-slate-800">{formData.email}</strong>
+                {lang === 'en'
+                  ? <>E-Voucher has been sent to <strong className="text-slate-800">{formData.email}</strong></>
+                  : lang === 'ms'
+                  ? <>E-Baucar telah dihantar ke e-mel <strong className="text-slate-800">{formData.email}</strong></>
+                  : <>E-Voucher telah dikirimkan ke email <strong className="text-slate-800">{formData.email}</strong></>}
               </p>
             </div>
 
@@ -235,7 +262,7 @@ export function BookingCheckoutModal({
             <div className="bg-gradient-to-br from-slate-50 to-blue-50/50 border border-slate-200 rounded-2xl p-5 text-left max-w-lg mx-auto shadow-sm">
               <div className="flex justify-between items-start border-b border-slate-200 pb-3 mb-3">
                 <div>
-                  <div className="text-[10px] text-slate-400 font-bold uppercase">No. Booking NusaStay</div>
+                  <div className="text-[10px] text-slate-400 font-bold uppercase">{t?.bookingCodeLabel || 'No. Booking NusaStay'}</div>
                   <div className="text-lg font-mono font-black text-brand-600 tracking-wider">
                     {bookingCode}
                   </div>
@@ -243,20 +270,22 @@ export function BookingCheckoutModal({
                 <div className="text-right">
                   <div className="text-[10px] text-slate-400 font-bold uppercase">Status</div>
                   <div className="text-xs font-extrabold text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded">
-                    TERKONFIRMASI
+                    {t?.statusConfirmed || 'TERKONFIRMASI'}
                   </div>
                 </div>
               </div>
 
               <div className="space-y-1.5 text-xs text-slate-700">
                 <p><strong className="text-slate-900">Hotel:</strong> {hotel?.name}</p>
-                <p><strong className="text-slate-900">Tipe Kamar:</strong> {room?.name || 'Deluxe Room'}</p>
-                <p><strong className="text-slate-900">Tamu:</strong> {formData.fullName} ({guests.adults} Dewasa)</p>
-                <p><strong className="text-slate-900">Jadwal:</strong> {formatDateIndo(checkInDate)} s.d {formatDateIndo(checkOutDate)} ({nights} Malam)</p>
+                <p><strong className="text-slate-900">{lang === 'en' ? 'Room Type:' : lang === 'ms' ? 'Jenis Bilik:' : 'Tipe Kamar:'}</strong> {room?.name || 'Deluxe Room'}</p>
+                <p><strong className="text-slate-900">{lang === 'en' ? 'Guest:' : lang === 'ms' ? 'Tetamu:' : 'Tamu:'}</strong> {formData.fullName} ({guests.adults} {t?.adults || 'Dewasa'})</p>
+                <p><strong className="text-slate-900">{lang === 'en' ? 'Schedule:' : lang === 'ms' ? 'Jadual:' : 'Jadwal:'}</strong> {formatDateIndo(checkInDate, lang)} - {formatDateIndo(checkOutDate, lang)} ({nights} {t?.nights || 'Malam'})</p>
               </div>
 
               <div className="mt-4 pt-3 border-t border-dashed border-slate-300 flex items-center justify-between text-xs">
-                <span className="text-slate-500">Tunjukkan e-voucher ini saat check-in di resepsionis hotel.</span>
+                <span className="text-slate-500">
+                  {lang === 'en' ? 'Present this e-voucher upon check-in at the hotel front desk.' : lang === 'ms' ? 'Tunjukkan e-baucar ini semasa daftar masuk di kaunter hotel.' : 'Tunjukkan e-voucher ini saat check-in di resepsionis hotel.'}
+                </span>
                 <QrCode className="w-8 h-8 text-slate-800" />
               </div>
             </div>
@@ -268,14 +297,14 @@ export function BookingCheckoutModal({
                 className="px-5 py-2.5 bg-brand-500 hover:bg-brand-600 text-white font-bold text-sm rounded-xl flex items-center justify-center gap-1.5 shadow-sm transition-colors"
               >
                 <Download className="w-4 h-4" />
-                Unduh PDF Voucher
+                {t?.downloadPdf || 'Unduh PDF Voucher'}
               </button>
               <button
                 type="button"
                 onClick={onClose}
                 className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm rounded-xl transition-colors"
               >
-                Kembali ke Beranda
+                {t?.backToHome || 'Kembali ke Beranda'}
               </button>
             </div>
           </div>

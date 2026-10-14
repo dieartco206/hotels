@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { X, MapPin, Star, Building2, ChevronRight } from 'lucide-react';
-import { formatRupiah } from '../utils/formatters';
+import { formatCurrency } from '../utils/formatters';
 
 export function InteractiveMapModal({ 
   hotels, 
   onClose, 
-  onSelectHotel 
+  onSelectHotel,
+  t,
+  currency = 'IDR'
 }) {
   const [activeHotel, setActiveHotel] = useState(hotels[0] || null);
 
@@ -20,8 +22,8 @@ export function InteractiveMapModal({
               <MapPin className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-extrabold text-slate-900 text-lg">Peta Lokasi Hotel & Resor</h3>
-              <p className="text-xs text-slate-500">Klik pin harga untuk melihat pratinjau akomodasi</p>
+              <h3 className="font-extrabold text-slate-900 text-lg">{t?.mapTitle || 'Peta Lokasi Hotel & Resor'}</h3>
+              <p className="text-xs text-slate-500">{t?.mapSubtitle || 'Klik pin harga untuk melihat pratinjau akomodasi'}</p>
             </div>
           </div>
           <button
@@ -73,7 +75,7 @@ export function InteractiveMapModal({
                           ? 'bg-cta text-white border-cta shadow-lg' 
                           : 'bg-white text-slate-800 border-slate-300 hover:border-brand-500 hover:text-brand-600'
                       }`}>
-                        <span>{formatRupiah(hotel.price)}</span>
+                        <span>{formatCurrency(hotel.price, currency)}</span>
                       </div>
                       {/* Pin arrow indicator */}
                       <div className={`w-2 h-2 rotate-45 -mt-1 ${isSelected ? 'bg-cta' : 'bg-white'}`} />
@@ -112,10 +114,10 @@ export function InteractiveMapModal({
                   <div className="mt-2 flex items-center justify-between">
                     <div>
                       <span className="text-xs text-slate-400 line-through block text-[10px]">
-                        {formatRupiah(activeHotel.originalPrice)}
+                        {formatCurrency(activeHotel.originalPrice, currency)}
                       </span>
                       <span className="text-sm font-black text-cta">
-                        {formatRupiah(activeHotel.price)}
+                        {formatCurrency(activeHotel.price, currency)}
                       </span>
                     </div>
 
@@ -126,7 +128,7 @@ export function InteractiveMapModal({
                       }}
                       className="px-3 py-1.5 bg-cta hover:bg-cta-hover text-white text-xs font-bold rounded-lg shadow-xs transition-colors flex items-center gap-0.5"
                     >
-                      Pilih Kamar
+                      {t?.selectRoomBtn || 'Pilih Kamar'}
                       <ChevronRight className="w-3.5 h-3.5" />
                     </button>
                   </div>

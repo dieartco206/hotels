@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
   Building2, 
   Heart, 
@@ -11,13 +11,39 @@ import {
   ShieldCheck,
   ChevronDown,
   Compass,
-  PhoneCall
+  PhoneCall,
+  Globe2
 } from 'lucide-react';
+import { SUPPORTED_LANGUAGES, SUPPORTED_CURRENCIES } from '../utils/i18n';
 
-export function Navbar({ wishlistCount = 0, onOpenWishlist, onSelectPromo }) {
+export function Navbar({ 
+  wishlistCount = 0, 
+  onOpenWishlist, 
+  onSelectPromo,
+  lang,
+  setLang,
+  currency,
+  setCurrency,
+  t
+}) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [currencyDropdownOpen, setCurrencyDropdownOpen] = useState(false);
+  const [localeDropdownOpen, setLocaleDropdownOpen] = useState(false);
   const [authModal, setAuthModal] = useState(null); // 'login' | 'register' | null
+
+  const localeRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (localeRef.current && !localeRef.current.contains(event.target)) {
+        setLocaleDropdownOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const currentLang = SUPPORTED_LANGUAGES.find(l => l.code === lang) || SUPPORTED_LANGUAGES[0];
+  const currentCurr = SUPPORTED_CURRENCIES.find(c => c.code === currency) || SUPPORTED_CURRENCIES[0];
 
   return (
     <>
@@ -28,52 +54,149 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, onSelectPromo }) {
             <div className="flex items-center gap-5">
               <span className="flex items-center gap-1.5 text-emerald-700 font-semibold">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                Jaminan Harga Terbaik & Konfirmasi Langsung dari Hotel
+                {t.guaranteeText}
               </span>
               <span className="text-slate-300">•</span>
               <span className="flex items-center gap-1 text-slate-600">
                 <PhoneCall className="w-3 h-3 text-slate-400" />
-                Concierge 24 Jam: 021-5088-9000
+                {t.conciergeText}
               </span>
             </div>
             
             <div className="flex items-center gap-4">
               <a 
                 href="#partner" 
-                onClick={(e) => { e.preventDefault(); alert('Portal Mitra Properti NusaStay: Gabung bersama lebih dari 2.500 akomodasi terbaik di Indonesia.'); }}
+                onClick={(e) => { e.preventDefault(); alert(t.navPartner + ': Portal NusaStay.'); }}
                 className="hover:text-brand-600 flex items-center gap-1.5 font-medium transition-colors"
               >
                 <Building2 className="w-3.5 h-3.5 text-slate-400" />
-                Daftarkan Properti
+                {t.navPartner}
               </a>
               <span className="text-slate-300">•</span>
               
-              {/* Currency Selector */}
-              <div className="relative">
+              {/* Region, Language & Currency Selector */}
+              <div className="relative" ref={localeRef}>
                 <button 
-                  onClick={() => setCurrencyDropdownOpen(!currencyDropdownOpen)}
-                  className="flex items-center gap-1.5 hover:text-slate-900 transition-colors font-semibold text-slate-700"
+                  onClick={() => setLocaleDropdownOpen(!localeDropdownOpen)}
+                  className="flex items-center gap-2 hover:text-slate-900 transition-colors font-bold text-slate-700 bg-white px-2.5 py-1 rounded-lg border border-slate-200 hover:border-brand-400 shadow-2xs"
+                  title="Ganti Bahasa & Mata Uang"
                 >
-                  <span className="inline-block w-4 h-3 bg-red-600 relative overflow-hidden rounded-xs border border-slate-200 shadow-2xs">
-                    <span className="absolute bottom-0 left-0 right-0 h-1/2 bg-white"></span>
-                  </span>
-                  <span>IDR (Rp)</span>
+                  <span className="text-sm">{currentLang.flag}</span>
+                  <span className="text-xs uppercase">{currentCurr.code} ({currentCurr.symbol})</span>
+                  <span className="text-slate-300">|</span>
+                  <span className="text-xs uppercase text-slate-500">{currentLang.code}</span>
                   <ChevronDown className="w-3 h-3 text-slate-400" />
                 </button>
 
-                {currencyDropdownOpen && (
-                  <div className="absolute right-0 top-6 w-44 bg-white rounded-xl shadow-float border border-slate-200 py-2 text-left z-50">
-                    <div className="px-3 py-1 font-bold text-slate-400 text-[10px] uppercase tracking-wider">Mata Uang</div>
-                    <button className="w-full text-left px-3 py-1.5 hover:bg-slate-50 text-brand-600 font-bold flex items-center justify-between text-xs">
-                      <span>Rupiah Indonesia (IDR)</span>
-                      <span>✓</span>
-                    </button>
-                    <button className="w-full text-left px-3 py-1.5 hover:bg-slate-50 text-slate-600 text-xs">
-                      US Dollar (USD)
-                    </button>
-                    <button className="w-full text-left px-3 py-1.5 hover:bg-slate-50 text-slate-600 text-xs">
-                      Singapore Dollar (SGD)
-                    </button>
+                {localeDropdownOpen && (
+                  <div className="absolute right-0 top-8 w-72 bg-white rounded-2xl shadow-float border border-slate-200 p-4 text-left z-50 animate-in fade-in duration-150">
+                    
+                    {/* Quick Region Presets */}
+                    <div className="mb-3">
+                      <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-2">
+                        Pilih Negara / Wilayah Cepat:
+                      </span>
+                      <div className="space-y-1">
+                        <button
+                          onClick={() => {
+                            setLang('id');
+                            setCurrency('IDR');
+                            setLocaleDropdownOpen(false);
+                          }}
+                          className={`w-full flex items-center justify-between p-2 rounded-xl text-xs font-bold transition-colors ${
+                            lang === 'id' && currency === 'IDR'
+                              ? 'bg-brand-50 text-brand-700 border border-brand-200'
+                              : 'hover:bg-slate-50 text-slate-700'
+                          }`}
+                        >
+                          <span className="flex items-center gap-2">
+                            <span className="text-base">🇮🇩</span>
+                            <span>Indonesia (IDR - Rp)</span>
+                          </span>
+                          {lang === 'id' && currency === 'IDR' && <span className="text-brand-600 font-black">✓</span>}
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            setLang('ms');
+                            setCurrency('MYR');
+                            setLocaleDropdownOpen(false);
+                          }}
+                          className={`w-full flex items-center justify-between p-2 rounded-xl text-xs font-bold transition-colors ${
+                            lang === 'ms' && currency === 'MYR'
+                              ? 'bg-brand-50 text-brand-700 border border-brand-200'
+                              : 'hover:bg-slate-50 text-slate-700'
+                          }`}
+                        >
+                          <span className="flex items-center gap-2">
+                            <span className="text-base">🇲🇾</span>
+                            <span>Malaysia (MYR - RM)</span>
+                          </span>
+                          {lang === 'ms' && currency === 'MYR' && <span className="text-brand-600 font-black">✓</span>}
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            setLang('en');
+                            setCurrency('SGD');
+                            setLocaleDropdownOpen(false);
+                          }}
+                          className={`w-full flex items-center justify-between p-2 rounded-xl text-xs font-bold transition-colors ${
+                            lang === 'en' && currency === 'SGD'
+                              ? 'bg-brand-50 text-brand-700 border border-brand-200'
+                              : 'hover:bg-slate-50 text-slate-700'
+                          }`}
+                        >
+                          <span className="flex items-center gap-2">
+                            <span className="text-base">🇸🇬</span>
+                            <span>Singapore (SGD - S$)</span>
+                          </span>
+                          {lang === 'en' && currency === 'SGD' && <span className="text-brand-600 font-black">✓</span>}
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Independent Customization */}
+                    <div className="pt-3 border-t border-slate-100 grid grid-cols-2 gap-3 text-xs">
+                      <div>
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
+                          Bahasa:
+                        </span>
+                        <div className="space-y-0.5">
+                          {SUPPORTED_LANGUAGES.map(l => (
+                            <button
+                              key={l.code}
+                              onClick={() => setLang(l.code)}
+                              className={`w-full text-left px-2 py-1 rounded-lg text-xs font-semibold ${
+                                lang === l.code ? 'bg-slate-100 text-brand-700 font-bold' : 'text-slate-600 hover:bg-slate-50'
+                              }`}
+                            >
+                              {l.flag} {l.name}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
+                          Mata Uang:
+                        </span>
+                        <div className="space-y-0.5">
+                          {SUPPORTED_CURRENCIES.map(c => (
+                            <button
+                              key={c.code}
+                              onClick={() => setCurrency(c.code)}
+                              className={`w-full text-left px-2 py-1 rounded-lg text-xs font-semibold ${
+                                currency === c.code ? 'bg-slate-100 text-brand-700 font-bold' : 'text-slate-600 hover:bg-slate-50'
+                              }`}
+                            >
+                              {c.code} ({c.symbol})
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
                   </div>
                 )}
               </div>
@@ -98,7 +221,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, onSelectPromo }) {
                     </span>
                   </div>
                   <span className="text-[10px] font-bold tracking-widest text-slate-400 uppercase mt-0.5">
-                    Kurasi Hotel Nusantara
+                    {t.brandTagline}
                   </span>
                 </div>
               </a>
@@ -110,7 +233,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, onSelectPromo }) {
                   className="px-3.5 py-2 text-sm font-bold text-brand-700 bg-brand-50 rounded-xl flex items-center gap-2 border border-brand-100"
                 >
                   <Building2 className="w-4 h-4 text-brand-600" />
-                  Eksplor Hotel
+                  {t.navExplore}
                 </a>
                 
                 <a 
@@ -119,7 +242,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, onSelectPromo }) {
                   className="px-3.5 py-2 text-sm font-semibold text-slate-600 hover:text-brand-600 hover:bg-slate-50 rounded-xl transition-colors flex items-center gap-1.5"
                 >
                   <Palmtree className="w-4 h-4 text-emerald-600" />
-                  Resor & Villa
+                  {t.navVillas}
                 </a>
 
                 <a 
@@ -127,7 +250,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, onSelectPromo }) {
                   className="px-3.5 py-2 text-sm font-semibold text-slate-600 hover:text-rose-600 hover:bg-slate-50 rounded-xl transition-colors flex items-center gap-1.5 relative"
                 >
                   <Percent className="w-4 h-4 text-rose-500" />
-                  Promo Terbatas
+                  {t.navDeals}
                   <span className="px-1.5 py-0.5 bg-rose-500 text-[10px] font-extrabold text-white rounded-full uppercase tracking-wider">
                     DEAL
                   </span>
@@ -135,22 +258,32 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, onSelectPromo }) {
 
                 <a 
                   href="#orders" 
-                  onClick={(e) => { e.preventDefault(); alert('Cek Pesanan: Masukkan Kode Booking NusaStay (contoh: NUSA-123456) dan alamat email pemesan.'); }}
+                  onClick={(e) => { e.preventDefault(); alert(t.navOrders + ': Masukkan Kode Booking NusaStay.'); }}
                   className="px-3.5 py-2 text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-colors flex items-center gap-1.5"
                 >
                   <FileText className="w-4 h-4 text-slate-400" />
-                  Cek Pesanan
+                  {t.navOrders}
                 </a>
               </nav>
             </div>
 
             {/* Right Action Buttons */}
             <div className="hidden sm:flex items-center gap-3">
+              
+              {/* Quick Currency Switcher Pill */}
+              <button
+                onClick={() => setLocaleDropdownOpen(true)}
+                className="lg:hidden flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-700"
+              >
+                <span>{currentLang.flag}</span>
+                <span>{currentCurr.code}</span>
+              </button>
+
               {/* Wishlist Button */}
               <button 
                 onClick={onOpenWishlist}
                 className="relative p-2.5 rounded-xl border border-slate-200 text-slate-600 hover:text-rose-600 hover:border-rose-200 hover:bg-rose-50/40 transition-all duration-150 group"
-                title="Daftar Simpanan (Wishlist)"
+                title={t.saveWishlist}
               >
                 <Heart className={`w-5 h-5 transition-transform group-hover:scale-110 ${wishlistCount > 0 ? 'fill-rose-500 text-rose-500' : ''}`} />
                 {wishlistCount > 0 && (
@@ -166,7 +299,7 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, onSelectPromo }) {
                 className="px-4 py-2 text-sm font-bold text-brand-600 border border-brand-500 hover:bg-brand-50 rounded-xl transition-all duration-150 flex items-center gap-1.5 shadow-2xs"
               >
                 <User className="w-4 h-4" />
-                Masuk
+                {t.navLogin}
               </button>
 
               {/* Register Button */}
@@ -174,12 +307,23 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, onSelectPromo }) {
                 onClick={() => setAuthModal('register')}
                 className="px-5 py-2 text-sm font-bold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-sm hover:shadow transition-all duration-150 flex items-center gap-1.5"
               >
-                Daftar
+                {t.navRegister}
               </button>
             </div>
 
-            {/* Mobile Hamburger */}
+            {/* Mobile Hamburger & Language Selector */}
             <div className="sm:hidden flex items-center gap-2">
+              <button
+                onClick={() => {
+                  const nextLang = lang === 'id' ? 'ms' : lang === 'ms' ? 'en' : 'id';
+                  const nextCurr = nextLang === 'id' ? 'IDR' : nextLang === 'ms' ? 'MYR' : 'SGD';
+                  setLang(nextLang);
+                  setCurrency(nextCurr);
+                }}
+                className="px-2 py-1 rounded-lg border border-slate-200 text-xs font-bold"
+              >
+                {currentLang.flag} {currentCurr.code}
+              </button>
               <button 
                 onClick={onOpenWishlist}
                 className="relative p-2 rounded-xl border border-slate-200 text-slate-600"
@@ -209,41 +353,41 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, onSelectPromo }) {
               onClick={() => setMobileMenuOpen(false)}
               className="block px-3.5 py-2.5 text-sm font-bold text-brand-700 bg-brand-50 rounded-xl"
             >
-              🏨 Eksplor Hotel
+              🏨 {t.navExplore}
             </a>
             <a 
               href="#flash-sale" 
               onClick={() => setMobileMenuOpen(false)}
               className="block px-3.5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 rounded-xl"
             >
-              🏷️ Promo Terbatas
+              🏷️ {t.navDeals}
             </a>
             <a 
               href="#villas" 
               onClick={() => { setMobileMenuOpen(false); onSelectPromo && onSelectPromo('villa'); }}
               className="block px-3.5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 rounded-xl"
             >
-              🌴 Resor & Villa
+              🌴 {t.navVillas}
             </a>
             <div className="pt-2 border-t border-slate-100 flex gap-2">
               <button 
                 onClick={() => { setMobileMenuOpen(false); setAuthModal('login'); }}
                 className="w-1/2 py-2.5 text-center text-sm font-bold text-brand-600 border border-brand-500 rounded-xl"
               >
-                Masuk
+                {t.navLogin}
               </button>
               <button 
                 onClick={() => { setMobileMenuOpen(false); setAuthModal('register'); }}
                 className="w-1/2 py-2.5 text-center text-sm font-bold text-white bg-brand-600 rounded-xl"
               >
-                Daftar
+                {t.navRegister}
               </button>
             </div>
           </div>
         )}
       </header>
 
-      {/* Auth Modal (Clean Bespoke Identity) */}
+      {/* Auth Modal */}
       {authModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 animate-in fade-in duration-200">
           <div className="bg-white rounded-3xl shadow-modal border border-slate-200 w-full max-w-md p-6 relative">
@@ -259,40 +403,40 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, onSelectPromo }) {
                 <Compass className="w-6 h-6 stroke-[2.2]" />
               </div>
               <h3 className="text-xl font-black text-slate-900">
-                {authModal === 'login' ? 'Masuk ke Akun NusaStay' : 'Bergabung Bersama NusaStay'}
+                {authModal === 'login' ? `${t.navLogin} NusaStay` : `${t.navRegister} NusaStay`}
               </h3>
               <p className="text-xs text-slate-500 mt-1">
-                Dapatkan harga khusus anggota hingga 30% dan jaminan konfirmasi instan
+                {lang === 'en' ? 'Exclusive member rates up to 30% and instant confirmation' : lang === 'ms' ? 'Kadar diskaun ahli eksklusif hingga 30% dan pengesahan segera' : 'Dapatkan harga khusus anggota hingga 30% dan jaminan konfirmasi instan'}
               </p>
             </div>
 
-            <form onSubmit={(e) => { e.preventDefault(); alert(`Berhasil ${authModal === 'login' ? 'masuk' : 'mendaftar'}! Selamat datang di NusaStay.`); setAuthModal(null); }} className="space-y-3.5">
+            <form onSubmit={(e) => { e.preventDefault(); alert(`Berhasil ${authModal === 'login' ? 'masuk' : 'mendaftar'}!`); setAuthModal(null); }} className="space-y-3.5">
               {authModal === 'register' && (
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Nama Lengkap</label>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">{t.fullNameLabel}</label>
                   <input 
                     type="text" 
                     required 
-                    placeholder="Contoh: Budi Pratama"
+                    placeholder="Budi Pratama"
                     className="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500" 
                   />
                 </div>
               )}
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Email atau No. Handphone</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">{t.emailLabel}</label>
                 <input 
                   type="text" 
                   required 
-                  placeholder="Contoh: budi@gmail.com / 08123456789"
+                  placeholder="budi@gmail.com"
                   className="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500" 
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Kata Sandi</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Password</label>
                 <input 
                   type="password" 
                   required 
-                  placeholder="Minimal 8 karakter"
+                  placeholder="••••••••"
                   className="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500" 
                 />
               </div>
@@ -301,16 +445,8 @@ export function Navbar({ wishlistCount = 0, onOpenWishlist, onSelectPromo }) {
                 type="submit"
                 className="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-extrabold rounded-xl shadow-sm transition-all duration-150 mt-2"
               >
-                {authModal === 'login' ? 'Masuk Sekarang' : 'Daftar Akun Baru'}
+                {authModal === 'login' ? t.navLogin : t.navRegister}
               </button>
-
-              <div className="text-center text-xs text-slate-500 pt-2">
-                {authModal === 'login' ? (
-                  <span>Belum punya akun? <button type="button" onClick={() => setAuthModal('register')} className="text-brand-600 font-bold hover:underline">Daftar sekarang</button></span>
-                ) : (
-                  <span>Sudah punya akun? <button type="button" onClick={() => setAuthModal('login')} className="text-brand-600 font-bold hover:underline">Masuk di sini</button></span>
-                )}
-              </div>
             </form>
           </div>
         </div>

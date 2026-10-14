@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Flame, Clock, Tag, ChevronRight, Star, MapPin, Check } from 'lucide-react';
-import { formatRupiah } from '../utils/formatters';
+import { formatCurrency } from '../utils/i18n';
 
-export function FlashSaleBanner({ flashHotels, onSelectHotel }) {
+export function FlashSaleBanner({ flashHotels, onSelectHotel, t, currency, lang }) {
   const [selectedCategory, setSelectedCategory] = useState('all');
   
   // Real-time ticking countdown timer
@@ -31,6 +31,15 @@ export function FlashSaleBanner({ flashHotels, onSelectHotel }) {
 
   const formatPad = (num) => String(num).padStart(2, '0');
 
+  // Localized Categories
+  const categories = [
+    { id: 'all', label: lang === 'en' ? 'All Deals' : lang === 'ms' ? 'Semua Tawaran' : 'Semua Penawaran' },
+    { id: 'bali', label: '🏝️ Bali Retreat' },
+    { id: 'jakarta', label: lang === 'en' ? '🏙️ Jakarta City' : '🏙️ Jakarta Metropolitan' },
+    { id: 'bandung', label: lang === 'en' ? '⛰️ Highland Bandung' : '⛰️ Bandung Sejuk' },
+    { id: 'luxury', label: lang === 'en' ? '⭐ 5-Star Luxury' : '⭐ Resor Bintang 5' },
+  ];
+
   // Filter flash hotels based on tab
   const filteredFlashHotels = flashHotels.filter(hotel => {
     if (selectedCategory === 'all') return true;
@@ -55,12 +64,12 @@ export function FlashSaleBanner({ flashHotels, onSelectHotel }) {
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-xs font-black uppercase tracking-wider text-rose-600 bg-rose-100 px-2.5 py-0.5 rounded-full">
-                  Penawaran Kilat
+                  {t.flashSaleBadge}
                 </span>
-                <span className="text-xs text-slate-500 font-medium hidden sm:inline">Harga terendah dalam 30 hari terakhir</span>
+                <span className="text-xs text-slate-500 font-medium hidden sm:inline">{t.flashSaleSubtitle}</span>
               </div>
               <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-0.5">
-                Koleksi Spesial Periode Terbatas
+                {t.flashSaleTitle}
               </h2>
             </div>
           </div>
@@ -68,7 +77,7 @@ export function FlashSaleBanner({ flashHotels, onSelectHotel }) {
           {/* Countdown Clock */}
           <div className="flex items-center gap-2 self-start md:self-auto bg-white px-4 py-2 rounded-2xl border border-rose-200 shadow-xs">
             <Clock className="w-4 h-4 text-rose-500" />
-            <span className="text-xs font-bold text-slate-600">Berakhir Dalam:</span>
+            <span className="text-xs font-bold text-slate-600">{t.endsIn}</span>
             <div className="flex items-center gap-1 font-mono font-black text-rose-600 text-sm">
               <span className="bg-rose-50 px-2 py-0.5 rounded border border-rose-100">{formatPad(timeLeft.hours)}</span>
               <span>:</span>
@@ -81,13 +90,7 @@ export function FlashSaleBanner({ flashHotels, onSelectHotel }) {
 
         {/* Category Filter Pills */}
         <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-6 scrollbar-none">
-          {[
-            { id: 'all', label: 'Semua Penawaran' },
-            { id: 'bali', label: '🏝️ Bali Retreat' },
-            { id: 'jakarta', label: '🏙️ Jakarta Metropolitan' },
-            { id: 'bandung', label: '⛰️ Bandung Sejuk' },
-            { id: 'luxury', label: '⭐ Resor Bintang 5' },
-          ].map(cat => (
+          {categories.map(cat => (
             <button
               key={cat.id}
               onClick={() => setSelectedCategory(cat.id)}
@@ -110,7 +113,7 @@ export function FlashSaleBanner({ flashHotels, onSelectHotel }) {
               onClick={() => onSelectHotel(hotel)}
               className="group bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-card hover:shadow-float hover:-translate-y-1 transition-all duration-200 cursor-pointer flex flex-col justify-between"
             >
-              {/* Photo & Badges - STRICT UNIFORM HEIGHT (h-48) */}
+              {/* Photo & Badges */}
               <div className="relative h-48 w-full overflow-hidden bg-slate-100 shrink-0">
                 <img
                   src={hotel.mainImage}
@@ -121,7 +124,7 @@ export function FlashSaleBanner({ flashHotels, onSelectHotel }) {
                 {/* Top-Left Discount Badge */}
                 <div className="absolute top-2.5 left-2.5 bg-rose-600 text-white font-black text-xs px-2.5 py-1 rounded-lg shadow-sm flex items-center gap-1">
                   <Tag className="w-3 h-3" />
-                  Hemat {hotel.discountPercent}%
+                  {t.savePercent} {hotel.discountPercent}%
                 </div>
 
                 {/* Top-Right Property Type Pill */}
@@ -137,7 +140,7 @@ export function FlashSaleBanner({ flashHotels, onSelectHotel }) {
                 </div>
               </div>
 
-              {/* Card Body - Dense, well-spaced, no awkward empty void */}
+              {/* Card Body */}
               <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
                 <div className="space-y-1.5">
                   <div className="flex items-center gap-1 text-[11px] text-slate-500 font-semibold">
@@ -153,17 +156,17 @@ export function FlashSaleBanner({ flashHotels, onSelectHotel }) {
                   <div className="flex flex-wrap items-center gap-1.5 pt-0.5 text-[10px] font-semibold text-emerald-700">
                     <span className="bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100 flex items-center gap-0.5">
                       <Check className="w-2.5 h-2.5 stroke-[3]" />
-                      Sarapan Gratis
+                      {t.facilityBreakfast}
                     </span>
                     <span className="bg-blue-50 text-brand-700 px-2 py-0.5 rounded border border-blue-100">
-                      Kolam Renang
+                      {t.facilityPool}
                     </span>
                   </div>
 
                   {/* Quota Progress */}
                   <div className="pt-1.5">
                     <div className="flex justify-between items-center text-[11px] font-bold text-rose-600 mb-1">
-                      <span>🔥 Sisa {hotel.flashSaleRemaining || 2} kamar promo</span>
+                      <span>🔥 {t.remainingRooms.replace('{count}', hotel.flashSaleRemaining || 2)}</span>
                     </div>
                     <div className="w-full bg-rose-100 h-1.5 rounded-full overflow-hidden">
                       <div 
@@ -178,18 +181,18 @@ export function FlashSaleBanner({ flashHotels, onSelectHotel }) {
                 <div className="pt-3 border-t border-slate-100 flex items-end justify-between">
                   <div>
                     <span className="text-[11px] text-slate-400 line-through block font-medium">
-                      {formatRupiah(hotel.originalPrice)}
+                      {formatCurrency(hotel.originalPrice, currency)}
                     </span>
                     <span className="text-base sm:text-lg font-black text-rose-600 leading-tight block">
-                      {formatRupiah(hotel.price)}
+                      {formatCurrency(hotel.price, currency)}
                     </span>
-                    <span className="text-[10px] text-slate-400 block font-medium">/malam (bersih)</span>
+                    <span className="text-[10px] text-slate-400 block font-medium">{t.perNightSubtext}</span>
                   </div>
                   <button
                     type="button"
                     className="px-3.5 py-2 bg-cta hover:bg-cta-hover text-white text-xs font-black rounded-xl shadow-xs transition-colors shrink-0"
                   >
-                    Klaim Kamar
+                    {t.claimRoom}
                   </button>
                 </div>
               </div>
