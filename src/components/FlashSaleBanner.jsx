@@ -143,9 +143,9 @@ export function FlashSaleBanner({ flashHotels, onSelectHotel, t, currency, lang 
               {/* Card Body */}
               <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
                 <div className="space-y-1.5">
-                  <div className="flex items-center gap-1 text-[11px] text-slate-500 font-semibold">
+                  <div className="flex items-center gap-1 text-[11px] text-slate-500 font-semibold min-w-0">
                     <MapPin className="w-3 h-3 text-brand-600 shrink-0" />
-                    <span className="truncate">{hotel.area}</span>
+                    <span className="truncate whitespace-nowrap">{hotel.area}</span>
                   </div>
 
                   <h3 className="font-extrabold text-slate-900 text-sm sm:text-base line-clamp-1 group-hover:text-brand-600 transition-colors">

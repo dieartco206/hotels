@@ -68,11 +68,11 @@ export function HotelDetailModal({
             <h2 className="text-xl sm:text-2xl font-black text-slate-900 truncate">
               {hotel.name}
             </h2>
-            <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-0.5">
+            <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-0.5 min-w-0">
               <MapPin className="w-3.5 h-3.5 text-brand-500 shrink-0" />
-              <span>{hotel.area}</span>
-              <span className="text-slate-300">•</span>
-              <span>{hotel.distanceText}</span>
+              <span className="whitespace-nowrap truncate">{hotel.area}</span>
+              <span className="text-slate-300 shrink-0">•</span>
+              <span className="whitespace-nowrap truncate text-slate-500">{hotel.distanceText}</span>
             </div>
           </div>
 

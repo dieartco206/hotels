@@ -108,11 +108,11 @@ export function HotelCard({
           </h3>
 
           {/* Location & Distance */}
-          <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-1">
+          <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-1 min-w-0">
             <MapPin className="w-3.5 h-3.5 text-brand-500 shrink-0" />
-            <span className="font-medium text-slate-700">{hotel.area}</span>
-            <span className="text-slate-300">•</span>
-            <span className="truncate">{hotel.distanceText}</span>
+            <span className="font-medium text-slate-700 whitespace-nowrap truncate">{hotel.area}</span>
+            <span className="text-slate-300 shrink-0">•</span>
+            <span className="text-slate-500 whitespace-nowrap truncate shrink-0">{hotel.distanceText}</span>
           </div>
 
           {/* Facilities Icons Row */}

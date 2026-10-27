@@ -3,7 +3,7 @@ import { ShieldCheck, Award, Tag, Compass } from 'lucide-react';
 
 export function HeroSection({ t }) {
   return (
-    <section className="relative bg-slate-950 text-white overflow-hidden pb-24 sm:pb-32 pt-10 sm:pt-16">
+    <section className="relative bg-slate-950 text-white overflow-hidden pb-24 sm:pb-28 pt-8 sm:pt-12">
       {/* Background Photography with Curated Luxury Atmosphere */}
       <div className="absolute inset-0 z-0">
         <img
@@ -16,36 +16,36 @@ export function HeroSection({ t }) {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left">
-        <div className="max-w-3xl">
+        <div className="max-w-2xl">
           {/* Top Pill - Real travel badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-semibold mb-4 shadow-sm">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-semibold mb-3 shadow-sm">
             <span className="flex h-2 w-2 rounded-full bg-emerald-400"></span>
             <Compass className="w-3.5 h-3.5 text-blue-300" />
             <span>{t.heroBadge}</span>
           </div>
 
           {/* Heading */}
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white leading-tight">
             {t.heroTitle}
           </h1>
 
           {/* Subheading */}
-          <p className="mt-3.5 text-base sm:text-lg text-slate-200 font-normal leading-relaxed max-w-2xl">
+          <p className="mt-2 text-sm sm:text-base text-slate-200 font-normal leading-relaxed max-w-xl">
             {t.heroSubtitle}
           </p>
 
           {/* Value Propositions */}
-          <div className="mt-6 flex flex-wrap items-center gap-4 sm:gap-6 text-xs sm:text-sm text-slate-300">
-            <div className="flex items-center gap-2 font-medium">
-              <ShieldCheck className="w-4 h-4 text-emerald-400" />
+          <div className="mt-4 flex flex-wrap items-center gap-3 sm:gap-5 text-xs text-slate-300">
+            <div className="flex items-center gap-1.5 font-medium">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
               <span>{t.heroOfficialPartner}</span>
             </div>
-            <div className="flex items-center gap-2 font-medium">
-              <Award className="w-4 h-4 text-amber-300" />
+            <div className="flex items-center gap-1.5 font-medium">
+              <Award className="w-3.5 h-3.5 text-amber-300" />
               <span>{t.heroRealReviews}</span>
             </div>
-            <div className="flex items-center gap-2 font-medium">
-              <Tag className="w-4 h-4 text-rose-400" />
+            <div className="flex items-center gap-1.5 font-medium">
+              <Tag className="w-3.5 h-3.5 text-rose-400" />
               <span>{t.heroTransparentPricing}</span>
             </div>
           </div>

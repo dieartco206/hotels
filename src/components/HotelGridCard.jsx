@@ -77,9 +77,9 @@ export function HotelGridCard({
           </h3>
 
           {/* Location */}
-          <div className="flex items-center gap-1 text-xs text-slate-500 mt-1">
+          <div className="flex items-center gap-1 text-xs text-slate-500 mt-1 min-w-0">
             <MapPin className="w-3.5 h-3.5 text-brand-500 shrink-0" />
-            <span className="truncate">{hotel.area}</span>
+            <span className="truncate whitespace-nowrap">{hotel.area}</span>
           </div>
 
           {/* Badges */}

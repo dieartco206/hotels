@@ -13,20 +13,30 @@ export const SUPPORTED_CURRENCIES = [
 ];
 
 export const formatCurrency = (amountInIdr, currencyCode = 'IDR') => {
-  if (amountInIdr === undefined || amountInIdr === null) return 'Rp 0';
+  if (amountInIdr === undefined || amountInIdr === null) {
+    if (currencyCode === 'MYR') return 'RM 0.00';
+    if (currencyCode === 'SGD') return 'S$ 0.00';
+    return 'Rp 0';
+  }
   
   if (currencyCode === 'MYR') {
-    const myrAmount = Math.round(amountInIdr / 3550);
-    return 'RM ' + myrAmount.toLocaleString('en-US');
+    const myrAmount = amountInIdr / 3550;
+    return 'RM ' + myrAmount.toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
   }
   
   if (currencyCode === 'SGD') {
-    const sgdAmount = Math.round(amountInIdr / 11850);
-    return 'S$ ' + sgdAmount.toLocaleString('en-US');
+    const sgdAmount = amountInIdr / 11850;
+    return 'S$ ' + sgdAmount.toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
   }
 
-  // Default IDR
-  return 'Rp ' + amountInIdr.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  // Default IDR (no cents in Indonesian hotel pricing)
+  return 'Rp ' + Math.round(amountInIdr).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 };
 
 export const getRatingText = (rating, lang = 'id') => {
@@ -94,12 +104,12 @@ export const TRANSLATIONS = {
     navRegister: 'Daftar',
     guaranteeText: 'Jaminan Harga Terbaik & Konfirmasi Langsung',
     conciergeText: 'Concierge 24 Jam: 021-5088-9000',
-    heroBadge: 'Koleksi Eksklusif Musim Liburan 2026',
-    heroTitle: 'Kurasi Hotel & Resor Berkarakter di Seluruh Nusantara',
-    heroSubtitle: 'Dari villa tebing samudra di Bali hingga suite metropolitan di Jakarta. Setiap properti dikurasi dengan standar kenyamanan tinggi.',
-    heroOfficialPartner: 'Mitra Resmi Terverifikasi',
-    heroRealReviews: '100% Ulasan Tamu Asli',
-    heroTransparentPricing: 'Harga Transparan & Tanpa Biaya Terselubung',
+    heroBadge: 'Pilihan Terbaik 2026',
+    heroTitle: 'Hotel & Resor Pilihan Nusantara',
+    heroSubtitle: 'Pesan hotel dan villa nyaman dengan harga transparan dan konfirmasi instan.',
+    heroOfficialPartner: 'Mitra Resmi',
+    heroRealReviews: 'Ulasan Tamu Asli',
+    heroTransparentPricing: 'Harga Transparan',
     
     // Search Tabs
     tabHotels: 'Hotel Bintang & Butik',
@@ -233,12 +243,12 @@ export const TRANSLATIONS = {
     navRegister: 'Daftar Akaun',
     guaranteeText: 'Jaminan Harga Terbaik & Pengesahan Segera',
     conciergeText: 'Perkhidmatan Tetamu 24 Jam: 021-5088-9000',
-    heroBadge: 'Koleksi Eksklusif Musim Percutian 2026',
-    heroTitle: 'Kurasi Hotel & Resort Menawan di Seluruh Nusantara',
-    heroSubtitle: 'Dari villa tebing lautan di Bali hingga suite metropolitan di Jakarta. Setiap penginapan dikurasi dengan piawaian keselesaan tertinggi.',
-    heroOfficialPartner: 'Rakan Kongsi Rasmi Sah',
-    heroRealReviews: '100% Ulasan Tetamu Sebenar',
-    heroTransparentPricing: 'Harga Telus Tanpa Kos Tersembunyi',
+    heroBadge: 'Pilihan Terbaik 2026',
+    heroTitle: 'Hotel & Resort Pilihan Nusantara',
+    heroSubtitle: 'Tempah hotel dan villa selesa dengan harga telus dan pengesahan segera.',
+    heroOfficialPartner: 'Rakan Rasmi',
+    heroRealReviews: 'Ulasan Sebenar',
+    heroTransparentPricing: 'Harga Telus',
 
     // Search Tabs
     tabHotels: 'Hotel Bintang & Butik',
@@ -372,12 +382,12 @@ export const TRANSLATIONS = {
     navRegister: 'Register',
     guaranteeText: 'Best Price Guarantee & Direct Confirmation',
     conciergeText: '24/7 Guest Concierge: +62 21-5088-9000',
-    heroBadge: 'Exclusive 2026 Holiday Collection',
-    heroTitle: 'Curated Luxury Hotels & Resorts in Indonesia',
-    heroSubtitle: 'From clifftop oceanfront villas in Bali to metropolitan penthouse suites in Jakarta. Every property vetted to the highest comfort standards.',
-    heroOfficialPartner: 'Official Verified Partners',
-    heroRealReviews: '100% Verified Guest Reviews',
-    heroTransparentPricing: 'Transparent Pricing with Zero Hidden Fees',
+    heroBadge: 'Top Picks 2026',
+    heroTitle: 'Curated Stays in Indonesia',
+    heroSubtitle: 'Book premium hotels and villas with best rates and instant confirmation.',
+    heroOfficialPartner: 'Official Partners',
+    heroRealReviews: 'Verified Reviews',
+    heroTransparentPricing: 'Transparent Rates',
 
     // Search Tabs
     tabHotels: 'Hotels & Boutique Stays',
