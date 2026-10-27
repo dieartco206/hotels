@@ -17,12 +17,15 @@ import {
 import { calculateNights, formatDateLocalized } from '../utils/i18n';
 
 const POPULAR_DESTINATIONS = [
-  { city: 'Semua Kota', province: 'Seluruh Indonesia', type: 'Semua Koleksi' },
-  { city: 'Bali', province: 'Nusa Dua, Ubud & Seminyak', type: 'Destinasi Favorit' },
-  { city: 'Jakarta', province: 'Thamrin, SCBD & Senopati', type: 'Pusat Bisnis' },
-  { city: 'Bandung', province: 'Ciumbuleuit & Dago Atas', type: 'Wisata Pegunungan' },
-  { city: 'Yogyakarta', province: 'Borobudur & Malioboro', type: 'Wisata Budaya' },
-  { city: 'Surabaya', province: 'Tegalsari & Gubeng', type: 'Metropolis Timur' },
+  { city: 'Semua Kota', province: 'Indonesia • Malaysia • Singapore', type: 'Semua Koleksi' },
+  { city: 'Bali', province: 'Nusa Dua, Ubud & Uluwatu (ID)', type: 'Pantai & Budaya' },
+  { city: 'Kuala Lumpur', province: 'KLCC, Bukit Bintang (MY)', type: 'Metropolis Malaysia' },
+  { city: 'Singapore', province: 'Marina Bay, Sentosa & Orchard (SG)', type: 'World-Class City' },
+  { city: 'Jakarta', province: 'Thamrin, SCBD & Senopati (ID)', type: 'Ibu Kota & Bisnis' },
+  { city: 'Penang', province: 'George Town & Batu Ferringhi (MY)', type: 'UNESCO Heritage' },
+  { city: 'Langkawi', province: 'Pantai Cenang & Datai Bay (MY)', type: 'Pulau Tropika' },
+  { city: 'Bandung', province: 'Ciumbuleuit & Dago Atas (ID)', type: 'Wisata Sejuk' },
+  { city: 'Yogyakarta', province: 'Borobudur & Malioboro (ID)', type: 'Wisata Budaya' },
 ];
 
 export function SearchWidget({
@@ -110,7 +113,7 @@ export function SearchWidget({
                 : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
             }`}
           >
-            <Palmtree className="w-4 h-4 text-emerald-600" />
+            <Palmtree className="w-4 h-4 text-brand-600" />
             {t.tabVillas}
           </button>
 
@@ -122,9 +125,9 @@ export function SearchWidget({
                 : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
             }`}
           >
-            <Clock className="w-4 h-4 text-amber-500" />
+            <Clock className="w-4 h-4 text-brand-600" />
             {t.tabTransit}
-            <span className="text-[10px] bg-amber-100 text-amber-800 px-1.5 py-0.2 rounded font-bold">4-8h</span>
+            <span className="text-[10px] bg-brand-100 text-brand-800 px-1.5 py-0.2 rounded font-bold">4-8h</span>
           </button>
 
           <button
@@ -135,9 +138,9 @@ export function SearchWidget({
                 : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
             }`}
           >
-            <Tag className="w-4 h-4 text-rose-500" />
+            <Tag className="w-4 h-4 text-brand-600" />
             {t.tabSpecial}
-            <span className="text-[10px] bg-rose-100 text-rose-700 px-1.5 py-0.2 rounded font-bold">-30%</span>
+            <span className="text-[10px] bg-brand-100 text-brand-800 px-1.5 py-0.2 rounded font-bold">-30%</span>
           </button>
         </div>
 

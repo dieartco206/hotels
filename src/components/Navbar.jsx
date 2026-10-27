@@ -73,8 +73,8 @@ export function Navbar({
         <div className="hidden lg:block border-b border-slate-100 bg-slate-50/80 text-xs text-slate-500 py-1.5 px-4 sm:px-8">
           <div className="max-w-7xl mx-auto flex justify-between items-center">
             <div className="flex items-center gap-5">
-              <span className="flex items-center gap-1.5 text-emerald-700 font-semibold whitespace-nowrap">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+              <span className="flex items-center gap-1.5 text-slate-700 font-semibold whitespace-nowrap">
+                <ShieldCheck className="w-3.5 h-3.5 text-brand-600 shrink-0" />
                 {t?.guaranteeText || 'Jaminan Harga Terbaik & Konfirmasi Langsung'}
               </span>
               <span className="text-slate-300">•</span>
@@ -176,48 +176,6 @@ export function Navbar({
                         </button>
                       </div>
                     </div>
-
-                    {/* Independent Customization */}
-                    <div className="pt-3 border-t border-slate-100 grid grid-cols-2 gap-3 text-xs">
-                      <div>
-                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
-                          Bahasa:
-                        </span>
-                        <div className="space-y-0.5">
-                          {SUPPORTED_LANGUAGES.map(l => (
-                            <button
-                              key={l.code}
-                              onClick={() => setLang(l.code)}
-                              className={`w-full text-left px-2 py-1 rounded-lg text-xs font-semibold cursor-pointer ${
-                                lang === l.code ? 'bg-slate-100 text-brand-700 font-bold' : 'text-slate-600 hover:bg-slate-50'
-                              }`}
-                            >
-                              {l.flag} {l.name}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div>
-                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
-                          Mata Uang:
-                        </span>
-                        <div className="space-y-0.5">
-                          {SUPPORTED_CURRENCIES.map(c => (
-                            <button
-                              key={c.code}
-                              onClick={() => setCurrency(c.code)}
-                              className={`w-full text-left px-2 py-1 rounded-lg text-xs font-semibold cursor-pointer ${
-                                currency === c.code ? 'bg-slate-100 text-brand-700 font-bold' : 'text-slate-600 hover:bg-slate-50'
-                              }`}
-                            >
-                              {c.code} ({c.symbol})
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-
                   </div>
                 )}
               </div>
@@ -260,17 +218,17 @@ export function Navbar({
                   onClick={(e) => { e.preventDefault(); onSelectPromo && onSelectPromo('villa'); }}
                   className="px-3 xl:px-3.5 py-2 text-xs xl:text-sm font-semibold text-slate-600 hover:text-brand-600 hover:bg-slate-50 rounded-xl transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer"
                 >
-                  <Palmtree className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <Palmtree className="w-4 h-4 text-brand-600 shrink-0" />
                   <span>{t?.navVillas || 'Resor & Villa'}</span>
                 </a>
 
                 <a 
                   href="#flash-sale" 
-                  className="px-3 xl:px-3.5 py-2 text-xs xl:text-sm font-semibold text-slate-600 hover:text-rose-600 hover:bg-slate-50 rounded-xl transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0"
+                  className="px-3 xl:px-3.5 py-2 text-xs xl:text-sm font-semibold text-slate-600 hover:text-brand-600 hover:bg-slate-50 rounded-xl transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0"
                 >
-                  <Percent className="w-4 h-4 text-rose-500 shrink-0" />
+                  <Percent className="w-4 h-4 text-brand-600 shrink-0" />
                   <span>{t?.navDeals || 'Promo Terbatas'}</span>
-                  <span className="px-1.5 py-0.5 bg-rose-500 text-[10px] font-extrabold text-white rounded-full uppercase tracking-wider shrink-0">
+                  <span className="px-1.5 py-0.5 bg-brand-600 text-[10px] font-extrabold text-white rounded-full uppercase tracking-wider shrink-0">
                     DEAL
                   </span>
                 </a>
@@ -397,7 +355,7 @@ export function Navbar({
               onClick={() => { setMobileMenuOpen(false); onSelectPromo && onSelectPromo('villa'); }}
               className="flex items-center gap-2.5 px-3.5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 rounded-xl"
             >
-              <Palmtree className="w-4 h-4 text-emerald-600 shrink-0" />
+              <Palmtree className="w-4 h-4 text-brand-600 shrink-0" />
               <span>{t?.navVillas || 'Resor & Villa'}</span>
             </a>
 
@@ -407,10 +365,10 @@ export function Navbar({
               className="flex items-center justify-between px-3.5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 rounded-xl"
             >
               <span className="flex items-center gap-2.5">
-                <Percent className="w-4 h-4 text-rose-500 shrink-0" />
+                <Percent className="w-4 h-4 text-brand-600 shrink-0" />
                 <span>{t?.navDeals || 'Promo Terbatas'}</span>
               </span>
-              <span className="px-1.5 py-0.5 bg-rose-500 text-[10px] font-extrabold text-white rounded-full uppercase">
+              <span className="px-1.5 py-0.5 bg-brand-600 text-[10px] font-extrabold text-white rounded-full uppercase">
                 DEAL
               </span>
             </a>

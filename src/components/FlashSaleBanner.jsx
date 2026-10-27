@@ -31,22 +31,22 @@ export function FlashSaleBanner({ flashHotels, onSelectHotel, t, currency, lang 
 
   const formatPad = (num) => String(num).padStart(2, '0');
 
-  // Localized Categories
+  // Localized Categories (clean text without colorful OS emojis)
   const categories = [
-    { id: 'all', label: lang === 'en' ? 'All Deals' : lang === 'ms' ? 'Semua Tawaran' : 'Semua Penawaran' },
-    { id: 'bali', label: '🏝️ Bali Retreat' },
-    { id: 'jakarta', label: lang === 'en' ? '🏙️ Jakarta City' : '🏙️ Jakarta Metropolitan' },
-    { id: 'bandung', label: lang === 'en' ? '⛰️ Highland Bandung' : '⛰️ Bandung Sejuk' },
-    { id: 'luxury', label: lang === 'en' ? '⭐ 5-Star Luxury' : '⭐ Resor Bintang 5' },
+    { id: 'all', label: lang === 'en' ? 'All Stays' : lang === 'ms' ? 'Semua Penginapan' : 'Semua Hotel' },
+    { id: 'singapore', label: 'Singapore' },
+    { id: 'malaysia', label: 'Malaysia' },
+    { id: 'indonesia', label: 'Indonesia' },
+    { id: 'resort', label: lang === 'en' ? 'Villas & Resorts' : lang === 'ms' ? 'Resort & Villa' : 'Resor & Villa' },
   ];
 
   // Filter flash hotels based on tab
   const filteredFlashHotels = flashHotels.filter(hotel => {
     if (selectedCategory === 'all') return true;
-    if (selectedCategory === 'bali') return hotel.city === 'Bali';
-    if (selectedCategory === 'jakarta') return hotel.city === 'Jakarta';
-    if (selectedCategory === 'bandung') return hotel.city === 'Bandung';
-    if (selectedCategory === 'luxury') return hotel.starRating === 5;
+    if (selectedCategory === 'singapore') return hotel.country === 'Singapore' || hotel.city === 'Singapore';
+    if (selectedCategory === 'malaysia') return hotel.country === 'Malaysia' || ['Kuala Lumpur', 'Penang', 'Langkawi'].includes(hotel.city);
+    if (selectedCategory === 'indonesia') return hotel.country === 'Indonesia' || ['Bali', 'Jakarta', 'Bandung', 'Yogyakarta'].includes(hotel.city);
+    if (selectedCategory === 'resort') return hotel.type === 'Resort' || hotel.type === 'Villa';
     return true;
   });
 
@@ -94,9 +94,9 @@ export function FlashSaleBanner({ flashHotels, onSelectHotel, t, currency, lang 
             <button
               key={cat.id}
               onClick={() => setSelectedCategory(cat.id)}
-              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap ${
+              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap cursor-pointer ${
                 selectedCategory === cat.id
-                  ? 'bg-rose-600 text-white shadow-xs'
+                  ? 'bg-brand-600 text-white shadow-xs'
                   : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
               }`}
             >

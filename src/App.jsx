@@ -73,7 +73,7 @@ export default function App() {
   const t = useMemo(() => TRANSLATIONS[lang] || TRANSLATIONS.id, [lang]);
 
   // 1. Search Engine State
-  const [activeCity, setActiveCity] = useState('Bali');
+  const [activeCity, setActiveCity] = useState('Semua Kota');
   const [searchQuery, setSearchQuery] = useState('');
   
   // Set default dates to realistic future dates
@@ -184,13 +184,14 @@ export default function App() {
         return false;
       }
 
-      // 2. Search Query (Hotel name, area, city)
+      // 2. Search Query (Hotel name, area, city, country)
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
         const matchesName = hotel.name.toLowerCase().includes(q);
         const matchesArea = hotel.area.toLowerCase().includes(q);
         const matchesCity = hotel.city.toLowerCase().includes(q);
-        if (!matchesName && !matchesArea && !matchesCity) return false;
+        const matchesCountry = (hotel.country || '').toLowerCase().includes(q);
+        if (!matchesName && !matchesArea && !matchesCity && !matchesCountry) return false;
       }
 
       // 3. Price Range

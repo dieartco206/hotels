@@ -125,13 +125,13 @@ export function HotelCard({
             )}
             {hotel.hasPool && (
               <span className="flex items-center gap-1">
-                <Waves className="w-3.5 h-3.5 text-blue-500" />
+                <Waves className="w-3.5 h-3.5 text-slate-500" />
                 {t?.facilityPool || 'Kolam Renang'}
               </span>
             )}
             {hotel.hasRestaurant && (
               <span className="flex items-center gap-1">
-                <Utensils className="w-3.5 h-3.5 text-amber-600" />
+                <Utensils className="w-3.5 h-3.5 text-slate-500" />
                 Restoran
               </span>
             )}

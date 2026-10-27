@@ -163,10 +163,10 @@ export function HotelDetailModal({
           {/* Navigation Tabs */}
           <div className="flex items-center gap-2 border-b border-slate-200 pb-2">
             {[
-              { id: 'rooms', label: t?.tabRooms || '🛏️ Pilihan Kamar' },
-              { id: 'overview', label: t?.tabOverview || '📝 Ringkasan Hotel' },
-              { id: 'facilities', label: t?.tabFacilities || '🏊 Fasilitas Lengkap' },
-              { id: 'reviews', label: t?.tabReviews || '⭐ Ulasan Tamu' },
+              { id: 'rooms', label: t?.tabRooms || 'Pilihan Kamar' },
+              { id: 'overview', label: t?.tabOverview || 'Ringkasan Hotel' },
+              { id: 'facilities', label: t?.tabFacilities || 'Fasilitas Lengkap' },
+              { id: 'reviews', label: t?.tabReviews || 'Ulasan Tamu' },
             ].map(tab => (
               <button
                 key={tab.id}

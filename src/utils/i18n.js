@@ -181,10 +181,10 @@ export const TRANSLATIONS = {
     savedWishlist: 'Tersimpan di Wishlist!',
 
     // Detail Modal
-    tabRooms: '🛏️ Pilihan Kamar',
-    tabOverview: '📝 Ringkasan Hotel',
-    tabFacilities: '🏊 Fasilitas Lengkap',
-    tabReviews: '⭐ Ulasan Tamu',
+    tabRooms: 'Pilihan Kamar',
+    tabOverview: 'Ringkasan Hotel',
+    tabFacilities: 'Fasilitas Lengkap',
+    tabReviews: 'Ulasan Tamu',
     bookNow: 'Pesan Sekarang',
     roomSize: 'Luas Kamar',
     bedConfiguration: 'Tipe Ranjang',
@@ -320,10 +320,10 @@ export const TRANSLATIONS = {
     savedWishlist: 'Disimpan dalam Senarai Hajat!',
 
     // Detail Modal
-    tabRooms: '🛏️ Pilihan Bilik',
-    tabOverview: '📝 Ringkasan Hotel',
-    tabFacilities: '🏊 Kemudahan Penuh',
-    tabReviews: '⭐ Ulasan Tetamu',
+    tabRooms: 'Pilihan Bilik',
+    tabOverview: 'Ringkasan Hotel',
+    tabFacilities: 'Kemudahan Penuh',
+    tabReviews: 'Ulasan Tetamu',
     bookNow: 'Tempah Sekarang',
     roomSize: 'Keluasan Bilik',
     bedConfiguration: 'Jenis Katil',
@@ -459,10 +459,10 @@ export const TRANSLATIONS = {
     savedWishlist: 'Saved to Wishlist!',
 
     // Detail Modal
-    tabRooms: '🛏️ Room Options',
-    tabOverview: '📝 Hotel Overview',
-    tabFacilities: '🏊 Full Amenities',
-    tabReviews: '⭐ Guest Reviews',
+    tabRooms: 'Room Options',
+    tabOverview: 'Hotel Overview',
+    tabFacilities: 'Full Amenities',
+    tabReviews: 'Guest Reviews',
     bookNow: 'Book Now',
     roomSize: 'Room Area',
     bedConfiguration: 'Bed Type',
