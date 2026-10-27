@@ -9,29 +9,65 @@ export function InteractiveMapModal({
   t,
   currency = 'IDR'
 }) {
-  const [activeHotel, setActiveHotel] = useState(hotels[0] || null);
+  const [mapCountry, setMapCountry] = useState('all');
+  
+  const displayedHotels = React.useMemo(() => {
+    if (mapCountry === 'all') return hotels;
+    return hotels.filter(h => h.country === mapCountry);
+  }, [hotels, mapCountry]);
+
+  const [activeHotel, setActiveHotel] = useState(displayedHotels[0] || hotels[0] || null);
+
+  React.useEffect(() => {
+    if (displayedHotels.length > 0 && !displayedHotels.some(h => h.id === activeHotel?.id)) {
+      setActiveHotel(displayedHotels[0]);
+    }
+  }, [displayedHotels, activeHotel]);
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-2 sm:p-4 md:p-6 animate-in fade-in duration-200">
       <div className="bg-white rounded-3xl shadow-modal border border-slate-200 w-full max-w-5xl h-[85vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-200">
         
         {/* Modal Header */}
-        <div className="bg-white px-6 py-4 border-b border-slate-200 flex items-center justify-between z-10">
+        <div className="bg-white px-6 py-3.5 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 z-10">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center">
               <MapPin className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-extrabold text-slate-900 text-lg">{t?.mapTitle || 'Peta Lokasi Hotel & Resor'}</h3>
+              <h3 className="font-extrabold text-slate-900 text-base sm:text-lg">{t?.mapTitle || 'Peta Lokasi Hotel & Resor'}</h3>
               <p className="text-xs text-slate-500">{t?.mapSubtitle || 'Klik pin harga untuk melihat pratinjau akomodasi'}</p>
             </div>
           </div>
-          <button
-            onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
+
+          {/* Regional Quick Filter Pills */}
+          <div className="flex items-center gap-1.5 self-start sm:self-auto">
+            {[
+              { id: 'all', label: t?.countryAll || 'Semua' },
+              { id: 'Singapore', label: 'Singapore' },
+              { id: 'Malaysia', label: 'Malaysia' },
+              { id: 'Indonesia', label: 'Indonesia' },
+            ].map(tab => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setMapCountry(tab.id)}
+                className={`px-3 py-1 rounded-full text-xs font-bold transition-all border ${
+                  mapCountry === tab.id
+                    ? 'bg-brand-600 text-white border-brand-600 shadow-2xs'
+                    : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+            <button
+              onClick={onClose}
+              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors ml-2"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Map Canvas and Interactive Pins */}
@@ -51,7 +87,7 @@ export function InteractiveMapModal({
           {/* Interactive Hotel Pins */}
           <div className="absolute inset-0 p-8 sm:p-12 overflow-auto">
             <div className="relative w-full h-full min-h-[450px]">
-              {hotels.map((hotel, index) => {
+              {displayedHotels.map((hotel, index) => {
                 // Distribute pins across the map canvas visually
                 const topPercent = 20 + ((index * 37) % 65);
                 const leftPercent = 15 + ((index * 43) % 70);

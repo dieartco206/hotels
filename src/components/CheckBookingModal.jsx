@@ -31,19 +31,51 @@ export function CheckBookingModal({
   if (!isOpen) return null;
 
   // Sample mock booking for instant preview
-  const sampleBooking = {
-    code: 'NUSA-829142',
-    hotelName: 'The Apurva Kempinski Bali',
-    roomName: 'Grand Deluxe Ocean View',
-    checkIn: '2026-11-18',
-    checkOut: '2026-11-21',
-    nights: 3,
-    guests: 'Budi Pratama (2 Dewasa)',
-    area: 'Sawangan, Nusa Dua, Bali',
-    totalPrice: 'Rp 7.488.000',
-    status: 'TERKONFIRMASI',
-    bookedAt: '12 Okt 2026, 14:30 WIB'
-  };
+  const sampleBooking = React.useMemo(() => {
+    if (lang === 'en') {
+      return {
+        code: 'NUSA-829142',
+        hotelName: 'The Fullerton Hotel Singapore',
+        roomName: 'Heritage Room Marina View',
+        checkIn: '2026-11-18',
+        checkOut: '2026-11-21',
+        nights: 3,
+        guests: 'John Tan (2 Adults)',
+        area: 'Marina Bay, Singapore',
+        totalPrice: 'SGD 1,485.00',
+        status: 'CONFIRMED',
+        bookedAt: '12 Oct 2026, 14:30 SGT'
+      };
+    }
+    if (lang === 'ms') {
+      return {
+        code: 'NUSA-829142',
+        hotelName: 'Mandarin Oriental Kuala Lumpur',
+        roomName: 'Club Executive Park View',
+        checkIn: '2026-11-18',
+        checkOut: '2026-11-21',
+        nights: 3,
+        guests: 'Ahmad Firdaus (2 Dewasa)',
+        area: 'KLCC, Kuala Lumpur, Malaysia',
+        totalPrice: 'RM 2,850.00',
+        status: 'DISAHKAN',
+        bookedAt: '12 Okt 2026, 14:30 MYT'
+      };
+    }
+    return {
+      code: 'NUSA-829142',
+      hotelName: 'The Apurva Kempinski Bali',
+      roomName: 'Grand Deluxe Ocean View',
+      checkIn: '2026-11-18',
+      checkOut: '2026-11-21',
+      nights: 3,
+      guests: 'Budi Pratama (2 Dewasa)',
+      area: 'Sawangan, Nusa Dua, Bali, Indonesia',
+      totalPrice: 'Rp 7.488.000',
+      status: 'TERKONFIRMASI',
+      bookedAt: '12 Okt 2026, 14:30 WIB'
+    };
+  }, [lang]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -66,12 +98,14 @@ export function CheckBookingModal({
 
   const handleUseSample = () => {
     setBookingCode('NUSA-829142');
-    setEmailOrPhone('budi.pratama@gmail.com');
+    setEmailOrPhone(lang === 'en' ? 'johntan@gmail.com' : lang === 'ms' ? 'ahmad.firdaus@gmail.com' : 'budi.pratama@gmail.com');
     setSearchResult(sampleBooking);
   };
 
   const handleDownloadVoucher = () => {
     const code = searchResult?.code || 'NUSA-829142';
+    const tz = lang === 'en' ? 'SGT' : lang === 'ms' ? 'MYT' : 'WIB';
+    const conciergePhone = lang === 'en' ? '+65 6788 9000' : lang === 'ms' ? '+60 3-8088 9000' : '+62 21-5088-9000';
     const content = `
 <!DOCTYPE html>
 <html>
@@ -99,20 +133,24 @@ export function CheckBookingModal({
         <div class="logo">NusaStay</div>
         <div class="code">${code}</div>
       </div>
-      <div class="badge">✓ TERKONFIRMASI</div>
+      <div class="badge">✓ ${searchResult?.status || 'TERKONFIRMASI'}</div>
     </div>
     <div class="section">
-      <div class="row"><span class="label">Nama Hotel:</span><span class="val">${searchResult?.hotelName}</span></div>
-      <div class="row"><span class="label">Tipe Kamar:</span><span class="val">${searchResult?.roomName}</span></div>
-      <div class="row"><span class="label">Nama Tamu:</span><span class="val">${searchResult?.guests}</span></div>
-      <div class="row"><span class="label">Check-in:</span><span class="val">${searchResult?.checkIn} (Mulai 14:00 WIB)</span></div>
-      <div class="row"><span class="label">Check-out:</span><span class="val">${searchResult?.checkOut} (Sebelum 12:00 WIB)</span></div>
-      <div class="row"><span class="label">Durasi:</span><span class="val">${searchResult?.nights} Malam</span></div>
-      <div class="row"><span class="label">Lokasi:</span><span class="val">${searchResult?.area}</span></div>
+      <div class="row"><span class="label">${lang === 'en' ? 'Hotel Name:' : lang === 'ms' ? 'Nama Hotel:' : 'Nama Hotel:'}</span><span class="val">${searchResult?.hotelName}</span></div>
+      <div class="row"><span class="label">${lang === 'en' ? 'Room Type:' : lang === 'ms' ? 'Jenis Bilik:' : 'Tipe Kamar:'}</span><span class="val">${searchResult?.roomName}</span></div>
+      <div class="row"><span class="label">${lang === 'en' ? 'Guest Name:' : lang === 'ms' ? 'Nama Tetamu:' : 'Nama Tamu:'}</span><span class="val">${searchResult?.guests}</span></div>
+      <div class="row"><span class="label">Check-in:</span><span class="val">${searchResult?.checkIn} (14:00 ${tz})</span></div>
+      <div class="row"><span class="label">Check-out:</span><span class="val">${searchResult?.checkOut} (12:00 ${tz})</span></div>
+      <div class="row"><span class="label">${lang === 'en' ? 'Duration:' : lang === 'ms' ? 'Tempoh:' : 'Durasi:'}</span><span class="val">${searchResult?.nights} ${lang === 'en' ? 'Nights' : 'Malam'}</span></div>
+      <div class="row"><span class="label">${lang === 'en' ? 'Location:' : lang === 'ms' ? 'Lokasi:' : 'Lokasi:'}</span><span class="val">${searchResult?.area}</span></div>
+      <div class="row" style="font-size: 16px; margin-top: 16px; padding-top: 12px; border-top: 1px solid #E2E8F0;">
+        <span class="label" style="font-weight: 800; color: #0F172A;">${lang === 'en' ? 'Total Amount:' : lang === 'ms' ? 'Jumlah Bayaran:' : 'Total Biaya:'}</span>
+        <span class="val" style="color: #FF5E1F; font-size: 18px;">${searchResult?.totalPrice}</span>
+      </div>
     </div>
     <div class="footer">
-      Tunjukkan e-voucher ini saat check-in di resepsionis hotel.<br>
-      Layanan Pelanggan 24 Jam: 021-5088-9000 • concierge@nusastay.id
+      ${lang === 'en' ? 'Present this e-voucher upon check-in at the hotel front desk.' : lang === 'ms' ? 'Tunjukkan e-baucar ini semasa daftar masuk di kaunter hotel.' : 'Tunjukkan e-voucher ini saat check-in di resepsionis hotel.'}<br>
+      ${lang === 'en' ? '24/7 Concierge Support:' : lang === 'ms' ? 'Khidmat Pelanggan 24 Jam:' : 'Layanan Pelanggan 24 Jam:'} ${conciergePhone} • support@nusastay.com
     </div>
   </div>
 </body>
@@ -200,7 +238,7 @@ export function CheckBookingModal({
               </label>
               <input
                 type="text"
-                placeholder="budi.pratama@gmail.com"
+                placeholder={lang === 'en' ? 'johntan@gmail.com' : lang === 'ms' ? 'ahmad.firdaus@gmail.com' : 'budi.pratama@gmail.com'}
                 value={emailOrPhone}
                 onChange={(e) => setEmailOrPhone(e.target.value)}
                 className="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:outline-none"

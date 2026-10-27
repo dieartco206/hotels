@@ -23,6 +23,7 @@ export function BookingCheckoutModal({
   guests,
   onClose,
   onBookingSuccess,
+  showToast,
   t,
   currency = 'IDR',
   lang = 'id'
@@ -39,33 +40,40 @@ export function BookingCheckoutModal({
 
   const nights = calculateNights(checkInDate, checkOutDate);
   const baseRoomTotal = (room?.price || hotel?.price || 1500000) * nights;
-  const taxAndService = Math.round(baseRoomTotal * 0.11);
+  const taxRate = currency === 'SGD' ? 0.09 : currency === 'MYR' ? 0.08 : 0.11;
+  const taxAndService = Math.round(baseRoomTotal * taxRate);
   const memberDiscount = 150000;
   const totalAmount = Math.max(0, baseRoomTotal + taxAndService - memberDiscount);
 
   const getPaymentMethods = () => {
     if (currency === 'MYR') {
       return [
-        { id: 'maybank', name: 'Maybank2u', icon: '🏦' },
-        { id: 'cimb', name: 'CIMB Clicks', icon: '💳' },
-        { id: 'tng', name: "Touch 'n Go", icon: '📱' },
-        { id: 'cc', name: 'Kad Kredit', icon: '🔒' },
+        { id: 'maybank', name: 'Maybank2u', iconType: 'bank' },
+        { id: 'cimb', name: 'CIMB Clicks', iconType: 'bank' },
+        { id: 'tng', name: "Touch 'n Go", iconType: 'qr' },
+        { id: 'cc', name: 'Kad Kredit', iconType: 'card' },
       ];
     }
     if (currency === 'SGD') {
       return [
-        { id: 'paynow', name: 'PayNow / QR', icon: '📱' },
-        { id: 'dbs', name: 'DBS PayLah!', icon: '🏦' },
-        { id: 'ocbc', name: 'OCBC Pay', icon: '💳' },
-        { id: 'cc', name: 'Credit Card', icon: '🔒' },
+        { id: 'paynow', name: 'PayNow / QR', iconType: 'qr' },
+        { id: 'dbs', name: 'DBS PayLah!', iconType: 'bank' },
+        { id: 'ocbc', name: 'OCBC Pay', iconType: 'bank' },
+        { id: 'cc', name: 'Credit Card', iconType: 'card' },
       ];
     }
     return [
-      { id: 'bca', name: 'BCA Virtual Account', icon: '🏦' },
-      { id: 'mandiri', name: 'Mandiri VA', icon: '💳' },
-      { id: 'gopay', name: 'GoPay / QRIS', icon: '📱' },
-      { id: 'cc', name: 'Kartu Kredit', icon: '🔒' },
+      { id: 'bca', name: 'BCA Virtual Account', iconType: 'bank' },
+      { id: 'mandiri', name: 'Mandiri VA', iconType: 'bank' },
+      { id: 'gopay', name: 'GoPay / QRIS', iconType: 'qr' },
+      { id: 'cc', name: 'Kartu Kredit', iconType: 'card' },
     ];
+  };
+
+  const renderPaymentIcon = (iconType) => {
+    if (iconType === 'bank') return <Building2 className="w-5 h-5 text-brand-600" />;
+    if (iconType === 'qr') return <QrCode className="w-5 h-5 text-brand-600" />;
+    return <CreditCard className="w-5 h-5 text-brand-600" />;
   };
 
   const handleSubmitBooking = (e) => {
@@ -79,11 +87,33 @@ export function BookingCheckoutModal({
   };
 
   const handleDownloadVoucher = () => {
+    const tz = hotel?.country === 'Singapore' ? 'SGT' : hotel?.country === 'Malaysia' ? 'MYT' : 'WIB';
+    const conciergePhone = hotel?.country === 'Singapore' ? '+65 6788 9000' : hotel?.country === 'Malaysia' ? '+60 3-8088 9000' : '+62 21-5088-9000';
+    const vLabels = {
+      title: lang === 'en' ? 'Official NusaStay E-Voucher' : lang === 'ms' ? 'E-Baucar Rasmi NusaStay' : 'E-Voucher Resmi NusaStay',
+      confirmed: lang === 'en' ? 'CONFIRMED' : lang === 'ms' ? 'DISAHKAN' : 'TERKONFIRMASI',
+      roomType: lang === 'en' ? 'Room Type:' : lang === 'ms' ? 'Jenis Bilik:' : 'Tipe Kamar:',
+      guestName: lang === 'en' ? 'Guest Name:' : lang === 'ms' ? 'Nama Tetamu:' : 'Nama Tamu:',
+      contact: lang === 'en' ? 'Contact:' : lang === 'ms' ? 'No. Telefon:' : 'No. Kontak:',
+      checkIn: 'Check-in:',
+      checkOut: 'Check-out:',
+      duration: lang === 'en' ? 'Duration:' : lang === 'ms' ? 'Tempoh:' : 'Durasi:',
+      nights: lang === 'en' ? 'Nights' : 'Malam',
+      paymentMethod: lang === 'en' ? 'Payment Method:' : lang === 'ms' ? 'Kaedah Bayaran:' : 'Metode Bayar:',
+      totalPaid: lang === 'en' ? 'Total Amount:' : lang === 'ms' ? 'Jumlah Bayaran:' : 'Total Biaya:',
+      footerDesc: lang === 'en'
+        ? 'Please present this e-voucher and valid government ID upon check-in at the hotel front desk.'
+        : lang === 'ms'
+        ? 'Sila tunjukkan e-baucar ini dan kad pengenalan rasmi semasa daftar masuk di kaunter hotel.'
+        : 'Harap tunjukkan e-voucher ini beserta kartu identitas resmi saat check-in di resepsionis hotel.',
+      support: lang === 'en' ? '24/7 NusaStay Concierge:' : lang === 'ms' ? 'Khidmat Tetamu NusaStay 24 Jam:' : 'NusaStay Concierge 24 Jam:'
+    };
+
     const voucherHtml = `<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
-  <title>E-Voucher NusaStay - ${bookingCode}</title>
+  <title>${vLabels.title} - ${bookingCode}</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 40px; color: #0F172A; background: #F8FAFC; }
     .card { max-width: 640px; margin: 0 auto; border: 1px solid #E2E8F0; border-radius: 16px; padding: 32px; background: #fff; box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
@@ -105,25 +135,25 @@ export function BookingCheckoutModal({
         <div class="logo">NusaStay</div>
         <div class="code">${bookingCode}</div>
       </div>
-      <div class="badge">TERKONFIRMASI</div>
+      <div class="badge">${vLabels.confirmed}</div>
     </div>
     <div class="section">
       <h3 style="margin: 0 0 16px 0; font-size: 18px; color: #0F172A;">${hotel?.name || 'Hotel NusaStay'}</h3>
-      <div class="row"><span class="label">Tipe Kamar:</span><span class="val">${room?.name || 'Deluxe Room'}</span></div>
-      <div class="row"><span class="label">Nama Tamu:</span><span class="val">${formData.fullName}</span></div>
-      <div class="row"><span class="label">No. Kontak:</span><span class="val">${formData.phone || formData.email}</span></div>
-      <div class="row"><span class="label">Check-in:</span><span class="val">${checkInDate} (14:00)</span></div>
-      <div class="row"><span class="label">Check-out:</span><span class="val">${checkOutDate} (12:00)</span></div>
-      <div class="row"><span class="label">Durasi:</span><span class="val">${nights} Malam</span></div>
-      <div class="row"><span class="label">Metode Bayar:</span><span class="val">${formData.paymentMethod === 'hotel' ? 'Bayar Saat Check-in' : 'Transfer Bank / VA'}</span></div>
+      <div class="row"><span class="label">${vLabels.roomType}</span><span class="val">${room?.name || 'Deluxe Room'}</span></div>
+      <div class="row"><span class="label">${vLabels.guestName}</span><span class="val">${formData.fullName}</span></div>
+      <div class="row"><span class="label">${vLabels.contact}</span><span class="val">${formData.phone || formData.email}</span></div>
+      <div class="row"><span class="label">${vLabels.checkIn}</span><span class="val">${checkInDate} (14:00 ${tz})</span></div>
+      <div class="row"><span class="label">${vLabels.checkOut}</span><span class="val">${checkOutDate} (12:00 ${tz})</span></div>
+      <div class="row"><span class="label">${vLabels.duration}</span><span class="val">${nights} ${vLabels.nights}</span></div>
+      <div class="row"><span class="label">${vLabels.paymentMethod}</span><span class="val">${formData.paymentMethod === 'hotel' ? 'Pay at Property' : 'Instant Online Payment'}</span></div>
       <div class="row" style="font-size: 16px; margin-top: 16px; padding-top: 12px; border-top: 1px solid #E2E8F0;">
-        <span class="label" style="font-weight: 800; color: #0F172A;">Total Biaya:</span>
-        <span class="val" style="color: #FF5E1F; font-size: 18px;">${formatCurrency(totalPrice, currency)}</span>
+        <span class="label" style="font-weight: 800; color: #0F172A;">${vLabels.totalPaid}</span>
+        <span class="val" style="color: #FF5E1F; font-size: 18px;">${formatCurrency(totalAmount, currency)}</span>
       </div>
     </div>
     <div class="footer">
-      Harap tunjukkan e-voucher ini beserta kartu identitas resmi saat check-in di front desk hotel.<br/>
-      NusaStay Guest Support 24 Jam: 021-5088-9000
+      ${vLabels.footerDesc}<br/>
+      ${vLabels.support} ${conciergePhone}
     </div>
   </div>
 </body>
@@ -137,7 +167,7 @@ export function BookingCheckoutModal({
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-    if (showToast) {
+    if (typeof showToast === 'function') {
       showToast(
         lang === 'ms' 
           ? `E-Baucar ${bookingCode} berjaya dimuat turun!` 
@@ -258,13 +288,13 @@ export function BookingCheckoutModal({
                   <label
                     key={pm.id}
                     onClick={() => setPaymentMethod(pm.id)}
-                    className={`p-3 rounded-xl border cursor-pointer text-center transition-all flex flex-col items-center justify-center gap-1 ${
+                    className={`p-3 rounded-xl border cursor-pointer text-center transition-all flex flex-col items-center justify-center gap-1.5 ${
                       paymentMethod === pm.id
                         ? 'border-brand-500 bg-brand-50 text-brand-700 font-bold shadow-xs'
                         : 'border-slate-200 hover:bg-slate-50 text-slate-700'
                     }`}
                   >
-                    <span className="text-xl">{pm.icon}</span>
+                    {renderPaymentIcon(pm.iconType)}
                     <span className="text-xs">{pm.name}</span>
                   </label>
                 ))}
@@ -278,7 +308,7 @@ export function BookingCheckoutModal({
                 <span className="font-semibold text-slate-800">{formatCurrency(baseRoomTotal, currency)}</span>
               </div>
               <div className="flex justify-between text-slate-600">
-                <span>{t?.taxAndService || 'Pajak & Biaya Layanan Resmi (11%)'}</span>
+                <span>{t?.taxAndServiceLabel || t?.taxAndService || (currency === 'SGD' ? 'GST & Service Charge (9%)' : currency === 'MYR' ? 'Cukai SST & Caj Perkhidmatan (8%)' : 'Pajak PPN & Biaya Layanan (11%)')}</span>
                 <span className="font-semibold text-slate-800">{formatCurrency(taxAndService, currency)}</span>
               </div>
               <div className="flex justify-between text-emerald-600 font-semibold">
@@ -300,8 +330,14 @@ export function BookingCheckoutModal({
             </button>
 
             <div className="text-center text-[11px] text-slate-400 flex items-center justify-center gap-1">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Transaksi dienkripsi dengan standar keamanan PCI-DSS 256-bit</span>
+              <ShieldCheck className="w-3.5 h-3.5 text-brand-600" />
+              <span>
+                {lang === 'en'
+                  ? 'Transactions encrypted with 256-bit PCI-DSS banking-grade security'
+                  : lang === 'ms'
+                  ? 'Transaksi disulitkan dengan piawaian keselamatan PCI-DSS 256-bit'
+                  : 'Transaksi dienkripsi dengan standar keamanan PCI-DSS 256-bit'}
+              </span>
             </div>
 
           </form>

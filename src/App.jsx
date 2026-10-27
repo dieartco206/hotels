@@ -88,6 +88,7 @@ export default function App() {
   const [guests, setGuests] = useState({ adults: 2, children: 0, rooms: 1 });
 
   // 2. Filter State
+  const [selectedCountry, setSelectedCountry] = useState('all');
   const [quickFilters, setQuickFilters] = useState({
     payAtHotel: false,
     freeBreakfast: false,
@@ -95,7 +96,7 @@ export default function App() {
     freeCancellation: false,
   });
 
-  const [priceRange, setPriceRange] = useState(10000000);
+  const [priceRange, setPriceRange] = useState(15000000);
   const [selectedStars, setSelectedStars] = useState([]);
   const [selectedFacilities, setSelectedFacilities] = useState({
     freeBreakfast: false,
@@ -156,7 +157,8 @@ export default function App() {
 
   // Reset Filters handler
   const handleResetFilters = () => {
-    setPriceRange(10000000);
+    setSelectedCountry('all');
+    setPriceRange(15000000);
     setSelectedStars([]);
     setSelectedFacilities({
       freeBreakfast: false,
@@ -179,6 +181,11 @@ export default function App() {
   // Filtered & Sorted Hotels Computation
   const filteredHotels = useMemo(() => {
     return HOTELS_DATA.filter(hotel => {
+      // 0. Country Destination Filter
+      if (selectedCountry !== 'all' && hotel.country !== selectedCountry) {
+        return false;
+      }
+
       // 1. Destination / City Filter
       if (activeCity !== 'Semua Kota' && hotel.city !== activeCity) {
         return false;
@@ -231,6 +238,7 @@ export default function App() {
       return (b.rating * b.reviewsCount) - (a.rating * a.reviewsCount); // default popularity
     });
   }, [
+    selectedCountry,
     activeCity,
     searchQuery,
     priceRange,
@@ -258,7 +266,8 @@ export default function App() {
 
   const activeFiltersCount = useMemo(() => {
     let count = 0;
-    if (priceRange < 10000000) count++;
+    if (selectedCountry !== 'all') count++;
+    if (priceRange < 15000000) count++;
     if (selectedStars.length > 0) count += selectedStars.length;
     if (selectedPropertyType !== 'all') count++;
     if (quickFilters.payAtHotel) count++;
@@ -268,7 +277,7 @@ export default function App() {
     if (selectedFacilities.hasPool) count++;
     if (selectedFacilities.hasWifi) count++;
     return count;
-  }, [priceRange, selectedStars, selectedPropertyType, quickFilters, selectedFacilities]);
+  }, [selectedCountry, priceRange, selectedStars, selectedPropertyType, quickFilters, selectedFacilities]);
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-slate-800 font-sans selection:bg-brand-100 selection:text-brand-900">
@@ -338,6 +347,8 @@ export default function App() {
             {/* Left Sidebar: Sticky Filters */}
             <div className="w-full lg:w-[280px] lg:sticky lg:top-24">
               <FilterSidebar
+                selectedCountry={selectedCountry}
+                setSelectedCountry={setSelectedCountry}
                 priceRange={priceRange}
                 setPriceRange={setPriceRange}
                 selectedStars={selectedStars}
@@ -424,10 +435,19 @@ export default function App() {
                 <div className="flex flex-wrap items-center gap-2 pt-1 pb-2">
                   <span className="text-xs font-bold text-slate-500">{t?.activeFiltersLabel || 'Filter Aktif:'}</span>
                   
-                  {priceRange < 10000000 && (
+                  {selectedCountry !== 'all' && (
+                    <span className="inline-flex items-center gap-1 text-xs bg-brand-50 text-brand-700 px-2.5 py-1 rounded-lg border border-brand-200 font-semibold">
+                      {selectedCountry}
+                      <button onClick={() => setSelectedCountry('all')} className="hover:text-brand-900">
+                        <X className="w-3 h-3" />
+                      </button>
+                    </span>
+                  )}
+
+                  {priceRange < 15000000 && (
                     <span className="inline-flex items-center gap-1 text-xs bg-brand-50 text-brand-700 px-2.5 py-1 rounded-lg border border-brand-200 font-semibold">
                       {t?.maxPriceLabel || 'Maks.'} {formatCurrency(priceRange, currency)}
-                      <button onClick={() => setPriceRange(10000000)} className="hover:text-brand-900">
+                      <button onClick={() => setPriceRange(15000000)} className="hover:text-brand-900">
                         <X className="w-3 h-3" />
                       </button>
                     </span>
@@ -560,6 +580,7 @@ export default function App() {
           guests={guests}
           onClose={() => setCheckoutModalData(null)}
           onBookingSuccess={handleBookingSuccess}
+          showToast={showToast}
           t={t}
           currency={currency}
           lang={lang}

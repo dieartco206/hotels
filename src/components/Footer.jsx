@@ -32,20 +32,23 @@ export function Footer({ t, currency = 'IDR', lang = 'id' }) {
 
             <p className="text-slate-500 leading-relaxed text-xs max-w-sm">
               {lang === 'en'
-                ? 'Curated platform for authentic hotels, private luxury resorts, and villas in Indonesia. Delivering premium stays with transparent rates and trusted reservation guarantees.'
+                ? 'Curated platform for authentic hotels, private luxury resorts, and villas across Southeast Asia (Singapore, Malaysia, Indonesia). Delivering premium stays with transparent rates and trusted reservation guarantees.'
                 : lang === 'ms'
-                ? 'Platform kurasi hotel, resort persendirian dan villa autentik di Indonesia. Menawarkan pengalaman percutian bertaraf tinggi dengan ketelusan kadar harga dan jaminan tempahan sah.'
-                : 'Platform kurasi hotel, resor privat, dan villa autentik di Indonesia. Menghadirkan pengalaman menginap berkelas dengan jaminan kenyamanan, transparansi tarif, dan kemudahan reservasi terpercaya.'}
+                ? 'Platform kurasi hotel, resort persendirian dan villa autentik di Asia Tenggara (Singapura, Malaysia, Indonesia). Menawarkan pengalaman percutian bertaraf tinggi dengan ketelusan kadar harga dan jaminan tempahan sah.'
+                : 'Platform kurasi hotel, resor privat, dan villa autentik di Asia Tenggara (Indonesia, Malaysia, Singapura). Menghadirkan pengalaman menginap berkelas dengan jaminan kenyamanan, transparansi tarif, dan kemudahan reservasi terpercaya.'}
             </p>
 
             <div className="pt-2 space-y-2 text-slate-700 font-semibold">
               <div className="flex items-center gap-2">
                 <PhoneCall className="w-4 h-4 text-brand-600" />
-                <span>{lang === 'en' ? '24/7 Guest Services' : lang === 'ms' ? 'Khidmat Tetamu 24 Jam' : 'Layanan Tamu 24 Jam'}: 021-5088-9000</span>
+                <span>
+                  {lang === 'en' ? '24/7 Guest Services' : lang === 'ms' ? 'Khidmat Tetamu 24 Jam' : 'Layanan Tamu 24 Jam'}:{' '}
+                  {lang === 'en' ? '+65 6788 9000' : lang === 'ms' ? '+60 3-8088 9000' : '+62 21-5088-9000'}
+                </span>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-brand-600" />
-                <span>concierge@nusastay.id</span>
+                <span>support@nusastay.com</span>
               </div>
             </div>
           </div>
@@ -70,11 +73,11 @@ export function Footer({ t, currency = 'IDR', lang = 'id' }) {
               {lang === 'en' ? 'Top Collections' : lang === 'ms' ? 'Koleksi Pilihan' : 'Koleksi Pilihan'}
             </h4>
             <ul className="space-y-2 font-medium">
-              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? '5-Star Bali Luxury Resorts' : lang === 'ms' ? 'Resort Bintang 5 Bali' : 'Resor Bintang 5 Bali'}</a></li>
-              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'Private Pool Villas' : lang === 'ms' ? 'Villa Kolam Renang Peribadi' : 'Private Pool Villa'}</a></li>
-              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'Executive Suites Jakarta' : lang === 'ms' ? 'Suite Eksekutif Jakarta' : 'Executive Hotel Jakarta'}</a></li>
-              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'Bandung Hillside Retreats' : lang === 'ms' ? 'Tempat Percutian Bandung' : 'Sanctuary Lereng Bandung'}</a></li>
-              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'Yogyakarta Heritage Stays' : lang === 'ms' ? 'Penginapan Warisan Jogja' : 'Heritage Stay Yogyakarta'}</a></li>
+              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'Marina Bay Skyline Stays' : lang === 'ms' ? 'Penginapan Marina Bay Singapore' : 'Hotel Mewah Marina Bay Singapore'}</a></li>
+              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'KLCC Executive Suites' : lang === 'ms' ? 'Suite Eksekutif KLCC Malaysia' : 'Suite Eksekutif KLCC Malaysia'}</a></li>
+              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'Bali & Uluwatu Luxury Resorts' : lang === 'ms' ? 'Resort Bintang 5 Bali & Uluwatu' : 'Resor Bintang 5 Bali & Uluwatu'}</a></li>
+              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'Langkawi & Penang Island Retreats' : lang === 'ms' ? 'Percutian Pulau Langkawi & Pulau Pinang' : 'Resor Pulau Langkawi & Penang'}</a></li>
+              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'Yogyakarta & Bandung Heritage Stays' : lang === 'ms' ? 'Penginapan Warisan Jogja & Bandung' : 'Heritage Stay Yogyakarta & Bandung'}</a></li>
             </ul>
           </div>
 

@@ -187,9 +187,9 @@ export function HotelDetailModal({
             <div className="space-y-4">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-lg font-extrabold text-slate-900">
-                  Tipe Kamar Tersedia ({hotel.rooms?.length || 1} Pilihan)
+                  {t?.roomOptionsTitle || 'Tipe Kamar Tersedia'} ({hotel.rooms?.length || 1})
                 </h3>
-                <span className="text-xs text-slate-500">Harga per kamar per malam</span>
+                <span className="text-xs text-slate-500">{t?.perRoomPerNight || 'Harga per kamar per malam'}</span>
               </div>
 
               {hotel.rooms?.map((room) => (
@@ -215,7 +215,7 @@ export function HotelDetailModal({
                         </h4>
                         {room.remainingRooms <= 2 && (
                           <span className="text-[11px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full">
-                            Sisa {room.remainingRooms} kamar!
+                            {t?.remainingRoomsAlert?.replace('{count}', room.remainingRooms) || `Sisa ${room.remainingRooms} kamar!`}
                           </span>
                         )}
                       </div>
@@ -232,7 +232,7 @@ export function HotelDetailModal({
                         </span>
                         <span className="flex items-center gap-1 font-medium bg-slate-50 px-2 py-1 rounded-md border border-slate-200">
                           <Users className="w-3.5 h-3.5 text-slate-500" />
-                          {room.maxGuests} Tamu Dewasa
+                          {t?.adultGuestsText?.replace('{count}', room.maxGuests) || `${room.maxGuests} Tamu Dewasa`}
                         </span>
                       </div>
 
@@ -253,18 +253,18 @@ export function HotelDetailModal({
                         {room.freeBreakfast && (
                           <div className="flex items-center gap-1.5 text-emerald-700 font-semibold">
                             <Check className="w-3.5 h-3.5 text-emerald-600 stroke-[3]" />
-                            Sarapan prasmanan lezat untuk {room.maxGuests} orang
+                            {t?.freeBreakfastIncluded || 'Sarapan prasmanan lezat termasuk'}
                           </div>
                         )}
                         {room.freeCancellation ? (
                           <div className="flex items-center gap-1.5 text-emerald-700 font-medium">
                             <Check className="w-3.5 h-3.5 text-emerald-600 stroke-[3]" />
-                            Bisa Refund / Pembatalan gratis s.d H-1
+                            {t?.freeCancellationAvailable || 'Bisa Refund / Pembatalan gratis s.d H-1'}
                           </div>
                         ) : (
                           <div className="flex items-center gap-1.5 text-amber-700 font-medium">
                             <Info className="w-3.5 h-3.5 text-amber-600" />
-                            Harga Promo Khusus (Non-refundable)
+                            {lang === 'en' ? 'Promotional Rate (Non-refundable)' : lang === 'ms' ? 'Kadar Promosi Khas (Tidak Boleh Bayar Balik)' : 'Harga Promo Khusus (Non-refundable)'}
                           </div>
                         )}
                       </div>
@@ -304,7 +304,9 @@ export function HotelDetailModal({
           {activeTab === 'overview' && (
             <div className="space-y-4">
               <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200">
-                <h4 className="text-base font-bold text-slate-900 mb-2">Tentang Akomodasi</h4>
+                <h4 className="text-base font-bold text-slate-900 mb-2">
+                  {lang === 'en' ? 'About Property' : lang === 'ms' ? 'Tentang Penginapan' : 'Tentang Akomodasi'}
+                </h4>
                 <p className="text-sm text-slate-600 leading-relaxed">
                   {hotel.description}
                 </p>
@@ -313,25 +315,47 @@ export function HotelDetailModal({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="p-4 bg-white rounded-xl border border-slate-200">
                   <h5 className="font-bold text-sm text-slate-800 mb-2 flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-brand-500" />
-                    Waktu Check-in & Check-out
+                    <Clock className="w-4 h-4 text-brand-600" />
+                    {lang === 'en' ? 'Check-in & Check-out Times' : lang === 'ms' ? 'Waktu Daftar Masuk & Keluar' : 'Waktu Check-in & Check-out'}
                   </h5>
                   <div className="space-y-1 text-xs text-slate-600">
-                    <p><span className="font-semibold text-slate-700">Check-in:</span> Mulai pukul 14:00 WIB</p>
-                    <p><span className="font-semibold text-slate-700">Check-out:</span> Sebelum pukul 12:00 WIB</p>
-                    <p className="text-slate-400 pt-1">Resepsionis beroperasi 24 jam penuh.</p>
+                    <p>
+                      <span className="font-semibold text-slate-700">Check-in:</span> {hotel.country === 'Singapore' ? 'From 14:00 (SGT)' : hotel.country === 'Malaysia' ? 'Bermula jam 14:00 (MYT)' : 'Mulai pukul 14:00 (WIB)'}
+                    </p>
+                    <p>
+                      <span className="font-semibold text-slate-700">Check-out:</span> {hotel.country === 'Singapore' ? 'Until 12:00 (SGT)' : hotel.country === 'Malaysia' ? 'Sebelum jam 12:00 (MYT)' : 'Sebelum pukul 12:00 (WIB)'}
+                    </p>
+                    <p className="text-slate-400 pt-1">
+                      {t?.receptionText || (lang === 'en' ? '24-hour front desk available.' : lang === 'ms' ? 'Kaunter penyambut tetamu beroperasi 24 jam.' : 'Resepsionis beroperasi 24 jam penuh.')}
+                    </p>
                   </div>
                 </div>
 
                 <div className="p-4 bg-white rounded-xl border border-slate-200">
                   <h5 className="font-bold text-sm text-slate-800 mb-2 flex items-center gap-2">
-                    <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                    Protokol Kesehatan & Kenyamanan
+                    <ShieldCheck className="w-4 h-4 text-brand-600" />
+                    {t?.hygieneProtocolTitle || (lang === 'en' ? 'Official Safety & Hygiene Standards' : lang === 'ms' ? 'Piawaian Kesihatan & Keselesaan Rasmi' : 'Protokol Kesehatan & Kenyamanan')}
                   </h5>
                   <div className="space-y-1 text-xs text-slate-600">
-                    <p>✓ Sertifikasi CHSE Kemenparekraf RI</p>
-                    <p>✓ Pembersihan berkala dan sterilisasi sprei standar internasional</p>
-                    <p>✓ Staf terlatih dan ramah tamah khas Indonesia</p>
+                    {hotel.country === 'Singapore' ? (
+                      <>
+                        <p>✓ SG Clean Certified (Singapore Tourism Board & NEA)</p>
+                        <p>✓ Daily sanitization & international hotel linen sterilization</p>
+                        <p>✓ Professional multilingual hospitality team</p>
+                      </>
+                    ) : hotel.country === 'Malaysia' ? (
+                      <>
+                        <p>✓ Pensijilan Clean & Safe Malaysia (MOTAC & MAH)</p>
+                        <p>✓ Pembersihan berkala dan pensterilan linen antarabangsa</p>
+                        <p>✓ Khidmat hospitaliti mesra profesional Malaysia</p>
+                      </>
+                    ) : (
+                      <>
+                        <p>✓ Sertifikasi CHSE Kemenparekraf RI</p>
+                        <p>✓ Pembersihan berkala dan sterilisasi sprei standar internasional</p>
+                        <p>✓ Staf terlatih dan keramahan otentik khas Indonesia</p>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -343,40 +367,40 @@ export function HotelDetailModal({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="p-4 rounded-xl border border-slate-200 bg-slate-50/50">
                 <h5 className="font-bold text-sm text-slate-800 mb-3 flex items-center gap-2">
-                  <Waves className="w-4 h-4 text-blue-500" />
-                  Kebugaran & Relaksasi
+                  <Waves className="w-4 h-4 text-brand-600" />
+                  {lang === 'en' ? 'Wellness & Relaxation' : lang === 'ms' ? 'Kesihatan & Relaksasi' : 'Kebugaran & Relaksasi'}
                 </h5>
                 <ul className="space-y-2 text-xs text-slate-600">
-                  <li>• Kolam renang infinity air hangat</li>
-                  <li>• Pusat kebugaran / Gym modern 24 jam</li>
-                  <li>• Spa & Pusat Pijat Tradisional</li>
-                  <li>• Jacuzzi & Sauna</li>
+                  <li>• {lang === 'en' ? 'Heated infinity swimming pool' : 'Kolam renang infinity air hangat'}</li>
+                  <li>• {lang === 'en' ? '24-hour modern fitness center' : 'Pusat kebugaran / Gym modern 24 jam'}</li>
+                  <li>• {lang === 'en' ? 'Luxury Spa & Traditional Massage' : 'Spa & Pusat Pijat Tradisional'}</li>
+                  <li>• {lang === 'en' ? 'Jacuzzi & Steam Sauna' : 'Jacuzzi & Sauna'}</li>
                 </ul>
               </div>
 
               <div className="p-4 rounded-xl border border-slate-200 bg-slate-50/50">
                 <h5 className="font-bold text-sm text-slate-800 mb-3 flex items-center gap-2">
-                  <Utensils className="w-4 h-4 text-amber-500" />
-                  Makanan & Minuman
+                  <Utensils className="w-4 h-4 text-brand-600" />
+                  {lang === 'en' ? 'Dining & Lounges' : lang === 'ms' ? 'Makanan & Minuman' : 'Makanan & Minuman'}
                 </h5>
                 <ul className="space-y-2 text-xs text-slate-600">
-                  <li>• Restoran santapan mewah (Fine Dining)</li>
-                  <li>• Bar tepi kolam & Lounge senja</li>
-                  <li>• Layanan kamar (Room service) 24 jam</li>
-                  <li>• Kafe kopi spesialti & afternoon tea</li>
+                  <li>• {lang === 'en' ? 'Fine dining signature restaurant' : 'Restoran santapan mewah (Fine Dining)'}</li>
+                  <li>• {lang === 'en' ? 'Poolside bar & sunset lounge' : 'Bar tepi kolam & Lounge senja'}</li>
+                  <li>• {lang === 'en' ? '24-hour in-room dining service' : 'Layanan kamar (Room service) 24 jam'}</li>
+                  <li>• {lang === 'en' ? 'Artisan café & high-tea selection' : 'Kafe kopi spesialti & afternoon tea'}</li>
                 </ul>
               </div>
 
               <div className="p-4 rounded-xl border border-slate-200 bg-slate-50/50">
                 <h5 className="font-bold text-sm text-slate-800 mb-3 flex items-center gap-2">
-                  <Wifi className="w-4 h-4 text-brand-500" />
-                  Layanan & Fasilitas Umum
+                  <Wifi className="w-4 h-4 text-brand-600" />
+                  {lang === 'en' ? 'General Services' : lang === 'ms' ? 'Perkhidmatan Am' : 'Layanan & Fasilitas Umum'}
                 </h5>
                 <ul className="space-y-2 text-xs text-slate-600">
-                  <li>• High-speed Wi-Fi gratis di seluruh area</li>
-                  <li>• Antar-jemput bandara (Airport Shuttle)</li>
-                  <li>• Parkir valet gratis & penitipan bagasi</li>
-                  <li>• Concierge & tur wisata lokal</li>
+                  <li>• {lang === 'en' ? 'High-speed complimentary Wi-Fi across property' : 'High-speed Wi-Fi gratis di seluruh area'}</li>
+                  <li>• {lang === 'en' ? 'Airport shuttle transfer service' : 'Antar-jemput bandara (Airport Shuttle)'}</li>
+                  <li>• {lang === 'en' ? 'Free valet parking & luggage storage' : 'Parkir valet gratis & penitipan bagasi'}</li>
+                  <li>• {lang === 'en' ? '24-hour concierge & regional tour assistance' : 'Concierge & tur wisata lokal'}</li>
                 </ul>
               </div>
             </div>
@@ -406,7 +430,7 @@ export function HotelDetailModal({
                 <div className="flex-1 w-full grid grid-cols-2 gap-3 text-xs">
                   <div>
                     <div className="flex justify-between font-semibold text-slate-700 mb-1">
-                      <span>Kebersihan</span>
+                      <span>{t?.metricCleanliness || 'Kebersihan'}</span>
                       <span>{hotel.reviewBreakdown?.cleanliness || 9.5} / 10</span>
                     </div>
                     <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
@@ -416,7 +440,7 @@ export function HotelDetailModal({
 
                   <div>
                     <div className="flex justify-between font-semibold text-slate-700 mb-1">
-                      <span>Kenyamanan</span>
+                      <span>{t?.metricComfort || 'Kenyamanan'}</span>
                       <span>{hotel.reviewBreakdown?.comfort || 9.4} / 10</span>
                     </div>
                     <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
@@ -426,7 +450,7 @@ export function HotelDetailModal({
 
                   <div>
                     <div className="flex justify-between font-semibold text-slate-700 mb-1">
-                      <span>Pelayanan Staf</span>
+                      <span>{t?.metricService || 'Pelayanan Staf'}</span>
                       <span>{hotel.reviewBreakdown?.service || 9.6} / 10</span>
                     </div>
                     <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
@@ -436,7 +460,7 @@ export function HotelDetailModal({
 
                   <div>
                     <div className="flex justify-between font-semibold text-slate-700 mb-1">
-                      <span>Lokasi Strategis</span>
+                      <span>{t?.metricLocation || 'Lokasi Strategis'}</span>
                       <span>{hotel.reviewBreakdown?.location || 9.2} / 10</span>
                     </div>
                     <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
@@ -446,39 +470,123 @@ export function HotelDetailModal({
                 </div>
               </div>
 
-              {/* Sample Verified Guest Reviews */}
+              {/* Sample Verified Guest Reviews (Dynamic per Country) */}
               <div className="space-y-3">
-                <div className="p-4 rounded-xl border border-slate-200 bg-white">
-                  <div className="flex items-center justify-between mb-1.5">
-                    <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full bg-brand-100 text-brand-700 font-bold text-xs flex items-center justify-center">
-                        BP
+                {hotel.country === 'Singapore' ? (
+                  <>
+                    <div className="p-4 rounded-xl border border-slate-200 bg-white">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <div className="flex items-center gap-2">
+                          <div className="w-7 h-7 rounded-full bg-brand-50 text-brand-700 font-bold text-xs flex items-center justify-center">
+                            BT
+                          </div>
+                          <span className="font-bold text-xs text-slate-800">Benjamin Tan</span>
+                          <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded font-semibold">
+                            {lang === 'en' ? 'Verified Guest' : 'Tamu Terverifikasi'}
+                          </span>
+                        </div>
+                        <span className="text-xs font-bold text-brand-600">10 / 10</span>
                       </div>
-                      <span className="font-bold text-xs text-slate-800">Budi Pratama</span>
-                      <span className="text-[10px] text-emerald-600 bg-emerald-50 px-1.5 py-0.2 rounded font-semibold">Tamu Terverifikasi</span>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        "Outstanding skyline views and premier hospitality. The infinity pool and attentive front desk made our vacation sensational."
+                      </p>
                     </div>
-                    <span className="text-xs font-bold text-brand-600">10 / 10</span>
-                  </div>
-                  <p className="text-xs text-slate-600 leading-relaxed">
-                    "Pengalaman menginap yang luar biasa sempurna! Pelayanan staf sangat ramah dan tanggap, sarapannya variatif dan lezat sekali. Anak-anak sangat menikmati kolam renangnya. Pasti akan kembali lagi!"
-                  </p>
-                </div>
 
-                <div className="p-4 rounded-xl border border-slate-200 bg-white">
-                  <div className="flex items-center justify-between mb-1.5">
-                    <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full bg-amber-100 text-amber-700 font-bold text-xs flex items-center justify-center">
-                        SS
+                    <div className="p-4 rounded-xl border border-slate-200 bg-white">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <div className="flex items-center gap-2">
+                          <div className="w-7 h-7 rounded-full bg-brand-50 text-brand-700 font-bold text-xs flex items-center justify-center">
+                            RL
+                          </div>
+                          <span className="font-bold text-xs text-slate-800">Rachel Lim</span>
+                          <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded font-semibold">
+                            {lang === 'en' ? 'Verified Guest' : 'Tamu Terverifikasi'}
+                          </span>
+                        </div>
+                        <span className="text-xs font-bold text-brand-600">9.6 / 10</span>
                       </div>
-                      <span className="font-bold text-xs text-slate-800">Siti Sarah</span>
-                      <span className="text-[10px] text-emerald-600 bg-emerald-50 px-1.5 py-0.2 rounded font-semibold">Tamu Terverifikasi</span>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        "Sparkling clean room, smooth check-in, and world-class dining. Booking via NusaStay was effortless."
+                      </p>
                     </div>
-                    <span className="text-xs font-bold text-brand-600">9.5 / 10</span>
-                  </div>
-                  <p className="text-xs text-slate-600 leading-relaxed">
-                    "Kamar bersih, pemandangannya sangat indah dan fasilitasnya lengkap. Lokasi sangat dekat dengan atraksi utama. Booking lewat NusaStay juga sangat mulus tanpa kendala check-in."
-                  </p>
-                </div>
+                  </>
+                ) : hotel.country === 'Malaysia' ? (
+                  <>
+                    <div className="p-4 rounded-xl border border-slate-200 bg-white">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <div className="flex items-center gap-2">
+                          <div className="w-7 h-7 rounded-full bg-brand-50 text-brand-700 font-bold text-xs flex items-center justify-center">
+                            FA
+                          </div>
+                          <span className="font-bold text-xs text-slate-800">Farid Azman</span>
+                          <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded font-semibold">
+                            {lang === 'en' ? 'Verified Guest' : lang === 'ms' ? 'Tetamu Disahkan' : 'Tamu Terverifikasi'}
+                          </span>
+                        </div>
+                        <span className="text-xs font-bold text-brand-600">10 / 10</span>
+                      </div>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        "Penginapan yang sungguh selesa dan bertaraf dunia. Pemandangan KLCC yang memukau dan layanan kakitangan yang sangat prihatin."
+                      </p>
+                    </div>
+
+                    <div className="p-4 rounded-xl border border-slate-200 bg-white">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <div className="flex items-center gap-2">
+                          <div className="w-7 h-7 rounded-full bg-brand-50 text-brand-700 font-bold text-xs flex items-center justify-center">
+                            NH
+                          </div>
+                          <span className="font-bold text-xs text-slate-800">Nurul Huda</span>
+                          <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded font-semibold">
+                            {lang === 'en' ? 'Verified Guest' : lang === 'ms' ? 'Tetamu Disahkan' : 'Tamu Terverifikasi'}
+                          </span>
+                        </div>
+                        <span className="text-xs font-bold text-brand-600">9.5 / 10</span>
+                      </div>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        "Bilik luas, sarapan bufet yang menyelerakan dan kolam renang yang mendamaikan. Pasti akan tempah lagi melalui NusaStay."
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="p-4 rounded-xl border border-slate-200 bg-white">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <div className="flex items-center gap-2">
+                          <div className="w-7 h-7 rounded-full bg-brand-50 text-brand-700 font-bold text-xs flex items-center justify-center">
+                            BP
+                          </div>
+                          <span className="font-bold text-xs text-slate-800">Budi Pratama</span>
+                          <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded font-semibold">
+                            {lang === 'en' ? 'Verified Guest' : 'Tamu Terverifikasi'}
+                          </span>
+                        </div>
+                        <span className="text-xs font-bold text-brand-600">10 / 10</span>
+                      </div>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        "Pengalaman menginap yang luar biasa sempurna! Pelayanan staf sangat ramah dan tanggap, sarapannya variatif dan lezat sekali. Anak-anak sangat menikmati kolam renangnya. Pasti akan kembali lagi!"
+                      </p>
+                    </div>
+
+                    <div className="p-4 rounded-xl border border-slate-200 bg-white">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <div className="flex items-center gap-2">
+                          <div className="w-7 h-7 rounded-full bg-brand-50 text-brand-700 font-bold text-xs flex items-center justify-center">
+                            SS
+                          </div>
+                          <span className="font-bold text-xs text-slate-800">Siti Sarah</span>
+                          <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded font-semibold">
+                            {lang === 'en' ? 'Verified Guest' : 'Tamu Terverifikasi'}
+                          </span>
+                        </div>
+                        <span className="text-xs font-bold text-brand-600">9.5 / 10</span>
+                      </div>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        "Kamar bersih, pemandangannya sangat indah dan fasilitasnya lengkap. Lokasi sangat dekat dengan atraksi utama. Booking lewat NusaStay juga sangat mulus tanpa kendala check-in."
+                      </p>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           )}

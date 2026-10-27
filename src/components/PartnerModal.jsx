@@ -149,20 +149,32 @@ export function PartnerModal({ isOpen, onClose, lang = 'id', showToast }) {
             <>
               {/* Partner Benefits Pills */}
               <div className="grid grid-cols-3 gap-3">
-                <div className="p-3 bg-blue-50/70 border border-blue-100 rounded-2xl text-center">
-                  <Percent className="w-5 h-5 text-blue-600 mx-auto mb-1" />
-                  <div className="text-xs font-bold text-slate-900">Komisi Fleksibel</div>
-                  <div className="text-[10px] text-slate-500">Mulai dari 8%</div>
+                <div className="p-3 bg-slate-50 border border-slate-200 rounded-2xl text-center">
+                  <Percent className="w-5 h-5 text-brand-600 mx-auto mb-1" />
+                  <div className="text-xs font-bold text-slate-900">
+                    {lang === 'en' ? 'Flexible Commission' : lang === 'ms' ? 'Komisen Fleksibel' : 'Komisi Fleksibel'}
+                  </div>
+                  <div className="text-[10px] text-slate-500">
+                    {lang === 'en' ? 'From 8% flat' : 'Mulai dari 8%'}
+                  </div>
                 </div>
-                <div className="p-3 bg-emerald-50/70 border border-emerald-100 rounded-2xl text-center">
-                  <Users className="w-5 h-5 text-emerald-600 mx-auto mb-1" />
-                  <div className="text-xs font-bold text-slate-900">Jutaan Tamu</div>
-                  <div className="text-[10px] text-slate-500">Trafik domestik & intl</div>
+                <div className="p-3 bg-slate-50 border border-slate-200 rounded-2xl text-center">
+                  <Users className="w-5 h-5 text-brand-600 mx-auto mb-1" />
+                  <div className="text-xs font-bold text-slate-900">
+                    {lang === 'en' ? 'Millions of Guests' : lang === 'ms' ? 'Jutaan Pelancong' : 'Jutaan Tamu'}
+                  </div>
+                  <div className="text-[10px] text-slate-500">
+                    {lang === 'en' ? 'Regional travelers' : 'Trafik domestik & regional'}
+                  </div>
                 </div>
-                <div className="p-3 bg-amber-50/70 border border-amber-100 rounded-2xl text-center">
-                  <Clock className="w-5 h-5 text-amber-600 mx-auto mb-1" />
-                  <div className="text-xs font-bold text-slate-900">Pencairan Harian</div>
-                  <div className="text-[10px] text-slate-500">Langsung ke rekening</div>
+                <div className="p-3 bg-slate-50 border border-slate-200 rounded-2xl text-center">
+                  <Clock className="w-5 h-5 text-brand-600 mx-auto mb-1" />
+                  <div className="text-xs font-bold text-slate-900">
+                    {lang === 'en' ? 'Daily Payouts' : lang === 'ms' ? 'Penyelesaian Harian' : 'Pencairan Harian'}
+                  </div>
+                  <div className="text-[10px] text-slate-500">
+                    {lang === 'en' ? 'Direct bank transfer' : 'Langsung ke rekening'}
+                  </div>
                 </div>
               </div>
 
@@ -171,31 +183,31 @@ export function PartnerModal({ isOpen, onClose, lang = 'id', showToast }) {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                      Nama Properti / Hotel <span className="text-red-500">*</span>
+                      {lang === 'en' ? 'Property Name' : lang === 'ms' ? 'Nama Penginapan' : 'Nama Properti / Hotel'} <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
                       required
-                      placeholder="Contoh: Villa Kayu Manis"
+                      placeholder={lang === 'en' ? 'e.g. The Heritage Manor' : lang === 'ms' ? 'Contoh: Villa Melati Langkawi' : 'Contoh: Villa Kayu Manis'}
                       value={formData.propertyName}
                       onChange={(e) => setFormData({ ...formData, propertyName: e.target.value })}
-                      className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 font-medium"
+                      className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-600 font-medium"
                     />
                   </div>
 
                   <div>
                     <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                      Tipe Properti <span className="text-red-500">*</span>
+                      {lang === 'en' ? 'Property Type' : lang === 'ms' ? 'Jenis Penginapan' : 'Tipe Properti'} <span className="text-red-500">*</span>
                     </label>
                     <select
                       value={formData.propertyType}
                       onChange={(e) => setFormData({ ...formData, propertyType: e.target.value })}
-                      className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 font-medium cursor-pointer"
+                      className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-600 font-medium cursor-pointer"
                     >
                       <option value="Hotel">Hotel</option>
                       <option value="Resort">Resort</option>
-                      <option value="Villa">Villa Privadi</option>
-                      <option value="Apartemen">Apartemen / Condotel</option>
+                      <option value="Villa">Villa</option>
+                      <option value="Apartemen">{lang === 'en' ? 'Apartment / Suite' : 'Apartemen / Condotel'}</option>
                       <option value="Boutique Hotel">Boutique Hotel</option>
                       <option value="Glamping">Glamping & Cabin</option>
                     </select>
@@ -205,69 +217,69 @@ export function PartnerModal({ isOpen, onClose, lang = 'id', showToast }) {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                      Kota / Wilayah <span className="text-red-500">*</span>
+                      {lang === 'en' ? 'City / Location' : lang === 'ms' ? 'Bandar / Kawasan' : 'Kota / Wilayah'} <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
-                      <MapPin className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+                      <MapPin className="w-4 h-4 text-brand-600 absolute left-3.5 top-3" />
                       <input
                         type="text"
                         required
-                        placeholder="Contoh: Badung, Bali"
+                        placeholder={lang === 'en' ? 'e.g. Marina Bay, Singapore' : lang === 'ms' ? 'Contoh: KLCC, Kuala Lumpur' : 'Contoh: Badung, Bali'}
                         value={formData.city}
                         onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                        className="w-full pl-9 pr-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 font-medium"
+                        className="w-full pl-9 pr-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-600 font-medium"
                       />
                     </div>
                   </div>
 
                   <div>
                     <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                      Estimasi Jumlah Kamar
+                      {lang === 'en' ? 'Estimated Total Rooms' : lang === 'ms' ? 'Anggaran Jumlah Bilik' : 'Estimasi Jumlah Kamar'}
                     </label>
                     <input
                       type="number"
-                      placeholder="Contoh: 12"
+                      placeholder="12"
                       value={formData.roomCount}
                       onChange={(e) => setFormData({ ...formData, roomCount: e.target.value })}
-                      className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 font-medium"
+                      className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-600 font-medium"
                     />
                   </div>
                 </div>
 
                 <div className="border-t border-slate-100 pt-3">
                   <div className="text-xs font-bold text-slate-900 mb-3 uppercase tracking-wider">
-                    Informasi Kontak Pengelola (PIC)
+                    {lang === 'en' ? 'Manager / Contact Information (PIC)' : lang === 'ms' ? 'Maklumat Hubungan Pengurus (PIC)' : 'Informasi Kontak Pengelola (PIC)'}
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div>
                       <label className="block text-xs font-semibold text-slate-600 mb-1">
-                        Nama Lengkap <span className="text-red-500">*</span>
+                        {lang === 'en' ? 'Full Name' : lang === 'ms' ? 'Nama Penuh' : 'Nama Lengkap'} <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
                         required
-                        placeholder="Nama Anda"
+                        placeholder={lang === 'en' ? 'John Tan' : lang === 'ms' ? 'Ahmad Firdaus' : 'Budi Pratama'}
                         value={formData.contactName}
                         onChange={(e) => setFormData({ ...formData, contactName: e.target.value })}
-                        className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 font-medium"
+                        className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-600 font-medium"
                       />
                     </div>
                     <div>
                       <label className="block text-xs font-semibold text-slate-600 mb-1">
-                        WhatsApp / HP <span className="text-red-500">*</span>
+                        WhatsApp / Phone <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="tel"
                         required
-                        placeholder="0812-xxxx-xxxx"
+                        placeholder={lang === 'en' ? '+65 9123 4567' : lang === 'ms' ? '+60 12-345 6789' : '0812-xxxx-xxxx'}
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 font-medium"
+                        className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-600 font-medium"
                       />
                     </div>
                     <div>
                       <label className="block text-xs font-semibold text-slate-600 mb-1">
-                        Email Bisnis <span className="text-red-500">*</span>
+                        {lang === 'en' ? 'Business Email' : lang === 'ms' ? 'E-mel Perniagaan' : 'Email Bisnis'} <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="email"
@@ -275,7 +287,7 @@ export function PartnerModal({ isOpen, onClose, lang = 'id', showToast }) {
                         placeholder="hotel@domain.com"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 font-medium"
+                        className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-600 font-medium"
                       />
                     </div>
                   </div>
@@ -308,14 +320,20 @@ export function PartnerModal({ isOpen, onClose, lang = 'id', showToast }) {
               {/* Direct Concierge Callout */}
               <div className="bg-slate-50 rounded-2xl p-3 border border-slate-200 flex items-center justify-between gap-3 text-xs">
                 <div className="flex items-center gap-2 text-slate-600">
-                  <MessageSquare className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>Butuh bantuan cepat pendaftaran? Hubungi Concierge Mitra NusaStay via WhatsApp.</span>
+                  <MessageSquare className="w-4 h-4 text-brand-600 shrink-0" />
+                  <span>
+                    {lang === 'en'
+                      ? 'Need quick partnership onboarding? Connect directly with NusaStay Concierge via WhatsApp.'
+                      : lang === 'ms'
+                      ? 'Perlukan bantuan pantas pendaftaran? Hubungi Khidmat Rakan Kongsi NusaStay via WhatsApp.'
+                      : 'Butuh bantuan cepat pendaftaran? Hubungi Concierge Mitra NusaStay via WhatsApp.'}
+                  </span>
                 </div>
                 <a
-                  href="https://wa.me/6281234567890?text=Halo%20NusaStay%20Partnership%2C%20saya%20tertarik%20mendaftarkan%20properti"
+                  href={lang === 'en' ? 'https://wa.me/6567889000' : lang === 'ms' ? 'https://wa.me/60380889000' : 'https://wa.me/6281234567890'}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg shrink-0 transition-colors inline-flex items-center gap-1.5"
+                  className="px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-lg shrink-0 transition-colors inline-flex items-center gap-1.5"
                 >
                   <Phone className="w-3.5 h-3.5" />
                   <span>Chat WA</span>
