@@ -364,7 +364,7 @@ export default function App() {
                 {/* Results count & current destination heading */}
                 <div>
                   <h2 className="text-base sm:text-lg font-black text-slate-900">
-                    {activeCity === 'Semua Kota' ? (t?.allIndonesia || 'Seluruh Indonesia') : (t?.hotelsIn ? t.hotelsIn.replace('{city}', activeCity) : `Hotel & Resor di ${activeCity}`)}
+                    {activeCity === 'Semua Kota' ? (t?.allDestinations || t?.allIndonesia || 'Semua Destinasi') : (t?.hotelsIn ? t.hotelsIn.replace('{city}', activeCity) : `Hotel & Resor di ${activeCity}`)}
                   </h2>
                   <p className="text-xs text-slate-500 font-medium">
                     {t?.showingHotels ? t.showingHotels.replace('{count}', filteredHotels.length) : `Menampilkan ${filteredHotels.length} akomodasi terbaik`}

@@ -42,12 +42,12 @@ export const HOTELS_DATA = [
     hasSpa: true,
     hasRestaurant: true,
     hasGym: true,
-    mainImage: 'https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&h=520&q=80',
+    mainImage: 'https://images.unsplash.com/photo-1565967511849-76a60a516170?auto=format&fit=crop&w=800&h=520&q=80',
     thumbnails: [
-      'https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1565967511849-76a60a516170?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=400&q=80',
       'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=400&q=80',
-      'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=400&q=80',
-      'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?auto=format&fit=crop&w=400&q=80',
     ],
     description: 'Ikon arsitektur dunia di tepi Marina Bay dengan kolam renang infinity rooftop terbesar di lantai 57. Menghadap langsung ke cakrawala gemerlap Singapura, pusat perbelanjaan The Shoppes, dan atraksi kelas dunia.',
     reviewBreakdown: {
