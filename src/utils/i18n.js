@@ -223,7 +223,7 @@ export const TRANSLATIONS = {
   },
 
   ms: {
-    brandTagline: 'Kurasi Hotel & Resort Nusantara',
+    brandTagline: 'Kurasi Hotel Nusantara',
     navExplore: 'Terokai Hotel',
     navVillas: 'Resort & Villa',
     navDeals: 'Tawaran Terhad',

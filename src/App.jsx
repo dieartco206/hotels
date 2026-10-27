@@ -8,6 +8,8 @@ import { HotelCard } from './components/HotelCard';
 import { HotelGridCard } from './components/HotelGridCard';
 import { HotelDetailModal } from './components/HotelDetailModal';
 import { BookingCheckoutModal } from './components/BookingCheckoutModal';
+import { CheckBookingModal } from './components/CheckBookingModal';
+import { PartnerModal } from './components/PartnerModal';
 import { InteractiveMapModal } from './components/InteractiveMapModal';
 import { WishlistDrawer } from './components/WishlistDrawer';
 import { Toast } from './components/Toast';
@@ -76,6 +78,8 @@ export default function App() {
   const [checkoutModalData, setCheckoutModalData] = useState(null); // { hotel, room }
   const [isMapModalOpen, setIsMapModalOpen] = useState(false);
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
+  const [isCheckBookingOpen, setIsCheckBookingOpen] = useState(false);
+  const [isPartnerOpen, setIsPartnerOpen] = useState(false);
   const [wishlist, setWishlist] = useState([HOTELS_DATA[0]]); // default 1 item saved for great initial UX
 
   // 5. Toast Feedback State
@@ -219,6 +223,9 @@ export default function App() {
       <Navbar
         wishlistCount={wishlist.length}
         onOpenWishlist={() => setIsWishlistOpen(true)}
+        onOpenCheckBooking={() => setIsCheckBookingOpen(true)}
+        onOpenPartner={() => setIsPartnerOpen(true)}
+        showToast={showToast}
         lang={lang}
         setLang={setLang}
         currency={currency}
@@ -537,7 +544,24 @@ export default function App() {
         lang={lang}
       />
 
-      {/* 10. Toast Notification */}
+      {/* 10. Check Booking (Cek Pesanan) Modal */}
+      <CheckBookingModal
+        isOpen={isCheckBookingOpen}
+        onClose={() => setIsCheckBookingOpen(false)}
+        lang={lang}
+        t={t}
+        showToast={showToast}
+      />
+
+      {/* 11. List Property (Mitra Properti) Modal */}
+      <PartnerModal
+        isOpen={isPartnerOpen}
+        onClose={() => setIsPartnerOpen(false)}
+        lang={lang}
+        showToast={showToast}
+      />
+
+      {/* 12. Toast Notification */}
       <Toast toast={toast} onClose={() => setToast(null)} />
 
     </div>

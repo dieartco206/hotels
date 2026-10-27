@@ -78,6 +78,76 @@ export function BookingCheckoutModal({
     }
   };
 
+  const handleDownloadVoucher = () => {
+    const voucherHtml = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>E-Voucher NusaStay - ${bookingCode}</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 40px; color: #0F172A; background: #F8FAFC; }
+    .card { max-width: 640px; margin: 0 auto; border: 1px solid #E2E8F0; border-radius: 16px; padding: 32px; background: #fff; box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+    .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #CBD5E1; padding-bottom: 20px; }
+    .logo { font-size: 24px; font-weight: 900; color: #0064D2; }
+    .badge { background: #ECFDF5; color: #047857; font-size: 12px; font-weight: 800; padding: 6px 12px; border-radius: 8px; }
+    .code { font-family: monospace; font-size: 18px; font-weight: 800; color: #0064D2; margin-top: 4px; }
+    .section { margin-top: 24px; }
+    .row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; }
+    .label { color: #64748B; font-weight: 500; }
+    .val { font-weight: 700; color: #0F172A; text-align: right; }
+    .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #E2E8F0; font-size: 12px; color: #64748B; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="header">
+      <div>
+        <div class="logo">NusaStay</div>
+        <div class="code">${bookingCode}</div>
+      </div>
+      <div class="badge">TERKONFIRMASI</div>
+    </div>
+    <div class="section">
+      <h3 style="margin: 0 0 16px 0; font-size: 18px; color: #0F172A;">${hotel?.name || 'Hotel NusaStay'}</h3>
+      <div class="row"><span class="label">Tipe Kamar:</span><span class="val">${room?.name || 'Deluxe Room'}</span></div>
+      <div class="row"><span class="label">Nama Tamu:</span><span class="val">${formData.fullName}</span></div>
+      <div class="row"><span class="label">No. Kontak:</span><span class="val">${formData.phone || formData.email}</span></div>
+      <div class="row"><span class="label">Check-in:</span><span class="val">${checkInDate} (14:00)</span></div>
+      <div class="row"><span class="label">Check-out:</span><span class="val">${checkOutDate} (12:00)</span></div>
+      <div class="row"><span class="label">Durasi:</span><span class="val">${nights} Malam</span></div>
+      <div class="row"><span class="label">Metode Bayar:</span><span class="val">${formData.paymentMethod === 'hotel' ? 'Bayar Saat Check-in' : 'Transfer Bank / VA'}</span></div>
+      <div class="row" style="font-size: 16px; margin-top: 16px; padding-top: 12px; border-top: 1px solid #E2E8F0;">
+        <span class="label" style="font-weight: 800; color: #0F172A;">Total Biaya:</span>
+        <span class="val" style="color: #FF5E1F; font-size: 18px;">${formatCurrency(totalPrice, currency)}</span>
+      </div>
+    </div>
+    <div class="footer">
+      Harap tunjukkan e-voucher ini beserta kartu identitas resmi saat check-in di front desk hotel.<br/>
+      NusaStay Guest Support 24 Jam: 021-5088-9000
+    </div>
+  </div>
+</body>
+</html>`;
+    const blob = new Blob([voucherHtml], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `Voucher-NusaStay-${bookingCode}.html`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    if (showToast) {
+      showToast(
+        lang === 'ms' 
+          ? `E-Baucar ${bookingCode} berjaya dimuat turun!` 
+          : lang === 'en' 
+          ? `E-Voucher ${bookingCode} downloaded successfully!` 
+          : `E-Voucher ${bookingCode} berhasil diunduh!`
+      );
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 md:p-6 animate-in fade-in duration-200">
       <div className="bg-white rounded-3xl shadow-modal border border-slate-200 w-full max-w-3xl overflow-hidden animate-in zoom-in-95 duration-200 my-auto">
@@ -293,8 +363,8 @@ export function BookingCheckoutModal({
             <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
               <button
                 type="button"
-                onClick={() => alert(`Mengunduh PDF E-Voucher ${bookingCode}...`)}
-                className="px-5 py-2.5 bg-brand-500 hover:bg-brand-600 text-white font-bold text-sm rounded-xl flex items-center justify-center gap-1.5 shadow-sm transition-colors"
+                onClick={handleDownloadVoucher}
+                className="px-5 py-2.5 bg-brand-500 hover:bg-brand-600 text-white font-bold text-sm rounded-xl flex items-center justify-center gap-1.5 shadow-sm transition-colors cursor-pointer"
               >
                 <Download className="w-4 h-4" />
                 {t?.downloadPdf || 'Unduh PDF Voucher'}
