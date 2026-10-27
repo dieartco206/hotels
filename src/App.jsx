@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
 import { SearchWidget } from './components/SearchWidget';
@@ -30,9 +30,46 @@ import {
 } from 'lucide-react';
 
 export default function App() {
-  // Locale & Multi-Currency State (Indonesia / Malaysia / Singapore)
-  const [lang, setLang] = useState('id'); // 'id' | 'ms' | 'en'
-  const [currency, setCurrency] = useState('IDR'); // 'IDR' | 'MYR' | 'SGD'
+  // Locale & Multi-Currency State (Indonesia / Malaysia / Singapore) with LocalStorage persistence
+  const [lang, setLang] = useState(() => {
+    try {
+      const savedLang = localStorage.getItem('nusastay_lang');
+      if (savedLang && ['id', 'ms', 'en'].includes(savedLang)) {
+        return savedLang;
+      }
+    } catch (e) {
+      // Ignore localStorage access restrictions
+    }
+    return 'id';
+  });
+
+  const [currency, setCurrency] = useState(() => {
+    try {
+      const savedCurr = localStorage.getItem('nusastay_currency');
+      if (savedCurr && ['IDR', 'MYR', 'SGD'].includes(savedCurr)) {
+        return savedCurr;
+      }
+    } catch (e) {
+      // Ignore
+    }
+    return 'IDR';
+  });
+
+  // Persist language to localStorage and document.documentElement
+  useEffect(() => {
+    try {
+      localStorage.setItem('nusastay_lang', lang);
+      document.documentElement.lang = lang;
+    } catch (e) {}
+  }, [lang]);
+
+  // Persist currency to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem('nusastay_currency', currency);
+    } catch (e) {}
+  }, [currency]);
+
   const t = useMemo(() => TRANSLATIONS[lang] || TRANSLATIONS.id, [lang]);
 
   // 1. Search Engine State
@@ -80,7 +117,23 @@ export default function App() {
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
   const [isCheckBookingOpen, setIsCheckBookingOpen] = useState(false);
   const [isPartnerOpen, setIsPartnerOpen] = useState(false);
-  const [wishlist, setWishlist] = useState([HOTELS_DATA[0]]); // default 1 item saved for great initial UX
+  const [wishlist, setWishlist] = useState(() => {
+    try {
+      const saved = localStorage.getItem('nusastay_wishlist');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {}
+    return [HOTELS_DATA[0]]; // default 1 item saved for great initial UX
+  });
+
+  // Persist wishlist to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem('nusastay_wishlist', JSON.stringify(wishlist));
+    } catch (e) {}
+  }, [wishlist]);
 
   // 5. Toast Feedback State
   const [toast, setToast] = useState(null);
