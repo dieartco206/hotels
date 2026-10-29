@@ -8,7 +8,6 @@ import {
   Mail, 
   MapPin, 
   ShieldCheck, 
-  Sparkles, 
   Percent, 
   Users, 
   Clock, 

@@ -12,8 +12,7 @@ import {
   ChevronDown, 
   Compass, 
   PhoneCall, 
-  Globe2,
-  Sparkles
+  Globe2
 } from 'lucide-react';
 import { SUPPORTED_LANGUAGES, SUPPORTED_CURRENCIES } from '../utils/i18n';
 
