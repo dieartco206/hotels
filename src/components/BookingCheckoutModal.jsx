@@ -333,10 +333,10 @@ export function BookingCheckoutModal({
               <ShieldCheck className="w-3.5 h-3.5 text-brand-600" />
               <span>
                 {lang === 'en'
-                  ? 'Transactions encrypted with 256-bit PCI-DSS banking-grade security'
+                  ? '256-bit PCI-DSS encrypted'
                   : lang === 'ms'
-                  ? 'Transaksi disulitkan dengan piawaian keselamatan PCI-DSS 256-bit'
-                  : 'Transaksi dienkripsi dengan standar keamanan PCI-DSS 256-bit'}
+                  ? 'Penyulitan PCI-DSS 256-bit'
+                  : 'Enkripsi PCI-DSS 256-bit'}
               </span>
             </div>
 

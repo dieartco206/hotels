@@ -306,10 +306,10 @@ export function PartnerModal({ isOpen, onClose, lang = 'id', showToast }) {
                         <Send className="w-4 h-4" />
                         <span>
                           {lang === 'ms' 
-                            ? 'Hantar Borang Pendaftaran Rakan Kongsi' 
+                            ? 'Hantar Pendaftaran' 
                             : lang === 'en' 
-                            ? 'Submit Property Partner Registration' 
-                            : 'Kirim Pendaftaran Mitra Properti'}
+                            ? 'Submit Registration' 
+                            : 'Kirim Pendaftaran'}
                         </span>
                       </>
                     )}
@@ -323,10 +323,10 @@ export function PartnerModal({ isOpen, onClose, lang = 'id', showToast }) {
                   <MessageSquare className="w-4 h-4 text-brand-600 shrink-0" />
                   <span>
                     {lang === 'en'
-                      ? 'Need quick partnership onboarding? Connect directly with NusaStay Concierge via WhatsApp.'
+                      ? 'Need help onboarding? Contact Concierge via WhatsApp.'
                       : lang === 'ms'
-                      ? 'Perlukan bantuan pantas pendaftaran? Hubungi Khidmat Rakan Kongsi NusaStay via WhatsApp.'
-                      : 'Butuh bantuan cepat pendaftaran? Hubungi Concierge Mitra NusaStay via WhatsApp.'}
+                      ? 'Perlukan bantuan? Hubungi Concierge via WhatsApp.'
+                      : 'Butuh bantuan pendaftaran? Hubungi Concierge via WhatsApp.'}
                   </span>
                 </div>
                 <a

@@ -187,9 +187,9 @@ export function HotelDetailModal({
             <div className="space-y-4">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-lg font-extrabold text-slate-900">
-                  {t?.roomOptionsTitle || 'Tipe Kamar Tersedia'} ({hotel.rooms?.length || 1})
+                  {t?.roomOptionsTitle || 'Pilihan Kamar'} ({hotel.rooms?.length || 1})
                 </h3>
-                <span className="text-xs text-slate-500">{t?.perRoomPerNight || 'Harga per kamar per malam'}</span>
+                <span className="text-xs text-slate-500">{t?.perRoomPerNight || 'Per kamar / malam'}</span>
               </div>
 
               {hotel.rooms?.map((room) => (
@@ -232,7 +232,7 @@ export function HotelDetailModal({
                         </span>
                         <span className="flex items-center gap-1 font-medium bg-slate-50 px-2 py-1 rounded-md border border-slate-200">
                           <Users className="w-3.5 h-3.5 text-slate-500" />
-                          {t?.adultGuestsText?.replace('{count}', room.maxGuests) || `${room.maxGuests} Tamu Dewasa`}
+                          {t?.adultGuestsText?.replace('{count}', room.maxGuests) || `${room.maxGuests} Dewasa`}
                         </span>
                       </div>
 
@@ -253,18 +253,18 @@ export function HotelDetailModal({
                         {room.freeBreakfast && (
                           <div className="flex items-center gap-1.5 text-emerald-700 font-semibold">
                             <Check className="w-3.5 h-3.5 text-emerald-600 stroke-[3]" />
-                            {t?.freeBreakfastIncluded || 'Sarapan prasmanan lezat termasuk'}
+                            {t?.freeBreakfastIncluded || 'Sarapan prasmanan termasuk'}
                           </div>
                         )}
                         {room.freeCancellation ? (
                           <div className="flex items-center gap-1.5 text-emerald-700 font-medium">
                             <Check className="w-3.5 h-3.5 text-emerald-600 stroke-[3]" />
-                            {t?.freeCancellationAvailable || 'Bisa Refund / Pembatalan gratis s.d H-1'}
+                            {t?.freeCancellationAvailable || 'Pembatalan gratis s.d H-1'}
                           </div>
                         ) : (
                           <div className="flex items-center gap-1.5 text-amber-700 font-medium">
                             <Info className="w-3.5 h-3.5 text-amber-600" />
-                            {lang === 'en' ? 'Promotional Rate (Non-refundable)' : lang === 'ms' ? 'Kadar Promosi Khas (Tidak Boleh Bayar Balik)' : 'Harga Promo Khusus (Non-refundable)'}
+                            {lang === 'en' ? 'Non-refundable' : lang === 'ms' ? 'Khas (Non-refundable)' : 'Promo (Non-refundable)'}
                           </div>
                         )}
                       </div>
@@ -316,17 +316,17 @@ export function HotelDetailModal({
                 <div className="p-4 bg-white rounded-xl border border-slate-200">
                   <h5 className="font-bold text-sm text-slate-800 mb-2 flex items-center gap-2">
                     <Clock className="w-4 h-4 text-brand-600" />
-                    {lang === 'en' ? 'Check-in & Check-out Times' : lang === 'ms' ? 'Waktu Daftar Masuk & Keluar' : 'Waktu Check-in & Check-out'}
+                    Check-in & Check-out
                   </h5>
                   <div className="space-y-1 text-xs text-slate-600">
                     <p>
-                      <span className="font-semibold text-slate-700">Check-in:</span> {hotel.country === 'Singapore' ? 'From 14:00 (SGT)' : hotel.country === 'Malaysia' ? 'Bermula jam 14:00 (MYT)' : 'Mulai pukul 14:00 (WIB)'}
+                      <span className="font-semibold text-slate-700">Check-in:</span> {hotel.country === 'Singapore' ? '14:00 (SGT)' : hotel.country === 'Malaysia' ? '14:00 (MYT)' : '14:00 (WIB)'}
                     </p>
                     <p>
-                      <span className="font-semibold text-slate-700">Check-out:</span> {hotel.country === 'Singapore' ? 'Until 12:00 (SGT)' : hotel.country === 'Malaysia' ? 'Sebelum jam 12:00 (MYT)' : 'Sebelum pukul 12:00 (WIB)'}
+                      <span className="font-semibold text-slate-700">Check-out:</span> {hotel.country === 'Singapore' ? '12:00 (SGT)' : hotel.country === 'Malaysia' ? '12:00 (MYT)' : '12:00 (WIB)'}
                     </p>
                     <p className="text-slate-400 pt-1">
-                      {t?.receptionText || (lang === 'en' ? '24-hour front desk available.' : lang === 'ms' ? 'Kaunter penyambut tetamu beroperasi 24 jam.' : 'Resepsionis beroperasi 24 jam penuh.')}
+                      {t?.receptionText || (lang === 'en' ? '24-hour front desk.' : lang === 'ms' ? 'Kaunter 24 jam.' : 'Resepsionis 24 jam.')}
                     </p>
                   </div>
                 </div>
@@ -334,7 +334,7 @@ export function HotelDetailModal({
                 <div className="p-4 bg-white rounded-xl border border-slate-200">
                   <h5 className="font-bold text-sm text-slate-800 mb-2 flex items-center gap-2">
                     <ShieldCheck className="w-4 h-4 text-brand-600" />
-                    {t?.hygieneProtocolTitle || (lang === 'en' ? 'Official Safety & Hygiene Standards' : lang === 'ms' ? 'Piawaian Kesihatan & Keselesaan Rasmi' : 'Protokol Kesehatan & Kenyamanan')}
+                    {t?.hygieneProtocolTitle || (lang === 'en' ? 'Hygiene Standards' : lang === 'ms' ? 'Piawaian Kebersihan' : 'Protokol Kebersihan')}
                   </h5>
                   <div className="space-y-1 text-xs text-slate-600">
                     {hotel.country === 'Singapore' ? (

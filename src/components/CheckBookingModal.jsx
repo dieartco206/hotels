@@ -187,10 +187,10 @@ export function CheckBookingModal({
             </div>
             <div>
               <h3 className="font-extrabold text-slate-900 text-base sm:text-lg">
-                {lang === 'en' ? 'Check Booking Status' : lang === 'ms' ? 'Semak Status Tempahan' : 'Cek Status Pesanan'}
+                {lang === 'en' ? 'Check Booking' : lang === 'ms' ? 'Semak Tempahan' : 'Cek Pesanan'}
               </h3>
               <p className="text-xs text-slate-500">
-                {lang === 'en' ? 'Find and view your official NusaStay e-voucher' : lang === 'ms' ? 'Cari dan semak e-baucar rasmi NusaStay anda' : 'Lacak reservasi dan unduh e-voucher resmi Anda'}
+                {lang === 'en' ? 'Track your reservation & voucher' : lang === 'ms' ? 'Jejak tempahan & e-baucar anda' : 'Lacak reservasi & e-voucher Anda'}
               </p>
             </div>
           </div>
@@ -210,7 +210,7 @@ export function CheckBookingModal({
             <div>
               <div className="flex justify-between items-center mb-1">
                 <label className="block text-xs font-bold text-slate-700">
-                  {lang === 'en' ? 'NusaStay Booking Code' : lang === 'ms' ? 'Kod Tempahan NusaStay' : 'Kode Booking NusaStay'}
+                  {lang === 'en' ? 'Booking Code' : lang === 'ms' ? 'Kod Tempahan' : 'Kode Booking'}
                 </label>
                 <button
                   type="button"
@@ -234,7 +234,7 @@ export function CheckBookingModal({
 
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1">
-                {lang === 'en' ? 'Email Address or WhatsApp Number' : lang === 'ms' ? 'Alamat E-mel atau No. WhatsApp' : 'Email Pemesan atau No. WhatsApp'}
+                {lang === 'en' ? 'Email or WhatsApp' : lang === 'ms' ? 'E-mel atau WhatsApp' : 'Email atau WhatsApp'}
               </label>
               <input
                 type="text"
@@ -341,7 +341,7 @@ export function CheckBookingModal({
                   className="flex-1 py-2.5 bg-cta hover:bg-cta-hover text-white text-xs font-bold rounded-xl shadow-xs transition-colors flex items-center justify-center gap-1.5"
                 >
                   <Download className="w-3.5 h-3.5" />
-                  {lang === 'en' ? 'Download E-Voucher (HTML)' : 'Unduh E-Voucher Resmi'}
+                  {lang === 'en' ? 'Download Voucher' : 'Unduh Voucher'}
                 </button>
                 <button
                   type="button"
@@ -357,8 +357,8 @@ export function CheckBookingModal({
 
           {/* Guarantee Footer */}
           <div className="flex items-center justify-center gap-1.5 text-[11px] text-slate-400 pt-1">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-            <span>{lang === 'en' ? 'Official encrypted reservation tracking powered by NusaStay' : 'Sistem verifikasi reservasi resmi terenkripsi NusaStay'}</span>
+            <ShieldCheck className="w-3.5 h-3.5 text-brand-600" />
+            <span>{lang === 'en' ? 'Encrypted reservation tracking' : 'Verifikasi reservasi terenkripsi'}</span>
           </div>
 
         </div>
