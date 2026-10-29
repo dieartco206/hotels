@@ -15,7 +15,7 @@ import { WishlistDrawer } from './components/WishlistDrawer';
 import { Toast } from './components/Toast';
 import { Footer } from './components/Footer';
 
-import { HOTELS_DATA } from './data/hotelsData';
+import { hotelsApi } from './services/api';
 import { formatCurrency } from './utils/formatters';
 import { TRANSLATIONS } from './utils/i18n';
 import { 
@@ -118,6 +118,26 @@ export default function App() {
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
   const [isCheckBookingOpen, setIsCheckBookingOpen] = useState(false);
   const [isPartnerOpen, setIsPartnerOpen] = useState(false);
+  const [hotels, setHotels] = useState([]);
+  const [loadingHotels, setLoadingHotels] = useState(true);
+
+  // Load real hotel data directly from MySQL Backend API
+  const loadLiveHotels = async () => {
+    try {
+      setLoadingHotels(true);
+      const data = await hotelsApi.getHotels();
+      setHotels(data);
+    } catch (err) {
+      console.error('Failed to load hotels from API:', err);
+    } finally {
+      setLoadingHotels(false);
+    }
+  };
+
+  useEffect(() => {
+    loadLiveHotels();
+  }, []);
+
   const [wishlist, setWishlist] = useState(() => {
     try {
       const saved = localStorage.getItem('nusastay_wishlist');
@@ -126,7 +146,7 @@ export default function App() {
         if (Array.isArray(parsed) && parsed.length > 0) return parsed;
       }
     } catch (e) {}
-    return [HOTELS_DATA[0]]; // default 1 item saved for great initial UX
+    return [];
   });
 
   // Persist wishlist to localStorage
@@ -178,9 +198,9 @@ export default function App() {
     showToast('Filter Direset', 'Semua filter pencarian telah dikembalikan ke kondisi awal.', 'info');
   };
 
-  // Filtered & Sorted Hotels Computation
+  // Filtered & Sorted Hotels Computation from real API data
   const filteredHotels = useMemo(() => {
-    return HOTELS_DATA.filter(hotel => {
+    return hotels.filter(hotel => {
       // 0. Country Destination Filter
       if (selectedCountry !== 'all' && hotel.country !== selectedCountry) {
         return false;
@@ -194,9 +214,9 @@ export default function App() {
       // 2. Search Query (Hotel name, area, city, country)
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
-        const matchesName = hotel.name.toLowerCase().includes(q);
-        const matchesArea = hotel.area.toLowerCase().includes(q);
-        const matchesCity = hotel.city.toLowerCase().includes(q);
+        const matchesName = (hotel.name || '').toLowerCase().includes(q);
+        const matchesArea = (hotel.area || '').toLowerCase().includes(q);
+        const matchesCity = (hotel.city || '').toLowerCase().includes(q);
         const matchesCountry = (hotel.country || '').toLowerCase().includes(q);
         if (!matchesName && !matchesArea && !matchesCity && !matchesCountry) return false;
       }
@@ -238,6 +258,7 @@ export default function App() {
       return (b.rating * b.reviewsCount) - (a.rating * a.reviewsCount); // default popularity
     });
   }, [
+    hotels,
     selectedCountry,
     activeCity,
     searchQuery,
@@ -251,8 +272,8 @@ export default function App() {
 
   // Flash Sale Hotels
   const flashSaleHotels = useMemo(() => {
-    return HOTELS_DATA.filter(h => h.flashSale);
-  }, []);
+    return hotels.filter(h => h.flashSale);
+  }, [hotels]);
 
   // Room Selected for Booking Flow
   const handleSelectRoom = (hotel, room) => {
@@ -493,7 +514,12 @@ export default function App() {
               )}
 
               {/* Hotel Cards Feed */}
-              {filteredHotels.length === 0 ? (
+              {loadingHotels ? (
+                <div className="bg-white rounded-3xl border border-slate-200/80 p-16 text-center shadow-card flex flex-col items-center justify-center gap-3">
+                  <div className="w-8 h-8 border-3 border-brand-600 border-t-transparent rounded-full animate-spin"></div>
+                  <span className="text-xs font-semibold text-slate-600">Memuat katalog hotel resmi dari server database...</span>
+                </div>
+              ) : filteredHotels.length === 0 ? (
                 <div className="bg-white rounded-3xl border border-slate-200 p-12 text-center shadow-card space-y-4">
                   <div className="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto">
                     <Building2 className="w-8 h-8" />

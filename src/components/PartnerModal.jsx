@@ -14,6 +14,7 @@ import {
   Clock, 
   MessageSquare
 } from 'lucide-react';
+import { hotelsApi } from '../services/api';
 
 export function PartnerModal({ isOpen, onClose, lang = 'id', showToast }) {
   const [formData, setFormData] = useState({
@@ -30,22 +31,45 @@ export function PartnerModal({ isOpen, onClose, lang = 'id', showToast }) {
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
+
+    try {
+      let country = 'Indonesia';
+      if (['Singapore', 'Marina Bay', 'Sentosa'].some(k => formData.city.includes(k))) {
+        country = 'Singapore';
+      } else if (['Kuala Lumpur', 'Penang', 'Langkawi'].some(k => formData.city.includes(k))) {
+        country = 'Malaysia';
+      }
+
+      const payload = {
+        business_name: formData.propertyName.trim(),
+        contact_person: formData.contactName.trim(),
+        email: formData.email.trim(),
+        phone: formData.phone.trim(),
+        country: country,
+        city: formData.city.trim(),
+        property_count: parseInt(formData.roomCount, 10) || 1,
+        notes: `Property Type: ${formData.propertyType}`,
+      };
+
+      await hotelsApi.applyPartner(payload);
       setIsSubmitted(true);
       if (showToast) {
         showToast(
           lang === 'ms' 
-            ? 'Permohonan rakan kongsi berjaya dihantar!' 
+            ? 'Permohonan rakan kongsi berjaya dihantar ke pangkalan data!' 
             : lang === 'en' 
-            ? 'Partner application submitted successfully!' 
-            : 'Pendaftaran mitra properti berhasil dikirim!'
+            ? 'Partner application registered in database successfully!' 
+            : 'Pendaftaran mitra properti berhasil masuk ke database!'
         );
       }
-    }, 600);
+    } catch (err) {
+      alert(err.message || 'Failed to submit application');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleReset = () => {

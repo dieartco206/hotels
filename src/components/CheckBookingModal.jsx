@@ -15,6 +15,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { formatDateIndo } from '../utils/formatters';
+import { hotelsApi } from '../services/api';
 
 export function CheckBookingModal({ 
   isOpen, 
@@ -77,29 +78,39 @@ export function CheckBookingModal({
     };
   }, [lang]);
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    setIsSearching(true);
+  const handleSearch = async (e) => {
+    if (e) e.preventDefault();
+    const cleanInput = bookingCode.trim();
+    if (!cleanInput) return;
 
-    setTimeout(() => {
+    setIsSearching(true);
+    setSearchResult(null);
+
+    try {
+      const b = await hotelsApi.getBookingByCode(cleanInput);
+      setSearchResult({
+        code: b.booking_code,
+        hotelName: b.hotel?.name || 'Luxury Hotel',
+        roomName: b.room?.name || 'Deluxe Category',
+        checkIn: typeof b.check_in === 'string' ? b.check_in.split('T')[0] : '2026-11-18',
+        checkOut: typeof b.check_out === 'string' ? b.check_out.split('T')[0] : '2026-11-20',
+        nights: b.nights || 1,
+        guests: `${b.guest_name} (${b.guests_count} Guests)`,
+        area: b.hotel?.city ? `${b.hotel.city}, ${b.hotel.country}` : 'Singapore',
+        totalPrice: `${b.currency || 'SGD'} ${Math.round(b.total_amount || 0).toLocaleString('en-US')}`,
+        status: (b.status || 'CONFIRMED').toUpperCase(),
+        bookedAt: new Date(b.created_at || Date.now()).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
+      });
+    } catch (err) {
+      setSearchResult('not_found');
+    } finally {
       setIsSearching(false);
-      const cleanInput = bookingCode.trim().toUpperCase();
-      // Match sample or any code starting with NUSA or length > 5
-      if (cleanInput.includes('NUSA') || cleanInput.length >= 6) {
-        setSearchResult({
-          ...sampleBooking,
-          code: cleanInput || 'NUSA-829142'
-        });
-      } else {
-        setSearchResult('not_found');
-      }
-    }, 400);
+    }
   };
 
-  const handleUseSample = () => {
-    setBookingCode('NUSA-829142');
-    setEmailOrPhone(lang === 'en' ? 'johntan@gmail.com' : lang === 'ms' ? 'ahmad.firdaus@gmail.com' : 'budi.pratama@gmail.com');
-    setSearchResult(sampleBooking);
+  const handleUseSample = (code = 'HTL-SG-8812') => {
+    setBookingCode(code);
+    setEmailOrPhone('guest@example.com');
   };
 
   const handleDownloadVoucher = () => {
@@ -212,19 +223,30 @@ export function CheckBookingModal({
                 <label className="block text-xs font-bold text-slate-700">
                   {lang === 'en' ? 'Booking Code' : lang === 'ms' ? 'Kod Tempahan' : 'Kode Booking'}
                 </label>
-                <button
-                  type="button"
-                  onClick={handleUseSample}
-                  className="text-[11px] font-bold text-brand-600 hover:underline flex items-center gap-0.5"
-                >
-                  {lang === 'en' ? 'Use Sample: NUSA-829142' : lang === 'ms' ? 'Guna Contoh: NUSA-829142' : 'Gunakan Contoh: NUSA-829142'}
-                </button>
+                <div className="flex items-center gap-1.5 text-[11px] font-bold text-brand-600">
+                  <span className="text-slate-400 font-normal">Contoh:</span>
+                  <button
+                    type="button"
+                    onClick={() => handleUseSample('HTL-SG-8812')}
+                    className="hover:underline font-mono"
+                  >
+                    HTL-SG-8812
+                  </button>
+                  <span className="text-slate-300">•</span>
+                  <button
+                    type="button"
+                    onClick={() => handleUseSample('HTL-ID-7721')}
+                    className="hover:underline font-mono"
+                  >
+                    HTL-ID-7721
+                  </button>
+                </div>
               </div>
               <div className="relative">
                 <input
                   type="text"
                   required
-                  placeholder="NUSA-829142"
+                  placeholder="e.g. HTL-SG-8812"
                   value={bookingCode}
                   onChange={(e) => setBookingCode(e.target.value)}
                   className="w-full px-3.5 py-2.5 text-sm font-mono uppercase tracking-wider border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:outline-none placeholder:font-sans placeholder:normal-case placeholder:tracking-normal"

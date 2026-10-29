@@ -14,6 +14,7 @@ import {
   Clock
 } from 'lucide-react';
 import { formatCurrency, formatDateIndo, calculateNights } from '../utils/formatters';
+import { hotelsApi } from '../services/api';
 
 export function BookingCheckoutModal({
   hotel,
@@ -76,13 +77,42 @@ export function BookingCheckoutModal({
     return <CreditCard className="w-5 h-5 text-brand-600" />;
   };
 
-  const handleSubmitBooking = (e) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmitBooking = async (e) => {
     e.preventDefault();
-    const code = 'NUSA-' + Math.floor(100000 + Math.random() * 900000);
-    setBookingCode(code);
-    setStep('success');
-    if (onBookingSuccess) {
-      onBookingSuccess(code, hotel.name, room.name);
+    setIsSubmitting(true);
+
+    try {
+      const payload = {
+        hotel_id: typeof hotel?.id === 'number' ? hotel.id : parseInt(hotel?.id, 10) || 1,
+        room_id: typeof room?.id === 'number' ? room.id : parseInt(room?.id, 10) || 1,
+        guest_name: formData.fullName.trim(),
+        guest_email: formData.email.trim(),
+        guest_phone: formData.phone.trim(),
+        check_in: checkInDate,
+        check_out: checkOutDate,
+        guests_count: guests?.adults || 2,
+        payment_method: paymentMethod,
+        special_requests: formData.specialRequests.join(', '),
+      };
+
+      const result = await hotelsApi.createBooking(payload);
+      const code = result?.booking_code || ('HTL-' + Math.floor(100000 + Math.random() * 900000));
+      setBookingCode(code);
+      setStep('success');
+
+      if (onBookingSuccess) {
+        onBookingSuccess(code, hotel.name, room?.name || 'Deluxe Room');
+      }
+    } catch (err) {
+      if (showToast) {
+        showToast('Booking Gagal', err.message || 'Kamar sudah habis atau terjadi kesalahan.', 'error');
+      } else {
+        alert(err.message || 'Booking submission failed');
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -324,9 +354,14 @@ export function BookingCheckoutModal({
             {/* Submit Button */}
             <button
               type="submit"
-              className="w-full py-3.5 bg-cta hover:bg-cta-hover text-white font-extrabold text-base rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 active:scale-98"
+              disabled={isSubmitting}
+              className="w-full py-3.5 bg-cta hover:bg-cta-hover disabled:opacity-50 text-white font-extrabold text-base rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 active:scale-98"
             >
-              <span>{t?.payAndConfirm || 'Bayar & Konfirmasi Pemesanan'} ({formatCurrency(totalAmount, currency)})</span>
+              <span>
+                {isSubmitting
+                  ? (lang === 'en' ? 'Securing Reservation...' : lang === 'ms' ? 'Mengesahkan Tempahan...' : 'Memproses Reservasi...')
+                  : `${t?.payAndConfirm || 'Bayar & Konfirmasi Pemesanan'} (${formatCurrency(totalAmount, currency)})`}
+              </span>
             </button>
 
             <div className="text-center text-[11px] text-slate-400 flex items-center justify-center gap-1">
