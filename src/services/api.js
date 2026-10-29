@@ -5,7 +5,8 @@ export function normalizeHotel(h) {
 
   let thumbnails = [];
   try {
-    thumbnails = typeof h.gallery === 'string' ? JSON.parse(h.gallery) : h.gallery || [];
+    const raw = typeof h.gallery === 'string' ? JSON.parse(h.gallery) : h.gallery || [];
+    thumbnails = Array.from(new Set(raw.filter(Boolean)));
   } catch (e) {
     thumbnails = [];
   }

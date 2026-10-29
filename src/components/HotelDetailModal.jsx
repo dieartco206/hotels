@@ -38,7 +38,7 @@ export function HotelDetailModal({
 
   if (!hotel) return null;
 
-  const allPhotos = [hotel.mainImage, ...(hotel.thumbnails || [])];
+  const allPhotos = Array.from(new Set([hotel.mainImage, ...(hotel.thumbnails || [])].filter(Boolean)));
   const nights = calculateNights(checkInDate, checkOutDate);
 
   return (

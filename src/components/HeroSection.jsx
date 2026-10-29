@@ -7,7 +7,7 @@ export function HeroSection({ t }) {
       {/* Background Photography with Curated Luxury Atmosphere */}
       <div className="absolute inset-0 z-0">
         <img
-          src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1920&q=85"
+          src="https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?auto=format&fit=crop&w=1920&q=85"
           alt="Luxury Resort Nusantara"
           className="w-full h-full object-cover object-center filter brightness-[0.55] contrast-[1.05]"
         />

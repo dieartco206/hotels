@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { 
   Heart, 
   MapPin, 
@@ -24,6 +24,15 @@ export function HotelCard({
   lang = 'id'
 }) {
   const [activePhoto, setActivePhoto] = useState(hotel.mainImage);
+
+  // Guarantee 100% deduplicated thumbnail strip (max 4 distinct photos)
+  const distinctThumbs = useMemo(() => {
+    return Array.from(new Set([hotel.mainImage, ...(hotel.thumbnails || [])].filter(Boolean))).slice(0, 4);
+  }, [hotel.mainImage, hotel.thumbnails]);
+
+  useEffect(() => {
+    setActivePhoto(hotel.mainImage);
+  }, [hotel.mainImage]);
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-card hover:shadow-float hover:border-slate-300 transition-all duration-200 group flex flex-col md:flex-row">
@@ -58,26 +67,18 @@ export function HotelCard({
           )}
         </div>
 
-        {/* Thumbnail Strip (3 smaller photos) */}
-        {hotel.thumbnails && hotel.thumbnails.length > 0 && (
+        {/* Thumbnail Strip (Guaranteed distinct photos) */}
+        {distinctThumbs.length > 1 && (
           <div className="grid grid-cols-4 gap-1.5 mt-2">
-            <button
-              onClick={() => setActivePhoto(hotel.mainImage)}
-              className={`relative aspect-[4/3] rounded-lg overflow-hidden border-2 transition-all ${
-                activePhoto === hotel.mainImage ? 'border-brand-500 shadow-2xs' : 'border-transparent opacity-75 hover:opacity-100'
-              }`}
-            >
-              <img src={hotel.mainImage} alt="Main" className="w-full h-full object-cover object-center" />
-            </button>
-            {hotel.thumbnails.slice(0, 3).map((thumb, idx) => (
+            {distinctThumbs.map((photo, idx) => (
               <button
                 key={idx}
-                onClick={() => setActivePhoto(thumb)}
+                onClick={() => setActivePhoto(photo)}
                 className={`relative aspect-[4/3] rounded-lg overflow-hidden border-2 transition-all ${
-                  activePhoto === thumb ? 'border-brand-500 shadow-2xs' : 'border-transparent opacity-75 hover:opacity-100'
+                  activePhoto === photo ? 'border-brand-500 shadow-2xs' : 'border-transparent opacity-75 hover:opacity-100'
                 }`}
               >
-                <img src={thumb} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover object-center" />
+                <img src={photo} alt={`Photo ${idx + 1}`} className="w-full h-full object-cover object-center" />
               </button>
             ))}
           </div>
