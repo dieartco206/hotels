@@ -3,7 +3,7 @@ import { formatCurrency, getRatingText, formatDateLocalized } from './i18n';
 
 export { formatCurrency, getRatingText, formatDateLocalized };
 
-export const formatRupiah = (amount, currency = 'IDR') => {
+export const formatRupiah = (amount, currency = 'MYR') => {
   return formatCurrency(amount, currency);
 };
 

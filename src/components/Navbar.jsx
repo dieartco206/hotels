@@ -24,7 +24,7 @@ export function Navbar({
   onOpenPartner,
   lang = 'id',
   setLang,
-  currency = 'IDR',
+  currency = 'MYR',
   setCurrency,
   t,
   showToast
@@ -111,67 +111,48 @@ export function Navbar({
                 {localeDropdownOpen && (
                   <div className="absolute right-0 top-8 w-72 bg-white rounded-2xl shadow-float border border-slate-200 p-4 text-left z-50 animate-in fade-in duration-150">
                     
-                    {/* Quick Region Presets */}
+                    {/* Language Presets (Malaysia) */}
                     <div className="mb-3">
                       <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-2">
-                        Pilih Negara / Wilayah Cepat:
+                        Pilihan Bahasa:
                       </span>
                       <div className="space-y-1">
-                        <button
-                          onClick={() => {
-                            setLang('id');
-                            setCurrency('IDR');
-                            setLocaleDropdownOpen(false);
-                          }}
-                          className={`w-full flex items-center justify-between p-2 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
-                            lang === 'id' && currency === 'IDR'
-                              ? 'bg-brand-50 text-brand-700 border border-brand-200'
-                              : 'hover:bg-slate-50 text-slate-700'
-                          }`}
-                        >
-                          <span className="flex items-center gap-2">
-                            <span className="text-base">🇮🇩</span>
-                            <span>Indonesia (IDR - Rp)</span>
-                          </span>
-                          {lang === 'id' && currency === 'IDR' && <span className="text-brand-600 font-black">✓</span>}
-                        </button>
-
                         <button
                           onClick={() => {
                             setLang('ms');
                             setCurrency('MYR');
                             setLocaleDropdownOpen(false);
                           }}
-                          className={`w-full flex items-center justify-between p-2 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
-                            lang === 'ms' && currency === 'MYR'
+                          className={`w-full flex items-center justify-between p-2.5 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
+                            lang === 'ms'
                               ? 'bg-brand-50 text-brand-700 border border-brand-200'
                               : 'hover:bg-slate-50 text-slate-700'
                           }`}
                         >
                           <span className="flex items-center gap-2">
                             <span className="text-base">🇲🇾</span>
-                            <span>Malaysia (MYR - RM)</span>
+                            <span>Bahasa Melayu (MYR - RM)</span>
                           </span>
-                          {lang === 'ms' && currency === 'MYR' && <span className="text-brand-600 font-black">✓</span>}
+                          {lang === 'ms' && <span className="text-brand-600 font-black">✓</span>}
                         </button>
 
                         <button
                           onClick={() => {
                             setLang('en');
-                            setCurrency('SGD');
+                            setCurrency('MYR');
                             setLocaleDropdownOpen(false);
                           }}
-                          className={`w-full flex items-center justify-between p-2 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
-                            lang === 'en' && currency === 'SGD'
+                          className={`w-full flex items-center justify-between p-2.5 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
+                            lang === 'en'
                               ? 'bg-brand-50 text-brand-700 border border-brand-200'
                               : 'hover:bg-slate-50 text-slate-700'
                           }`}
                         >
                           <span className="flex items-center gap-2">
-                            <span className="text-base">🇸🇬</span>
-                            <span>Singapore (SGD - S$)</span>
+                            <span className="text-base">🇲🇾</span>
+                            <span>English - Malaysia (MYR - RM)</span>
                           </span>
-                          {lang === 'en' && currency === 'SGD' && <span className="text-brand-600 font-black">✓</span>}
+                          {lang === 'en' && <span className="text-brand-600 font-black">✓</span>}
                         </button>
                       </div>
                     </div>
@@ -297,16 +278,15 @@ export function Navbar({
               <button
                 type="button"
                 onClick={() => {
-                  const nextLang = lang === 'id' ? 'ms' : lang === 'ms' ? 'en' : 'id';
-                  const nextCurr = nextLang === 'id' ? 'IDR' : nextLang === 'ms' ? 'MYR' : 'SGD';
+                  const nextLang = lang === 'ms' ? 'en' : 'ms';
                   setLang(nextLang);
-                  setCurrency(nextCurr);
+                  setCurrency('MYR');
                 }}
                 className="h-9 px-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 bg-slate-50 flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer"
-                title="Ganti Bahasa & Mata Uang"
+                title="Tukar Bahasa (BM / EN)"
               >
-                <span className="text-sm shrink-0">{currentLang.flag}</span>
-                <span className="text-[11px] font-black uppercase shrink-0">{currentCurr.code}</span>
+                <span className="text-sm shrink-0">🇲🇾</span>
+                <span className="text-[11px] font-black uppercase shrink-0">MYR</span>
               </button>
 
               {/* Mobile Wishlist */}

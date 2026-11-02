@@ -30,30 +30,20 @@ import {
 } from 'lucide-react';
 
 export default function App() {
-  // Locale & Multi-Currency State (Indonesia / Malaysia / Singapore) with LocalStorage persistence
+  // Locale & Currency State (Malaysia - MYR) with LocalStorage persistence
   const [lang, setLang] = useState(() => {
     try {
       const savedLang = localStorage.getItem('nusastay_lang');
-      if (savedLang && ['id', 'ms', 'en'].includes(savedLang)) {
+      if (savedLang && ['ms', 'en'].includes(savedLang)) {
         return savedLang;
-      }
-    } catch (e) {
-      // Ignore localStorage access restrictions
-    }
-    return 'id';
-  });
-
-  const [currency, setCurrency] = useState(() => {
-    try {
-      const savedCurr = localStorage.getItem('nusastay_currency');
-      if (savedCurr && ['IDR', 'MYR', 'SGD'].includes(savedCurr)) {
-        return savedCurr;
       }
     } catch (e) {
       // Ignore
     }
-    return 'IDR';
+    return 'ms';
   });
+
+  const [currency, setCurrency] = useState('MYR');
 
   // Persist language to localStorage and document.documentElement
   useEffect(() => {
@@ -66,11 +56,11 @@ export default function App() {
   // Persist currency to localStorage
   useEffect(() => {
     try {
-      localStorage.setItem('nusastay_currency', currency);
+      localStorage.setItem('nusastay_currency', 'MYR');
     } catch (e) {}
   }, [currency]);
 
-  const t = useMemo(() => TRANSLATIONS[lang] || TRANSLATIONS.id, [lang]);
+  const t = useMemo(() => TRANSLATIONS[lang] || TRANSLATIONS.ms, [lang]);
 
   // 1. Search Engine State
   const [activeCity, setActiveCity] = useState('Semua Kota');
@@ -96,7 +86,7 @@ export default function App() {
     freeCancellation: false,
   });
 
-  const [priceRange, setPriceRange] = useState(15000000);
+  const [priceRange, setPriceRange] = useState(3500);
   const [selectedStars, setSelectedStars] = useState([]);
   const [selectedFacilities, setSelectedFacilities] = useState({
     freeBreakfast: false,
@@ -178,7 +168,7 @@ export default function App() {
   // Reset Filters handler
   const handleResetFilters = () => {
     setSelectedCountry('all');
-    setPriceRange(15000000);
+    setPriceRange(3500);
     setSelectedStars([]);
     setSelectedFacilities({
       freeBreakfast: false,
@@ -201,9 +191,12 @@ export default function App() {
   // Filtered & Sorted Hotels Computation from real API data
   const filteredHotels = useMemo(() => {
     return hotels.filter(hotel => {
-      // 0. Country Destination Filter
-      if (selectedCountry !== 'all' && hotel.country !== selectedCountry) {
-        return false;
+      // 0. Destination Filter in Malaysia
+      if (selectedCountry !== 'all') {
+        const qDest = selectedCountry.toLowerCase();
+        const matchesCity = (hotel.city || '').toLowerCase().includes(qDest);
+        const matchesArea = (hotel.area || '').toLowerCase().includes(qDest);
+        if (!matchesCity && !matchesArea) return false;
       }
 
       // 1. Destination / City Filter
@@ -288,7 +281,7 @@ export default function App() {
   const activeFiltersCount = useMemo(() => {
     let count = 0;
     if (selectedCountry !== 'all') count++;
-    if (priceRange < 15000000) count++;
+    if (priceRange < 3500) count++;
     if (selectedStars.length > 0) count += selectedStars.length;
     if (selectedPropertyType !== 'all') count++;
     if (quickFilters.payAtHotel) count++;
@@ -396,7 +389,7 @@ export default function App() {
                 {/* Results count & current destination heading */}
                 <div>
                   <h2 className="text-base sm:text-lg font-black text-slate-900">
-                    {activeCity === 'Semua Kota' ? (t?.allDestinations || t?.allIndonesia || 'Semua Destinasi') : (t?.hotelsIn ? t.hotelsIn.replace('{city}', activeCity) : `Hotel & Resor di ${activeCity}`)}
+                    {activeCity === 'Semua Kota' ? (t?.allDestinations || t?.allMalaysia || 'Semua Destinasi') : (t?.hotelsIn ? t.hotelsIn.replace('{city}', activeCity) : `Hotel & Resor di ${activeCity}`)}
                   </h2>
                   <p className="text-xs text-slate-500 font-medium">
                     {t?.showingHotels ? t.showingHotels.replace('{count}', filteredHotels.length) : `Menampilkan ${filteredHotels.length} akomodasi terbaik`}
@@ -465,10 +458,10 @@ export default function App() {
                     </span>
                   )}
 
-                  {priceRange < 15000000 && (
+                  {priceRange < 3500 && (
                     <span className="inline-flex items-center gap-1 text-xs bg-brand-50 text-brand-700 px-2.5 py-1 rounded-lg border border-brand-200 font-semibold">
                       {t?.maxPriceLabel || 'Maks.'} {formatCurrency(priceRange, currency)}
-                      <button onClick={() => setPriceRange(15000000)} className="hover:text-brand-900">
+                      <button onClick={() => setPriceRange(3500)} className="hover:text-brand-900">
                         <X className="w-3 h-3" />
                       </button>
                     </span>

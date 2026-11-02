@@ -1,15 +1,9 @@
 import React from 'react';
 import { ShieldCheck, PhoneCall, Mail, Compass } from 'lucide-react';
 
-export function Footer({ t, currency = 'IDR', lang = 'id' }) {
+export function Footer({ t, currency = 'MYR', lang = 'ms' }) {
   const getOfficialPaymentMethods = () => {
-    if (currency === 'MYR') {
-      return ['Maybank2u', 'CIMB Clicks', "Touch 'n Go eWallet", 'GrabPay MY', 'Visa', 'Mastercard'];
-    }
-    if (currency === 'SGD') {
-      return ['PayNow / SGQR', 'DBS PayLah!', 'OCBC Pay', 'UOB TMRW', 'Visa', 'Mastercard'];
-    }
-    return ['BCA Virtual Account', 'Mandiri VA', 'Bank BRI', 'Bank BNI', 'GoPay / QRIS', 'Visa', 'Mastercard'];
+    return ['Maybank2u', 'CIMB Clicks', "Touch 'n Go eWallet", 'DuitNow QR', 'FPX Online Banking', 'GrabPay MY', 'Visa', 'Mastercard'];
   };
 
   return (
@@ -26,71 +20,68 @@ export function Footer({ t, currency = 'IDR', lang = 'id' }) {
                 <Compass className="w-5 h-5 text-white stroke-[2.2]" />
               </div>
               <span className="text-xl font-black text-slate-900 tracking-tight">
-                Nusa<span className="text-brand-600">Stay</span>
+                Hotels<span className="text-brand-600">.my</span>
               </span>
             </div>
 
             <p className="text-slate-500 leading-relaxed text-xs max-w-sm">
               {lang === 'en'
-                ? 'Curated platform for authentic hotels, private luxury resorts, and villas across Southeast Asia (Singapore, Malaysia, Indonesia). Delivering premium stays with transparent rates and trusted reservation guarantees.'
-                : lang === 'ms'
-                ? 'Platform kurasi hotel, resort persendirian dan villa autentik di Asia Tenggara (Singapura, Malaysia, Indonesia). Menawarkan pengalaman percutian bertaraf tinggi dengan ketelusan kadar harga dan jaminan tempahan sah.'
-                : 'Platform kurasi hotel, resor privat, dan villa autentik di Asia Tenggara (Indonesia, Malaysia, Singapura). Menghadirkan pengalaman menginap berkelas dengan jaminan kenyamanan, transparansi tarif, dan kemudahan reservasi terpercaya.'}
+                ? 'Curated platform for premier luxury hotels, rainforest resorts, and heritage suites across Malaysia (Kuala Lumpur, Langkawi, Penang, Melaka, Sabah, and Cameron Highlands). Delivering authentic stays with transparent MYR rates and official reservation guarantees.'
+                : 'Platform kurasi hotel, resort hutan hujan tropika, dan suite warisan mewah terkemuka di seluruh Malaysia (Kuala Lumpur, Langkawi, Pulau Pinang, Melaka, Sabah, dan Cameron Highlands). Menawarkan percutian eksklusif dengan ketelusan kadar Ringgit Malaysia (MYR) dan jaminan tempahan sah.'}
             </p>
 
             <div className="pt-2 space-y-2 text-slate-700 font-semibold">
               <div className="flex items-center gap-2">
                 <PhoneCall className="w-4 h-4 text-brand-600" />
                 <span>
-                  {lang === 'en' ? '24/7 Guest Services' : lang === 'ms' ? 'Khidmat Tetamu 24 Jam' : 'Layanan Tamu 24 Jam'}:{' '}
-                  {lang === 'en' ? '+65 6788 9000' : lang === 'ms' ? '+60 3-8088 9000' : '+62 21-5088-9000'}
+                  {lang === 'en' ? '24/7 Guest Concierge' : 'Khidmat Tetamu 24 Jam'}: +60 3-2142 8000
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-brand-600" />
-                <span>support@nusastay.com</span>
+                <span>support@hotels.com.my</span>
               </div>
             </div>
           </div>
 
-          {/* Column 2: Tentang NusaStay */}
+          {/* Column 2: Tentang Kami */}
           <div className="space-y-2.5">
             <h4 className="font-extrabold text-slate-900 text-sm mb-3">
-              {lang === 'en' ? 'About NusaStay' : lang === 'ms' ? 'Mengenai NusaStay' : 'Tentang NusaStay'}
+              {lang === 'en' ? 'About Platform' : 'Mengenai Platform'}
             </h4>
             <ul className="space-y-2 font-medium">
-              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'Curated Standards' : lang === 'ms' ? 'Piawaian Kurasi Hotel' : 'Standar Kurasi Hotel'}</a></li>
-              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'Help Center & FAQ' : lang === 'ms' ? 'Pusat Bantuan & Soalan Lazim' : 'Pusat Bantuan & FAQ'}</a></li>
-              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'Contact Concierge' : lang === 'ms' ? 'Hubungi Concierge' : 'Hubungi Concierge'}</a></li>
-              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'Careers & Hiring' : lang === 'ms' ? 'Kerjaya & Pekerjaan' : 'Karier & Rekrutmen'}</a></li>
-              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'Terms of Service' : lang === 'ms' ? 'Terma & Syarat' : 'Ketentuan Layanan'}</a></li>
+              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'Curated Standards' : 'Piawaian Kurasi Hotel'}</a></li>
+              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'Help Center & FAQ' : 'Pusat Bantuan & Soalan Lazim'}</a></li>
+              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'Contact Concierge' : 'Hubungi Concierge'}</a></li>
+              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'Careers & Hiring' : 'Kerjaya & Pekerjaan'}</a></li>
+              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'Terms of Service' : 'Terma & Syarat'}</a></li>
             </ul>
           </div>
 
-          {/* Column 3: Koleksi Penginapan */}
+          {/* Column 3: Koleksi Penginapan Malaysia */}
           <div className="space-y-2.5">
             <h4 className="font-extrabold text-slate-900 text-sm mb-3">
-              {lang === 'en' ? 'Top Collections' : lang === 'ms' ? 'Koleksi Pilihan' : 'Koleksi Pilihan'}
+              {lang === 'en' ? 'Top Malaysia Stays' : 'Koleksi Pilihan Malaysia'}
             </h4>
             <ul className="space-y-2 font-medium">
-              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'Marina Bay Skyline Stays' : lang === 'ms' ? 'Penginapan Marina Bay Singapore' : 'Hotel Mewah Marina Bay Singapore'}</a></li>
-              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'KLCC Executive Suites' : lang === 'ms' ? 'Suite Eksekutif KLCC Malaysia' : 'Suite Eksekutif KLCC Malaysia'}</a></li>
-              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'Bali & Uluwatu Luxury Resorts' : lang === 'ms' ? 'Resort Bintang 5 Bali & Uluwatu' : 'Resor Bintang 5 Bali & Uluwatu'}</a></li>
-              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'Langkawi & Penang Island Retreats' : lang === 'ms' ? 'Percutian Pulau Langkawi & Pulau Pinang' : 'Resor Pulau Langkawi & Penang'}</a></li>
-              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'Yogyakarta & Bandung Heritage Stays' : lang === 'ms' ? 'Penginapan Warisan Jogja & Bandung' : 'Heritage Stay Yogyakarta & Bandung'}</a></li>
+              <li><a href="#" className="hover:text-brand-600 transition-colors">Suite Mewah KLCC & Bukit Bintang</a></li>
+              <li><a href="#" className="hover:text-brand-600 transition-colors">Resort Hutan Hujan Langkawi</a></li>
+              <li><a href="#" className="hover:text-brand-600 transition-colors">Hotel Warisan Kolonial Penang</a></li>
+              <li><a href="#" className="hover:text-brand-600 transition-colors">Boutique Stay Sungai Melaka</a></li>
+              <li><a href="#" className="hover:text-brand-600 transition-colors">Retreat Tanah Tinggi Cameron & Genting</a></li>
             </ul>
           </div>
 
           {/* Column 4: Kemitraan */}
           <div className="space-y-2.5">
             <h4 className="font-extrabold text-slate-900 text-sm mb-3">
-              {lang === 'en' ? 'Property Partners' : lang === 'ms' ? 'Rakan Penginapan' : 'Mitra Properti'}
+              {lang === 'en' ? 'Property Partners' : 'Rakan Hotel Malaysia'}
             </h4>
             <ul className="space-y-2 font-medium">
-              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'List Your Property' : lang === 'ms' ? 'Daftarkan Penginapan Anda' : 'Daftarkan Properti Anda'}</a></li>
-              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'Partner Extranet Portal' : lang === 'ms' ? 'Portal Pengurusan Rakan' : 'Portal Manajemen Mitra'}</a></li>
-              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'Privacy Policy' : lang === 'ms' ? 'Dasar Privasi' : 'Kebijakan Privasi'}</a></li>
-              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'Security & Compliance' : lang === 'ms' ? 'Keselamatan Transaksi' : 'Keamanan Transaksi'}</a></li>
+              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'List Your Hotel' : 'Daftarkan Hotel Anda'}</a></li>
+              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'Partner Extranet Portal' : 'Portal Pengurusan Rakan'}</a></li>
+              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'Privacy Policy' : 'Dasar Privasi'}</a></li>
+              <li><a href="#" className="hover:text-brand-600 transition-colors">{lang === 'en' ? 'Tourism Tax (TTx) & SST' : 'Panduan Cukai SST & Pelancongan'}</a></li>
             </ul>
           </div>
 
@@ -126,7 +117,7 @@ export function Footer({ t, currency = 'IDR', lang = 'id' }) {
 
         {/* Copyright */}
         <div className="pt-8 text-center text-slate-400 text-xs">
-          <p>© 2026 PT Nusa Hospitality Indonesia (NusaStay). {lang === 'en' ? 'All rights reserved.' : lang === 'ms' ? 'Semua hak terpelihara.' : 'Seluruh hak cipta dilindungi undang-undang.'}</p>
+          <p>© 2026 Hotels Malaysia Sdn. Bhd. (Hotels.com.my). Semua hak terpelihara. Dilesenkan di bawah Akta Industri Pelancongan MOTAC Malaysia.</p>
         </div>
 
       </div>

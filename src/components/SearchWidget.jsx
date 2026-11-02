@@ -11,21 +11,20 @@ import {
   Minus, 
   ChevronDown,
   X,
-  Tag,
-  Compass
+  Tag
 } from 'lucide-react';
 import { calculateNights, formatDateLocalized } from '../utils/i18n';
 
 const POPULAR_DESTINATIONS = [
-  { city: 'Semua Kota', province: 'Indonesia • Malaysia • Singapore', type: 'Semua Koleksi' },
-  { city: 'Bali', province: 'Nusa Dua, Ubud & Uluwatu (ID)', type: 'Pantai & Budaya' },
-  { city: 'Kuala Lumpur', province: 'KLCC, Bukit Bintang (MY)', type: 'Metropolis Malaysia' },
-  { city: 'Singapore', province: 'Marina Bay, Sentosa & Orchard (SG)', type: 'World-Class City' },
-  { city: 'Jakarta', province: 'Thamrin, SCBD & Senopati (ID)', type: 'Ibu Kota & Bisnis' },
-  { city: 'Penang', province: 'George Town & Batu Ferringhi (MY)', type: 'UNESCO Heritage' },
-  { city: 'Langkawi', province: 'Pantai Cenang & Datai Bay (MY)', type: 'Pulau Tropika' },
-  { city: 'Bandung', province: 'Ciumbuleuit & Dago Atas (ID)', type: 'Wisata Sejuk' },
-  { city: 'Yogyakarta', province: 'Borobudur & Malioboro (ID)', type: 'Wisata Budaya' },
+  { city: 'Semua Kota', province: 'Seluruh Destinasi Mewah di Malaysia', type: 'Semua Koleksi' },
+  { city: 'Kuala Lumpur', province: 'KLCC, Bukit Bintang & Bangsar', type: 'Metropolis Malaysia' },
+  { city: 'Langkawi', province: 'Teluk Datai, Tanjung Rhu & Pantai Kok', type: 'Pulau Tropika UNESCO' },
+  { city: 'Penang', province: 'George Town UNESCO & Batu Ferringhi', type: 'Warisan & Makanan' },
+  { city: 'Melaka', province: 'Bandar Hilir & Sungai Melaka', type: 'Warisan Sejarah Selat' },
+  { city: 'Kota Kinabalu', province: 'Pantai Dalit & Pulau Gaya, Sabah', type: 'Alam Semula Jadi Borneo' },
+  { city: 'Cameron Highlands', province: 'Tanah Rata & Ladang Teh, Pahang', type: 'Tanah Tinggi Berhawa Sejuk' },
+  { city: 'Genting Highlands', province: 'Puncak Genting Resorts World', type: 'Hiburan Puncak Gunung' },
+  { city: 'Desaru Coast', province: 'Bandar Penawar & Pantai Johor', type: 'Pesisir Pantai Mewah' },
 ];
 
 export function SearchWidget({
@@ -516,11 +515,6 @@ export function SearchWidget({
               />
               <span className="font-semibold text-emerald-700">{t.quickFreeCancellation}</span>
             </label>
-          </div>
-
-          <div className="hidden lg:flex items-center gap-1.5 text-slate-400 font-medium">
-            <Compass className="w-3.5 h-3.5 text-brand-600" />
-            <span>ID • MY • SG Curated Hotels</span>
           </div>
         </div>
 

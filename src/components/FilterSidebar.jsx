@@ -90,35 +90,37 @@ export function FilterSidebar({
           </button>
         </div>
 
-        {/* 1. Country Destination Filter */}
+        {/* 1. Malaysia Destination Filter */}
         <div className="pb-4 border-b border-slate-100">
           <label className="text-xs font-bold text-slate-800 uppercase tracking-wider block mb-2.5">
-            {t.countryFilterTitle || 'Destinasi Negara'}
+            {t.countryFilterTitle || 'Wilayah di Malaysia'}
           </label>
           <div className="grid grid-cols-2 gap-1.5">
             {[
               { id: 'all', label: t.countryAll || 'Semua' },
-              { id: 'Singapore', label: t.countrySG || 'Singapore' },
-              { id: 'Malaysia', label: t.countryMY || 'Malaysia' },
-              { id: 'Indonesia', label: t.countryID || 'Indonesia' },
-            ].map(countryItem => (
+              { id: 'Kuala Lumpur', label: 'Kuala Lumpur' },
+              { id: 'Langkawi', label: 'Langkawi' },
+              { id: 'Penang', label: 'Penang' },
+              { id: 'Melaka', label: 'Melaka' },
+              { id: 'Kota Kinabalu', label: 'Kota Kinabalu' },
+            ].map(destItem => (
               <button
-                key={countryItem.id}
+                key={destItem.id}
                 type="button"
-                onClick={() => setSelectedCountry(countryItem.id)}
+                onClick={() => setSelectedCountry(destItem.id)}
                 className={`px-2.5 py-1.5 rounded-xl text-xs font-semibold transition-all text-center border ${
-                  selectedCountry === countryItem.id
+                  selectedCountry === destItem.id
                     ? 'bg-brand-600 text-white border-brand-600 shadow-sm'
                     : 'bg-slate-50 text-slate-700 border-slate-200/80 hover:bg-slate-100 hover:text-slate-900'
                 }`}
               >
-                {countryItem.label}
+                {destItem.label}
               </button>
             ))}
           </div>
         </div>
 
-        {/* 2. Price Range Slider */}
+        {/* 2. Price Range Slider (MYR) */}
         <div>
           <div className="flex items-center justify-between mb-2">
             <label className="text-xs font-bold text-slate-800 uppercase tracking-wider">
@@ -130,16 +132,16 @@ export function FilterSidebar({
           </div>
           <input
             type="range"
-            min="1000000"
-            max="15000000"
-            step="500000"
+            min="300"
+            max="3500"
+            step="50"
             value={priceRange}
             onChange={(e) => setPriceRange(Number(e.target.value))}
-            className="w-full accent-brand-600"
+            className="w-full accent-brand-600 cursor-pointer"
           />
           <div className="flex justify-between items-center text-[11px] text-slate-400 mt-1.5 font-medium">
-            <span>{formatCurrency(1000000, currency)}</span>
-            <span>{formatCurrency(15000000, currency)}+</span>
+            <span>{formatCurrency(300, currency)}</span>
+            <span>{formatCurrency(3500, currency)}+</span>
           </div>
         </div>
 

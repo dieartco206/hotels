@@ -20,7 +20,7 @@ export function HotelCard({
   onToggleWishlist, 
   isWishlisted,
   t,
-  currency = 'IDR',
+  currency = 'MYR',
   lang = 'id'
 }) {
   const [activePhoto, setActivePhoto] = useState(hotel.mainImage);

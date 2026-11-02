@@ -33,50 +33,20 @@ export function CheckBookingModal({
 
   // Sample mock booking for instant preview
   const sampleBooking = React.useMemo(() => {
-    if (lang === 'en') {
-      return {
-        code: 'NUSA-829142',
-        hotelName: 'The Fullerton Hotel Singapore',
-        roomName: 'Heritage Room Marina View',
-        checkIn: '2026-11-18',
-        checkOut: '2026-11-21',
-        nights: 3,
-        guests: 'John Tan (2 Adults)',
-        area: 'Marina Bay, Singapore',
-        totalPrice: 'SGD 1,485.00',
-        status: 'CONFIRMED',
-        bookedAt: '12 Oct 2026, 14:30 SGT'
-      };
-    }
-    if (lang === 'ms') {
-      return {
-        code: 'NUSA-829142',
-        hotelName: 'Mandarin Oriental Kuala Lumpur',
-        roomName: 'Club Executive Park View',
-        checkIn: '2026-11-18',
-        checkOut: '2026-11-21',
-        nights: 3,
-        guests: 'Ahmad Firdaus (2 Dewasa)',
-        area: 'KLCC, Kuala Lumpur, Malaysia',
-        totalPrice: 'RM 2,850.00',
-        status: 'DISAHKAN',
-        bookedAt: '12 Okt 2026, 14:30 MYT'
-      };
-    }
     return {
-      code: 'NUSA-829142',
-      hotelName: 'The Apurva Kempinski Bali',
-      roomName: 'Grand Deluxe Ocean View',
+      code: 'HTL-MY-8812',
+      hotelName: 'The Datai Langkawi',
+      roomName: 'Canopy Deluxe Rainforest Room',
       checkIn: '2026-11-18',
       checkOut: '2026-11-21',
       nights: 3,
-      guests: 'Budi Pratama (2 Dewasa)',
-      area: 'Sawangan, Nusa Dua, Bali, Indonesia',
-      totalPrice: 'Rp 7.488.000',
-      status: 'TERKONFIRMASI',
-      bookedAt: '12 Okt 2026, 14:30 WIB'
+      guests: 'Dato\' Imran Hakim (2 Dewasa)',
+      area: 'Teluk Datai, Kedah, Malaysia',
+      totalPrice: 'RM 7,350.00',
+      status: 'DISAHKAN',
+      bookedAt: '12 Okt 2026, 14:30 MYT'
     };
-  }, [lang]);
+  }, []);
 
   const handleSearch = async (e) => {
     if (e) e.preventDefault();
@@ -96,8 +66,8 @@ export function CheckBookingModal({
         checkOut: typeof b.check_out === 'string' ? b.check_out.split('T')[0] : '2026-11-20',
         nights: b.nights || 1,
         guests: `${b.guest_name} (${b.guests_count} Guests)`,
-        area: b.hotel?.city ? `${b.hotel.city}, ${b.hotel.country}` : 'Singapore',
-        totalPrice: `${b.currency || 'SGD'} ${Math.round(b.total_amount || 0).toLocaleString('en-US')}`,
+        area: b.hotel?.city ? `${b.hotel.city}, Malaysia` : 'Kuala Lumpur, Malaysia',
+        totalPrice: `RM ${Number(b.total_amount || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
         status: (b.status || 'CONFIRMED').toUpperCase(),
         bookedAt: new Date(b.created_at || Date.now()).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
       });

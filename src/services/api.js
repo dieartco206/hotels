@@ -79,10 +79,10 @@ export function normalizeHotel(h) {
       location: h.review_location || 9.8,
     },
     coordinates: {
-      lat: parseFloat(h.latitude) || 1.2838,
-      lng: parseFloat(h.longitude) || 103.8591,
+      lat: parseFloat(h.latitude) || 3.1557,
+      lng: parseFloat(h.longitude) || 101.7123,
     },
-    currency: h.currency || 'SGD',
+    currency: h.currency || 'MYR',
     rooms: normalizedRooms,
   };
 }

@@ -15,7 +15,7 @@ export function HotelGridCard({
   onToggleWishlist, 
   isWishlisted,
   t,
-  currency = 'IDR',
+  currency = 'MYR',
   lang = 'id'
 }) {
   return (

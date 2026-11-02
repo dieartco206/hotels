@@ -35,19 +35,12 @@ export function PartnerModal({ isOpen, onClose, lang = 'id', showToast }) {
     setIsSubmitting(true);
 
     try {
-      let country = 'Indonesia';
-      if (['Singapore', 'Marina Bay', 'Sentosa'].some(k => formData.city.includes(k))) {
-        country = 'Singapore';
-      } else if (['Kuala Lumpur', 'Penang', 'Langkawi'].some(k => formData.city.includes(k))) {
-        country = 'Malaysia';
-      }
-
       const payload = {
         business_name: formData.propertyName.trim(),
         contact_person: formData.contactName.trim(),
         email: formData.email.trim(),
         phone: formData.phone.trim(),
-        country: country,
+        country: 'Malaysia',
         city: formData.city.trim(),
         property_count: parseInt(formData.roomCount, 10) || 1,
         notes: `Property Type: ${formData.propertyType}`,
@@ -247,7 +240,7 @@ export function PartnerModal({ isOpen, onClose, lang = 'id', showToast }) {
                       <input
                         type="text"
                         required
-                        placeholder={lang === 'en' ? 'e.g. Marina Bay, Singapore' : lang === 'ms' ? 'Contoh: KLCC, Kuala Lumpur' : 'Contoh: Badung, Bali'}
+                        placeholder="Contoh: KLCC, Kuala Lumpur / Teluk Datai, Langkawi"
                         value={formData.city}
                         onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                         className="w-full pl-9 pr-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-600 font-medium"

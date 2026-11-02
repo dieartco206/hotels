@@ -26,48 +26,33 @@ export function BookingCheckoutModal({
   onBookingSuccess,
   showToast,
   t,
-  currency = 'IDR',
+  currency = 'MYR',
   lang = 'id'
 }) {
   const [step, setStep] = useState('form'); // 'form' | 'success'
   const [formData, setFormData] = useState({
-    fullName: lang === 'en' ? 'John Tan' : lang === 'ms' ? 'Ahmad Firdaus' : 'Budi Pratama',
-    phone: lang === 'en' ? '+65 9123 4567' : lang === 'ms' ? '+60 12-345 6789' : '081234567890',
-    email: lang === 'en' ? 'johntan@gmail.com' : lang === 'ms' ? 'ahmad.firdaus@gmail.com' : 'budi.pratama@gmail.com',
+    fullName: lang === 'en' ? 'Dato\' Imran Hakim' : 'Ahmad Firdaus',
+    phone: '+60 12-345 6789',
+    email: 'tetamu.hotel@gmail.com',
     specialRequests: ['Ranjang besar (King)', 'Bebas asap rokok']
   });
-  const [paymentMethod, setPaymentMethod] = useState(currency === 'MYR' ? 'maybank' : currency === 'SGD' ? 'paynow' : 'bca');
+  const [paymentMethod, setPaymentMethod] = useState('maybank');
   const [bookingCode, setBookingCode] = useState('');
 
   const nights = calculateNights(checkInDate, checkOutDate);
-  const baseRoomTotal = (room?.price || hotel?.price || 1500000) * nights;
-  const taxRate = currency === 'SGD' ? 0.09 : currency === 'MYR' ? 0.08 : 0.11;
-  const taxAndService = Math.round(baseRoomTotal * taxRate);
-  const memberDiscount = 150000;
+  const baseRoomTotal = (room?.price || hotel?.price || 650) * nights;
+  const taxRate = 0.08; // 8% SST Malaysia
+  const taxAndService = Math.round(baseRoomTotal * taxRate * 100) / 100;
+  const memberDiscount = 50.00; // RM 50.00
   const totalAmount = Math.max(0, baseRoomTotal + taxAndService - memberDiscount);
 
   const getPaymentMethods = () => {
-    if (currency === 'MYR') {
-      return [
-        { id: 'maybank', name: 'Maybank2u', iconType: 'bank' },
-        { id: 'cimb', name: 'CIMB Clicks', iconType: 'bank' },
-        { id: 'tng', name: "Touch 'n Go", iconType: 'qr' },
-        { id: 'cc', name: 'Kad Kredit', iconType: 'card' },
-      ];
-    }
-    if (currency === 'SGD') {
-      return [
-        { id: 'paynow', name: 'PayNow / QR', iconType: 'qr' },
-        { id: 'dbs', name: 'DBS PayLah!', iconType: 'bank' },
-        { id: 'ocbc', name: 'OCBC Pay', iconType: 'bank' },
-        { id: 'cc', name: 'Credit Card', iconType: 'card' },
-      ];
-    }
     return [
-      { id: 'bca', name: 'BCA Virtual Account', iconType: 'bank' },
-      { id: 'mandiri', name: 'Mandiri VA', iconType: 'bank' },
-      { id: 'gopay', name: 'GoPay / QRIS', iconType: 'qr' },
-      { id: 'cc', name: 'Kartu Kredit', iconType: 'card' },
+      { id: 'maybank', name: 'Maybank2u', iconType: 'bank' },
+      { id: 'cimb', name: 'CIMB Clicks', iconType: 'bank' },
+      { id: 'tng', name: "Touch 'n Go eWallet", iconType: 'qr' },
+      { id: 'duitnow', name: 'DuitNow QR', iconType: 'qr' },
+      { id: 'cc', name: 'Kad Kredit / Debit', iconType: 'card' },
     ];
   };
 
@@ -117,26 +102,22 @@ export function BookingCheckoutModal({
   };
 
   const handleDownloadVoucher = () => {
-    const tz = hotel?.country === 'Singapore' ? 'SGT' : hotel?.country === 'Malaysia' ? 'MYT' : 'WIB';
-    const conciergePhone = hotel?.country === 'Singapore' ? '+65 6788 9000' : hotel?.country === 'Malaysia' ? '+60 3-8088 9000' : '+62 21-5088-9000';
+    const tz = 'MYT';
+    const conciergePhone = '+60 3-2142 8000';
     const vLabels = {
-      title: lang === 'en' ? 'Official NusaStay E-Voucher' : lang === 'ms' ? 'E-Baucar Rasmi NusaStay' : 'E-Voucher Resmi NusaStay',
-      confirmed: lang === 'en' ? 'CONFIRMED' : lang === 'ms' ? 'DISAHKAN' : 'TERKONFIRMASI',
-      roomType: lang === 'en' ? 'Room Type:' : lang === 'ms' ? 'Jenis Bilik:' : 'Tipe Kamar:',
-      guestName: lang === 'en' ? 'Guest Name:' : lang === 'ms' ? 'Nama Tetamu:' : 'Nama Tamu:',
-      contact: lang === 'en' ? 'Contact:' : lang === 'ms' ? 'No. Telefon:' : 'No. Kontak:',
-      checkIn: 'Check-in:',
-      checkOut: 'Check-out:',
-      duration: lang === 'en' ? 'Duration:' : lang === 'ms' ? 'Tempoh:' : 'Durasi:',
-      nights: lang === 'en' ? 'Nights' : 'Malam',
-      paymentMethod: lang === 'en' ? 'Payment Method:' : lang === 'ms' ? 'Kaedah Bayaran:' : 'Metode Bayar:',
-      totalPaid: lang === 'en' ? 'Total Amount:' : lang === 'ms' ? 'Jumlah Bayaran:' : 'Total Biaya:',
-      footerDesc: lang === 'en'
-        ? 'Please present this e-voucher and valid government ID upon check-in at the hotel front desk.'
-        : lang === 'ms'
-        ? 'Sila tunjukkan e-baucar ini dan kad pengenalan rasmi semasa daftar masuk di kaunter hotel.'
-        : 'Harap tunjukkan e-voucher ini beserta kartu identitas resmi saat check-in di resepsionis hotel.',
-      support: lang === 'en' ? '24/7 NusaStay Concierge:' : lang === 'ms' ? 'Khidmat Tetamu NusaStay 24 Jam:' : 'NusaStay Concierge 24 Jam:'
+      title: 'E-Baucar Rasmi Hotels Malaysia',
+      confirmed: 'DISAHKAN',
+      roomType: 'Jenis Bilik:',
+      guestName: 'Nama Tetamu:',
+      contact: 'No. Telefon:',
+      checkIn: 'Daftar Masuk (Check-in):',
+      checkOut: 'Daftar Keluar (Check-out):',
+      duration: 'Tempoh:',
+      nights: 'Malam',
+      paymentMethod: 'Kaedah Bayaran:',
+      totalPaid: 'Jumlah Bayaran:',
+      footerDesc: 'Sila tunjukkan e-baucar ini dan kad pengenalan / pasport rasmi semasa daftar masuk di kaunter hotel.',
+      support: 'Khidmat Tetamu Hotels Malaysia 24 Jam: +60 3-2142 8000'
     };
 
     const voucherHtml = `<!DOCTYPE html>
@@ -338,11 +319,11 @@ export function BookingCheckoutModal({
                 <span className="font-semibold text-slate-800">{formatCurrency(baseRoomTotal, currency)}</span>
               </div>
               <div className="flex justify-between text-slate-600">
-                <span>{t?.taxAndServiceLabel || t?.taxAndService || (currency === 'SGD' ? 'GST & Service Charge (9%)' : currency === 'MYR' ? 'Cukai SST & Caj Perkhidmatan (8%)' : 'Pajak PPN & Biaya Layanan (11%)')}</span>
+                <span>Cukai SST & Caj Perkhidmatan (8%)</span>
                 <span className="font-semibold text-slate-800">{formatCurrency(taxAndService, currency)}</span>
               </div>
               <div className="flex justify-between text-emerald-600 font-semibold">
-                <span>{t?.memberDiscount || 'Diskon Eksklusif Member NusaStay'}</span>
+                <span>Diskaun Eksklusif Ahli Hotels Malaysia</span>
                 <span>- {formatCurrency(memberDiscount, currency)}</span>
               </div>
               <div className="pt-2 border-t border-slate-200 flex justify-between items-center text-sm">

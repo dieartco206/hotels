@@ -30,7 +30,7 @@ export function HotelDetailModal({
   isWishlisted,
   onToggleWishlist,
   t,
-  currency = 'IDR',
+  currency = 'MYR',
   lang = 'id'
 }) {
   const [activeTab, setActiveTab] = useState('rooms'); // 'overview' | 'rooms' | 'facilities' | 'reviews'
@@ -320,13 +320,13 @@ export function HotelDetailModal({
                   </h5>
                   <div className="space-y-1 text-xs text-slate-600">
                     <p>
-                      <span className="font-semibold text-slate-700">Check-in:</span> {hotel.country === 'Singapore' ? '14:00 (SGT)' : hotel.country === 'Malaysia' ? '14:00 (MYT)' : '14:00 (WIB)'}
+                      <span className="font-semibold text-slate-700">Check-in:</span> 14:00 (MYT)
                     </p>
                     <p>
-                      <span className="font-semibold text-slate-700">Check-out:</span> {hotel.country === 'Singapore' ? '12:00 (SGT)' : hotel.country === 'Malaysia' ? '12:00 (MYT)' : '12:00 (WIB)'}
+                      <span className="font-semibold text-slate-700">Check-out:</span> 12:00 (MYT)
                     </p>
                     <p className="text-slate-400 pt-1">
-                      {t?.receptionText || (lang === 'en' ? '24-hour front desk.' : lang === 'ms' ? 'Kaunter 24 jam.' : 'Resepsionis 24 jam.')}
+                      {t?.receptionText || 'Kaunter tetamu 24 jam sedia membantu.'}
                     </p>
                   </div>
                 </div>
@@ -334,28 +334,12 @@ export function HotelDetailModal({
                 <div className="p-4 bg-white rounded-xl border border-slate-200">
                   <h5 className="font-bold text-sm text-slate-800 mb-2 flex items-center gap-2">
                     <ShieldCheck className="w-4 h-4 text-brand-600" />
-                    {t?.hygieneProtocolTitle || (lang === 'en' ? 'Hygiene Standards' : lang === 'ms' ? 'Piawaian Kebersihan' : 'Protokol Kebersihan')}
+                    Piawaian Kebersihan & Keselamatan
                   </h5>
                   <div className="space-y-1 text-xs text-slate-600">
-                    {hotel.country === 'Singapore' ? (
-                      <>
-                        <p>✓ SG Clean Certified (Singapore Tourism Board & NEA)</p>
-                        <p>✓ Daily sanitization & international hotel linen sterilization</p>
-                        <p>✓ Professional multilingual hospitality team</p>
-                      </>
-                    ) : hotel.country === 'Malaysia' ? (
-                      <>
-                        <p>✓ Pensijilan Clean & Safe Malaysia (MOTAC & MAH)</p>
-                        <p>✓ Pembersihan berkala dan pensterilan linen antarabangsa</p>
-                        <p>✓ Khidmat hospitaliti mesra profesional Malaysia</p>
-                      </>
-                    ) : (
-                      <>
-                        <p>✓ Sertifikasi CHSE Kemenparekraf RI</p>
-                        <p>✓ Pembersihan berkala dan sterilisasi sprei standar internasional</p>
-                        <p>✓ Staf terlatih dan keramahan otentik khas Indonesia</p>
-                      </>
-                    )}
+                    <p>✓ Pensijilan Clean & Safe Malaysia (MOTAC & MAH)</p>
+                    <p>✓ Pembersihan berkala dan pensterilan linen standard antarabangsa</p>
+                    <p>✓ Khidmat hospitaliti profesional bertaraf 5-bintang Malaysia</p>
                   </div>
                 </div>
               </div>
@@ -470,123 +454,43 @@ export function HotelDetailModal({
                 </div>
               </div>
 
-              {/* Sample Verified Guest Reviews (Dynamic per Country) */}
+              {/* Sample Verified Guest Reviews (Malaysia Premier Curated) */}
               <div className="space-y-3">
-                {hotel.country === 'Singapore' ? (
-                  <>
-                    <div className="p-4 rounded-xl border border-slate-200 bg-white">
-                      <div className="flex items-center justify-between mb-1.5">
-                        <div className="flex items-center gap-2">
-                          <div className="w-7 h-7 rounded-full bg-brand-50 text-brand-700 font-bold text-xs flex items-center justify-center">
-                            BT
-                          </div>
-                          <span className="font-bold text-xs text-slate-800">Benjamin Tan</span>
-                          <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded font-semibold">
-                            {lang === 'en' ? 'Verified Guest' : 'Tamu Terverifikasi'}
-                          </span>
-                        </div>
-                        <span className="text-xs font-bold text-brand-600">10 / 10</span>
+                <div className="p-4 rounded-xl border border-slate-200 bg-white">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-full bg-brand-50 text-brand-700 font-bold text-xs flex items-center justify-center">
+                        FA
                       </div>
-                      <p className="text-xs text-slate-600 leading-relaxed">
-                        "Outstanding skyline views and premier hospitality. The infinity pool and attentive front desk made our vacation sensational."
-                      </p>
+                      <span className="font-bold text-xs text-slate-800">Farid Azman</span>
+                      <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded font-semibold">
+                        Tetamu Disahkan
+                      </span>
                     </div>
+                    <span className="text-xs font-bold text-brand-600">10 / 10</span>
+                  </div>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    "Penginapan yang sungguh selesa dan bertaraf dunia. Pemandangan alam yang memukau dan layanan kakitangan hotel yang amat prihatin dan mesra."
+                  </p>
+                </div>
 
-                    <div className="p-4 rounded-xl border border-slate-200 bg-white">
-                      <div className="flex items-center justify-between mb-1.5">
-                        <div className="flex items-center gap-2">
-                          <div className="w-7 h-7 rounded-full bg-brand-50 text-brand-700 font-bold text-xs flex items-center justify-center">
-                            RL
-                          </div>
-                          <span className="font-bold text-xs text-slate-800">Rachel Lim</span>
-                          <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded font-semibold">
-                            {lang === 'en' ? 'Verified Guest' : 'Tamu Terverifikasi'}
-                          </span>
-                        </div>
-                        <span className="text-xs font-bold text-brand-600">9.6 / 10</span>
+                <div className="p-4 rounded-xl border border-slate-200 bg-white">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-full bg-brand-50 text-brand-700 font-bold text-xs flex items-center justify-center">
+                        NH
                       </div>
-                      <p className="text-xs text-slate-600 leading-relaxed">
-                        "Sparkling clean room, smooth check-in, and world-class dining. Booking via NusaStay was effortless."
-                      </p>
+                      <span className="font-bold text-xs text-slate-800">Nurul Huda</span>
+                      <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded font-semibold">
+                        Tetamu Disahkan
+                      </span>
                     </div>
-                  </>
-                ) : hotel.country === 'Malaysia' ? (
-                  <>
-                    <div className="p-4 rounded-xl border border-slate-200 bg-white">
-                      <div className="flex items-center justify-between mb-1.5">
-                        <div className="flex items-center gap-2">
-                          <div className="w-7 h-7 rounded-full bg-brand-50 text-brand-700 font-bold text-xs flex items-center justify-center">
-                            FA
-                          </div>
-                          <span className="font-bold text-xs text-slate-800">Farid Azman</span>
-                          <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded font-semibold">
-                            {lang === 'en' ? 'Verified Guest' : lang === 'ms' ? 'Tetamu Disahkan' : 'Tamu Terverifikasi'}
-                          </span>
-                        </div>
-                        <span className="text-xs font-bold text-brand-600">10 / 10</span>
-                      </div>
-                      <p className="text-xs text-slate-600 leading-relaxed">
-                        "Penginapan yang sungguh selesa dan bertaraf dunia. Pemandangan KLCC yang memukau dan layanan kakitangan yang sangat prihatin."
-                      </p>
-                    </div>
-
-                    <div className="p-4 rounded-xl border border-slate-200 bg-white">
-                      <div className="flex items-center justify-between mb-1.5">
-                        <div className="flex items-center gap-2">
-                          <div className="w-7 h-7 rounded-full bg-brand-50 text-brand-700 font-bold text-xs flex items-center justify-center">
-                            NH
-                          </div>
-                          <span className="font-bold text-xs text-slate-800">Nurul Huda</span>
-                          <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded font-semibold">
-                            {lang === 'en' ? 'Verified Guest' : lang === 'ms' ? 'Tetamu Disahkan' : 'Tamu Terverifikasi'}
-                          </span>
-                        </div>
-                        <span className="text-xs font-bold text-brand-600">9.5 / 10</span>
-                      </div>
-                      <p className="text-xs text-slate-600 leading-relaxed">
-                        "Bilik luas, sarapan bufet yang menyelerakan dan kolam renang yang mendamaikan. Pasti akan tempah lagi melalui NusaStay."
-                      </p>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="p-4 rounded-xl border border-slate-200 bg-white">
-                      <div className="flex items-center justify-between mb-1.5">
-                        <div className="flex items-center gap-2">
-                          <div className="w-7 h-7 rounded-full bg-brand-50 text-brand-700 font-bold text-xs flex items-center justify-center">
-                            BP
-                          </div>
-                          <span className="font-bold text-xs text-slate-800">Budi Pratama</span>
-                          <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded font-semibold">
-                            {lang === 'en' ? 'Verified Guest' : 'Tamu Terverifikasi'}
-                          </span>
-                        </div>
-                        <span className="text-xs font-bold text-brand-600">10 / 10</span>
-                      </div>
-                      <p className="text-xs text-slate-600 leading-relaxed">
-                        "Pengalaman menginap yang luar biasa sempurna! Pelayanan staf sangat ramah dan tanggap, sarapannya variatif dan lezat sekali. Anak-anak sangat menikmati kolam renangnya. Pasti akan kembali lagi!"
-                      </p>
-                    </div>
-
-                    <div className="p-4 rounded-xl border border-slate-200 bg-white">
-                      <div className="flex items-center justify-between mb-1.5">
-                        <div className="flex items-center gap-2">
-                          <div className="w-7 h-7 rounded-full bg-brand-50 text-brand-700 font-bold text-xs flex items-center justify-center">
-                            SS
-                          </div>
-                          <span className="font-bold text-xs text-slate-800">Siti Sarah</span>
-                          <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded font-semibold">
-                            {lang === 'en' ? 'Verified Guest' : 'Tamu Terverifikasi'}
-                          </span>
-                        </div>
-                        <span className="text-xs font-bold text-brand-600">9.5 / 10</span>
-                      </div>
-                      <p className="text-xs text-slate-600 leading-relaxed">
-                        "Kamar bersih, pemandangannya sangat indah dan fasilitasnya lengkap. Lokasi sangat dekat dengan atraksi utama. Booking lewat NusaStay juga sangat mulus tanpa kendala check-in."
-                      </p>
-                    </div>
-                  </>
-                )}
+                    <span className="text-xs font-bold text-brand-600">9.8 / 10</span>
+                  </div>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    "Bilik yang sangat luas, sarapan bufet yang menyelerakan dan kolam renang yang mendamaikan. Tempahan sangat pantas dalam Ringgit Malaysia (MYR)."
+                  </p>
+                </div>
               </div>
             </div>
           )}

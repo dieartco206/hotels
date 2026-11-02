@@ -9,7 +9,7 @@ export function WishlistDrawer({
   onRemoveFromWishlist,
   onSelectHotel,
   t,
-  currency = 'IDR',
+  currency = 'MYR',
   lang = 'id'
 }) {
   if (!isOpen) return null;

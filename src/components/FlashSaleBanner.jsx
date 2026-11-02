@@ -31,21 +31,21 @@ export function FlashSaleBanner({ flashHotels, onSelectHotel, t, currency, lang 
 
   const formatPad = (num) => String(num).padStart(2, '0');
 
-  // Localized Categories (clean text without colorful OS emojis)
+  // Localized Categories for Malaysia destinations
   const categories = [
-    { id: 'all', label: lang === 'en' ? 'All Stays' : lang === 'ms' ? 'Semua Penginapan' : 'Semua Hotel' },
-    { id: 'singapore', label: 'Singapore' },
-    { id: 'malaysia', label: 'Malaysia' },
-    { id: 'indonesia', label: 'Indonesia' },
-    { id: 'resort', label: lang === 'en' ? 'Villas & Resorts' : lang === 'ms' ? 'Resort & Villa' : 'Resor & Villa' },
+    { id: 'all', label: lang === 'en' ? 'All Offers' : 'Semua Tawaran' },
+    { id: 'kl', label: 'Kuala Lumpur' },
+    { id: 'langkawi', label: 'Langkawi' },
+    { id: 'penang', label: 'Penang' },
+    { id: 'resort', label: lang === 'en' ? 'Villas & Resorts' : 'Resort & Percutian' },
   ];
 
   // Filter flash hotels based on tab
   const filteredFlashHotels = flashHotels.filter(hotel => {
     if (selectedCategory === 'all') return true;
-    if (selectedCategory === 'singapore') return hotel.country === 'Singapore' || hotel.city === 'Singapore';
-    if (selectedCategory === 'malaysia') return hotel.country === 'Malaysia' || ['Kuala Lumpur', 'Penang', 'Langkawi'].includes(hotel.city);
-    if (selectedCategory === 'indonesia') return hotel.country === 'Indonesia' || ['Bali', 'Jakarta', 'Bandung', 'Yogyakarta'].includes(hotel.city);
+    if (selectedCategory === 'kl') return hotel.city?.toLowerCase().includes('kuala lumpur');
+    if (selectedCategory === 'langkawi') return hotel.city?.toLowerCase().includes('langkawi');
+    if (selectedCategory === 'penang') return hotel.city?.toLowerCase().includes('penang');
     if (selectedCategory === 'resort') return hotel.type === 'Resort' || hotel.type === 'Villa';
     return true;
   });
